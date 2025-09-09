@@ -1,0 +1,89 @@
+==13463== Memcheck, a memory error detector
+==13463== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==13463== Using Valgrind-3.25.1 and LibVEX; rerun with -h for copyright info
+==13463== Command: ./minishell
+==13463== Parent PID: 6501
+==13463== 
+==13463== Conditional jump or move depends on uninitialised value(s)
+==13463==    at 0x4004A93: here_doc (heredoc.c:36)
+==13463==    by 0x4003AEE: open_fd (redirections.c:33)
+==13463==    by 0x4004377: execute_command (execute.c:77)
+==13463==    by 0x4004590: execution_routine (execute.c:137)
+==13463==    by 0x400464B: execute (execute.c:156)
+==13463==    by 0x4001584: main (main_loop.c:76)
+==13463==  Uninitialised value was created by a stack allocation
+==13463==    at 0x40049C5: here_doc (heredoc.c:16)
+==13463== 
+==13463== Conditional jump or move depends on uninitialised value(s)
+==13463==    at 0x4003BD4: open_fd (redirections.c:42)
+==13463==    by 0x4004377: execute_command (execute.c:77)
+==13463==    by 0x4004590: execution_routine (execute.c:137)
+==13463==    by 0x400464B: execute (execute.c:156)
+==13463==    by 0x4001584: main (main_loop.c:76)
+==13463==  Uninitialised value was created by a stack allocation
+==13463==    at 0x4004335: execute_command (execute.c:73)
+==13463== 
+==13463== Syscall param close(fd) contains uninitialised byte(s)
+==13463==    at 0x4A18DA1: close (close.c:27)
+==13463==    by 0x4004474: execute_command (execute.c:98)
+==13463==    by 0x4004590: execution_routine (execute.c:137)
+==13463==    by 0x400464B: execute (execute.c:156)
+==13463==    by 0x4001584: main (main_loop.c:76)
+==13463==  Uninitialised value was created by a stack allocation
+==13463==    at 0x4004335: execute_command (execute.c:73)
+==13463== 
+==13496== Conditional jump or move depends on uninitialised value(s)
+==13496==    at 0x40041D8: child_process (execute.c:42)
+==13496==    by 0x40043F3: execute_command (execute.c:85)
+==13496==    by 0x4004590: execution_routine (execute.c:137)
+==13496==    by 0x400464B: execute (execute.c:156)
+==13496==    by 0x4001584: main (main_loop.c:76)
+==13496==  Uninitialised value was created by a heap allocation
+==13496==    at 0x48537A8: malloc (vg_replace_malloc.c:446)
+==13496==    by 0x4003303: get_cmd (command_creation.c:83)
+==13496==    by 0x4003472: create_cmd (command_creation.c:117)
+==13496==    by 0x4002C24: parsing (parsing.c:79)
+==13496==    by 0x4001574: main (main_loop.c:75)
+==13496== 
+==13463== 
+==13463== FILE DESCRIPTORS: 6 open (4 inherited) at exit.
+==13463== Open file descriptor 4: /dev/pts/2
+==13463==    at 0x4A18E9B: dup (syscall-template.S:120)
+==13463==    by 0x4004D30: run_single_builtin_safely (built_in.c:75)
+==13463==    by 0x400463D: execute (execute.c:152)
+==13463==    by 0x4001584: main (main_loop.c:76)
+==13463== 
+==13463== Open file descriptor 3: /dev/pts/2
+==13463==    at 0x4A18E9B: dup (syscall-template.S:120)
+==13463==    by 0x4004D23: run_single_builtin_safely (built_in.c:74)
+==13463==    by 0x400463D: execute (execute.c:152)
+==13463==    by 0x4001584: main (main_loop.c:76)
+==13463== 
+==13463== 
+==13463== HEAP SUMMARY:
+==13463==     in use at exit: 241,143 bytes in 246 blocks
+==13463==   total heap usage: 560 allocs, 314 frees, 276,026 bytes allocated
+==13463== 
+==13463== 5 bytes in 1 blocks are definitely lost in loss record 1 of 79
+==13463==    at 0x48537A8: malloc (vg_replace_malloc.c:446)
+==13463==    by 0x48F3DBD: xmalloc (xmalloc.c:59)
+==13463==    by 0x48CD255: UnknownInlinedFun (readline.c:528)
+==13463==    by 0x48CD255: readline_internal_teardown (readline.c:511)
+==13463==    by 0x48D955C: UnknownInlinedFun (readline.c:750)
+==13463==    by 0x48D955C: readline (readline.c:387)
+==13463==    by 0x4004A37: here_doc (heredoc.c:27)
+==13463==    by 0x4003AEE: open_fd (redirections.c:33)
+==13463==    by 0x4004377: execute_command (execute.c:77)
+==13463==    by 0x4004590: execution_routine (execute.c:137)
+==13463==    by 0x400464B: execute (execute.c:156)
+==13463==    by 0x4001584: main (main_loop.c:76)
+==13463== 
+==13463== LEAK SUMMARY:
+==13463==    definitely lost: 5 bytes in 1 blocks
+==13463==    indirectly lost: 0 bytes in 0 blocks
+==13463==      possibly lost: 0 bytes in 0 blocks
+==13463==    still reachable: 0 bytes in 0 blocks
+==13463==         suppressed: 241,138 bytes in 245 blocks
+==13463== 
+==13463== For lists of detected and suppressed errors, rerun with: -s
+==13463== ERROR SUMMARY: 7 errors from 6 contexts (suppressed: 0 from 0)
