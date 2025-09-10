@@ -44,7 +44,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		close(input_fd);
 		input_fd = open(".heredoc", O_RDWR | O_EXCL, 0600);
 		if (input_fd < 0)
-			return (127);
+			return (display_error_message(errno, ".heredoc"), 127);
 		if (unlink(".heredoc") < 0)
 			display_error_message(errno, ".heredoc");
 	}

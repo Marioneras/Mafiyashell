@@ -39,6 +39,8 @@ static void	init_cmd(t_cmd *new_cmd, t_token *token)
 	new_cmd->redirections = NULL;
 	new_cmd->outfile = NULL;
 	new_cmd->infile = NULL;
+	new_cmd->heredoc = false;
+	new_cmd->append = false;
 	while (token && token->type != PIPE)
 	{
 		if (token->type == INPUT)
