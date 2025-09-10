@@ -33,7 +33,7 @@ int	here_doc(char *limiter, char **envp)
 			ft_clear(&line);
 			break ;
 		}
-		if (quoted)
+		if (!quoted)
 		{
 			tmp = line;
 			line = expand_var(tmp, envp);
