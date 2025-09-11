@@ -117,6 +117,7 @@ void						quote_error(char *str);
 int							check_quotes(char *str);
 void						track_quotes(char c, bool *s_quote, bool *d_quote);
 void						quote_removal(t_token *token);
+char						*remove_quotes(char *str);
 t_token						*tokenize(char *str);
 int							check_syntax(t_token *head);
 t_cmd						*create_cmd(t_obj *obj);

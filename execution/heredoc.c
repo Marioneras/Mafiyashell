@@ -22,8 +22,12 @@ int	here_doc(char *limiter, char **envp)
 	fd = open(".heredoc", O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (fd < 0)
 		return (fd);
+	quoted = false;
 	if (nb_quote(limiter) == 1)
 		quoted = true;
+	tmp = limiter;
+	limiter = remove_quotes(tmp);
+	ft_clear(&tmp);
 	line = readline("> ");
 	while (line)
 	{
@@ -33,7 +37,7 @@ int	here_doc(char *limiter, char **envp)
 			ft_clear(&line);
 			break ;
 		}
-		if (!quoted)
+		if (quoted == false)
 		{
 			tmp = line;
 			line = expand_var(tmp, envp);

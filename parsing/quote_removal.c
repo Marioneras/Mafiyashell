@@ -42,7 +42,7 @@ static bool	found_quotes_to_remove(t_token token)
 	return (false);
 }
 
-static char	*remove_quotes(char *str)
+char	*remove_quotes(char *str)
 {
 	char	*new_str;
 	bool	track_s_quotes;
@@ -79,7 +79,7 @@ void	quote_removal(t_token *token)
 	current = token;
 	while (current)
 	{
-		if (found_quotes_to_remove(*current))
+		if (found_quotes_to_remove(*current) && current->type != LIMITER)
 		{
 			tmp = current->name;
 			current->name = remove_quotes(tmp);
