@@ -12,6 +12,32 @@
 
 #include "minishell.h"
 
+static char	*strip_quotes(char *limiter, bool *quoted)
+{
+	char	*tmp;
+
+	if (nb_quote(limiter) == 1)
+		(*quoted) = true;
+	tmp = limiter;
+	limiter = remove_quotes(tmp);
+	return (limiter);
+}
+
+static void	process_input(char **line, bool quoted, char **envp)
+{
+	char	*tmp;
+
+	if (quoted == false)
+	{
+		tmp = (*line);
+		(*line) = expand_var(tmp, envp);
+		ft_clear(&tmp);
+	}
+	tmp = (*line);
+	(*line) = ft_strjoin(tmp, "\n");
+	ft_clear(&tmp);
+}
+
 int	here_doc(char *limiter, char **envp)
 {
 	int		fd;
@@ -23,10 +49,8 @@ int	here_doc(char *limiter, char **envp)
 	if (fd < 0)
 		return (fd);
 	quoted = false;
-	if (nb_quote(limiter) == 1)
-		quoted = true;
 	tmp = limiter;
-	limiter = remove_quotes(tmp);
+	limiter = strip_quotes(tmp, &quoted);
 	line = readline("> ");
 	while (line)
 	{
@@ -36,17 +60,7 @@ int	here_doc(char *limiter, char **envp)
 			ft_clear(&line);
 			break ;
 		}
-		if (quoted == false)
-		{
-			tmp = line;
-			line = expand_var(tmp, envp);
-			ft_clear(&tmp);
-		}
-		tmp = line;
-		line = ft_strjoin(tmp, "\n");
-		ft_clear(&tmp);
-		if (!line)
-			return (-1);
+		process_input(&line, quoted, envp);
 		ft_putstr_fd(line, fd);
 		line = readline("> ");
 	}
