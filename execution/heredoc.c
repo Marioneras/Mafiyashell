@@ -27,7 +27,6 @@ int	here_doc(char *limiter, char **envp)
 		quoted = true;
 	tmp = limiter;
 	limiter = remove_quotes(tmp);
-	ft_clear(&tmp);
 	line = readline("> ");
 	while (line)
 	{
@@ -43,6 +42,11 @@ int	here_doc(char *limiter, char **envp)
 			line = expand_var(tmp, envp);
 			ft_clear(&tmp);
 		}
+		tmp = line;
+		line = ft_strjoin(tmp, "\n");
+		ft_clear(&tmp);
+		if (!line)
+			return (-1);
 		ft_putstr_fd(line, fd);
 		line = readline("> ");
 	}
