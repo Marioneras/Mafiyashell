@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 11:57:01 by mberthou          #+#    #+#             */
-/*   Updated: 2025/06/17 10:07:53 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:06:18 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ void	run_builtin(t_obj *obj, t_cmd *cmd, int infile, int outfile)
 	(void)infile;
 	(void)outfile;
 
-	// if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
-	// 	run_echo(obj);
+	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
+		ft_echo(cmd->argv);
 	// else if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
 	// 	run_cd(obj);
 	// else if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
@@ -79,7 +79,9 @@ int	run_single_builtin_safely(t_obj *obj)
 	dup2(save_stdout, STDOUT_FILENO);
 	close(save_stdin);
 	close(save_stdout);
-	close(infile);
-	close(outfile);
+	if (infile != -1 && infile != STDIN_FILENO)
+		close(infile);
+	if (outfile != -1 && outfile != STDOUT_FILENO)
+		close(outfile);
 	return (0);
 }

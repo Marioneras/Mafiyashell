@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/04 19:31:20 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/09/11 19:04:08 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ char						*get_next_line(int fd);
 bool						is_built_in(t_cmd *cmd);
 void						run_builtin(t_obj *obj, t_cmd *cmd, int infile, int outfile);
 int							run_single_builtin_safely(t_obj *obj);
+int							ft_echo(char **args);
 
 /* ***** linked list utils **** */
 t_redirections				*append_redirections(t_redirections *head,

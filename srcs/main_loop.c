@@ -71,6 +71,8 @@ int	main(int argc, char *argv[], char **envp)
 		{
 			init_signal();
 			obj.input = readline("mafiyashell> "); //readline renvoie str alloue (=ce que user a ecrit)
+			if (!obj.input)
+				return (EXIT_FAILURE);
 			add_history(obj.input);
 			if (parsing(&obj, envp))
 				execute(&obj);
