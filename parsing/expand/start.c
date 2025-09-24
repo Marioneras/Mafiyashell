@@ -62,8 +62,8 @@ int is_expand(char *str)
     {
         if (quote_check(str) == 0)
         {
-            printf("\n%s\n\n", str);
-            printf("\nhere\n");
+            //printf("\n%s\n\n", str);
+            //printf("\nhere\n");
             return (0);
         }
     }

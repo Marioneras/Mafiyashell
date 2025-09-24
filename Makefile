@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+         #
+#    By: safamran <safamran@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/18 14:38:01 by mberthou          #+#    #+#              #
-#    Updated: 2025/09/11 19:07:33 by mberthou         ###   ########.fr        #
+#    Updated: 2025/09/12 18:59:56 by safamran         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 ################################################################################
 
 NAME = minishell
-CC = cc
+CC = clang-12
 CFLAGS = -Wall -Wextra -Werror -ggdb3
 DFLAGS = -MMD -MF $(@:.o=.d)
 AUTHOR = mberthou
@@ -36,7 +36,8 @@ SRCS = srcs/main_loop.c parsing/check_quote.c parsing/syntax_check.c \
 	   utils/display_functions.c utils/error_handling.c\
 	   execution/redirections.c execution/execute.c execution/find_path.c \
 	   execution/heredoc.c builtins/built_in.c utils/get_next_line.c \
-	   builtins/ft_echo.c
+	   builtins/ft_echo.c env/clone.c builtins/ft_env.c builtins/ft_unset.c \
+	   builtins/ft_export.c builtins/ft_pwd.c builtins/ft_cd.c
 INCLUDES = -I./include -I./libft
 LIBFT = -L./libft -lft
 

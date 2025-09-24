@@ -47,10 +47,11 @@ static void	racine_ex(t_token *head, char **envp)
 	while (current)
 	{
 		result = expand_it(current->name, envp);
-		if (result)
+		if (result && result != current->name)
 		{
 			free(current->name);
 			current->name = ft_strdup(result);
+			free(result);
 		}
 		current = current->next;
 	}

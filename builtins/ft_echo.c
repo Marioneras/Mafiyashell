@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:38:25 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/11 19:08:27 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:00:43 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static bool	is_flag(char *str)
+static bool is_flag(char *str)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (str[i] != '-')
@@ -31,22 +31,22 @@ static bool	is_flag(char *str)
 	return (true);
 }
 
-static bool	check_arguments(char **args)
+static bool check_arguments(char **args)
 {
-	int	i;
-
+	//int i;
+	//i = 0;
 	if (!args || !*args)
 		return (true);
-	i = 0;
+
 	if (is_flag(*args))
 		return (false);
 	return (true);
 }
 
-int	ft_echo(char **args)
+int ft_echo(char **args)
 {
-	bool	new_line;
-	int		i;
+	bool new_line;
+	int i;
 
 	args++;
 	new_line = check_arguments(args);
