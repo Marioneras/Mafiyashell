@@ -33,11 +33,8 @@ static bool is_flag(char *str)
 
 static bool check_arguments(char **args)
 {
-	//int i;
-	//i = 0;
 	if (!args || !*args)
 		return (true);
-
 	if (is_flag(*args))
 		return (false);
 	return (true);

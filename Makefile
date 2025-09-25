@@ -15,7 +15,7 @@
 ################################################################################
 
 NAME = minishell
-CC = clang-12
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -ggdb3
 DFLAGS = -MMD -MF $(@:.o=.d)
 AUTHOR = mberthou
@@ -46,8 +46,9 @@ LIBFT = -L./libft -lft
 ################################################################################
 
 SHELL := /bin/bash
-OBJS = $(SRCS:.c=.o)
-DEPS := $(wildcard *.d)
+OBJDIR = obj
+OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
+DEPS = $(OBJS:.o=.d)
 
 ################################################################################
 #                                 Makefile logic                               #
@@ -230,10 +231,10 @@ $(NAME): $(OBJS)
 setup:
 	@$(call save_files_changed)
 
-%.o: %.c
+$(OBJDIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(call display_progress_bar)
-	@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) $(INCLUDES) -c $< -o $@)
+	@$(call run_and_test,$(CC) $(CFLAGS) -MMD -MF $(OBJDIR)/$*.d $(INCLUDES) -c $< -o $@)
 
 clean:
 	 @echo "                                          "
@@ -244,8 +245,7 @@ clean:
 	 @echo "╚██████╗███████╗███████╗██║  ██║██║ ╚████║"
 	 @echo " ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
 	 @echo "                                          "
-	rm -f $(OBJS)
-	find -type f -name "*.d" -exec rm -rf {} \;
+	rm -f $(OBJDIR)
 	@printf "%-53b%b" "$(COM_COLOR)clean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 	@echo "Object files and dependancies cleaned."
 

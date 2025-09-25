@@ -93,6 +93,7 @@ static t_redirections	*get_redirection(t_token *current)
 		new_red->type = TRUNC;
 	else if (current->type == HEREDOC)
 		new_red->type = HEREDOC;
+	new_red->next = NULL;
 	return (new_red);
 }
 

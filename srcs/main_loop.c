@@ -72,7 +72,11 @@ int main(int argc, char *argv[], char **envp)
 		while (42)
 		{
 			init_signal();
-			obj.input = readline("mafiyashell> "); // readline renvoie str alloue (=ce que user a ecrit)
+			if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO)
+            || !isatty(STDERR_FILENO))
+				obj.input = get_next_line(STDIN_FILENO);
+			else
+				obj.input = readline("mafiyashell> "); // readline renvoie str alloue (=ce que user a ecrit)
 			if (!obj.input)
 				return (EXIT_FAILURE);
 			add_history(obj.input);
