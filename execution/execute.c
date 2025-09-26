@@ -39,6 +39,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
 
+	signal(SIGINT, SIG_DFL);
 	if (obj->cmd->heredoc)
 	{
 		close(input_fd);
@@ -58,12 +59,12 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		{
 			free(obj->pid);
 			free_obj(obj);
-			exit (127);
+			exit (126);
 		}
 		if (execve(cmd_path, obj->cmd->argv, obj->env) < 0)
 		{
 			display_error_message(errno, obj->cmd->argv[0]);
-			exit (126);
+			exit (127);
 		}
 	}
 	return (obj->exit_code);
@@ -87,6 +88,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 		return (127);
 	else
 	{
+		signal(SIGINT, SIG_IGN);
 		if (obj->cmd->infile)
 			close(*input_fd);
 		if (obj->cmd->next)
@@ -100,17 +102,23 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	return (0);
 }
 
-static void	wait_for_all(int number_of_commands, int *pid)
+static void	wait_for_all(int number_of_commands, t_obj *obj)
 {
 	int	i;
+	int	status;
 
 	i = 0;
 	while (i < number_of_commands)
 	{
-		waitpid(pid[i], NULL, 0);
+		if (i + 1 == number_of_commands)
+			waitpid(obj->pid[i], &status, 0);
+		else
+			waitpid(obj->pid[i], NULL, 0);
 		i++;
 	}
-	free(pid);
+	if (WIFEXITED(status))
+		obj->exit_code = WEXITSTATUS(status);
+	free(obj->pid);
 }
 
 static void	execution_routine(t_obj *obj)
@@ -137,7 +145,7 @@ static void	execution_routine(t_obj *obj)
 		obj->exit_code = execute_command(obj, ++i, &input_fd);
 		obj->cmd = obj->cmd->next;
 	}
-	wait_for_all(number_of_commands, obj->pid);
+	wait_for_all(number_of_commands, obj);
 }
 
 void	execute(t_obj *obj)
