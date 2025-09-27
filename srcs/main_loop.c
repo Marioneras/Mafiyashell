@@ -6,21 +6,24 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 17:36:22 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/13 16:04:21 by safamran         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:44:49 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void ctrl_c(int signal, siginfo_t *info, void *contex)
+pid_t	g_signal_pid = 0;
+
+static void ctrl_c(int signal, siginfo_t *info, void *context)
 {
 	(void)signal;
 	(void)info;
-	(void)contex;
+	(void)context;
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	rl_redisplay();
+	if (g_signal_pid == 0)
+		rl_redisplay();
 }
 
 static void init_signal()
@@ -73,15 +76,16 @@ int main(int argc, char *argv[], char **envp)
 		{
 			init_signal();
 			if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO)
-            || !isatty(STDERR_FILENO))
+				|| !isatty(STDERR_FILENO))
 				obj.input = get_next_line(STDIN_FILENO);
 			else
-				obj.input = readline("mafiyashell> "); // readline renvoie str alloue (=ce que user a ecrit)
+				obj.input = readline("mafiyashell> ");
 			if (!obj.input)
 				return (EXIT_FAILURE);
 			add_history(obj.input);
 			if (parsing(&obj, cenvp))
 				execute(&obj);
+			g_signal_pid = 0;
 		}
 	}
 	ft_freetab(obj.env);

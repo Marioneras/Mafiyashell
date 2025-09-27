@@ -6,11 +6,13 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 17:12:59 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/08 11:43:24 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:44:40 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern pid_t g_signal_pid;
 
 void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 {
@@ -39,7 +41,6 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
 
-	signal(SIGINT, SIG_DFL);
 	if (obj->cmd->heredoc)
 	{
 		close(input_fd);
@@ -82,13 +83,13 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 				return (127);
 	}
 	obj->pid[i] = fork();
+	g_signal_pid = obj->pid[i];
 	if (obj->pid[i] == 0)
 		child_process(obj, *input_fd, output_fd, pipe_fd);
 	else if (obj->pid[i] < 0)
 		return (127);
 	else
 	{
-		signal(SIGINT, SIG_IGN);
 		if (obj->cmd->infile)
 			close(*input_fd);
 		if (obj->cmd->next)

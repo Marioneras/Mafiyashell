@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/13 17:08:53 by safamran         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:15:45 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_env
 
 /* ********* srcs ************* */
 int main(int argc, char *argv[], char **envp);
+void ctrl_c_inside_child(int signal);
 
 /* ********* parsing ********** */
 bool parsing(t_obj *obj, char **envp);
