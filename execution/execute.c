@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern pid_t g_signal_pid;
+//extern pid_t g_signal_pid;
 
 void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 {
@@ -40,7 +40,7 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
-
+	child_signal();
 	if (obj->cmd->heredoc)
 	{
 		close(input_fd);
@@ -83,7 +83,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 				return (127);
 	}
 	obj->pid[i] = fork();
-	g_signal_pid = obj->pid[i];
+	//g_signal_pid = obj->pid[i];
 	if (obj->pid[i] == 0)
 		child_process(obj, *input_fd, output_fd, pipe_fd);
 	else if (obj->pid[i] < 0)
@@ -114,11 +114,13 @@ static void	wait_for_all(int number_of_commands, t_obj *obj)
 		if (i + 1 == number_of_commands)
 			waitpid(obj->pid[i], &status, 0);
 		else
-			waitpid(obj->pid[i], NULL, 0);
+			waitpid(obj->pid[i], NULL, WNOHANG);
 		i++;
 	}
 	if (WIFEXITED(status))
 		obj->exit_code = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+        obj->exit_code = 128 + WTERMSIG(status); // Gère les terminaisons par signal (ex. SIGINT)
 	free(obj->pid);
 }
 
@@ -153,6 +155,7 @@ void	execute(t_obj *obj)
 {
 	t_cmd	*saved_cmd;
 
+	in_exec_signal();
 	if (create_files(obj))
 	{
 		saved_cmd = obj->cmd;
@@ -171,4 +174,5 @@ void	execute(t_obj *obj)
 		free_cmd(obj->cmd);
 	}
 	free(obj->input);
+	normal_signal();
 }

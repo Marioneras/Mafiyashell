@@ -38,6 +38,8 @@
 #define BUFFER_SIZE 42
 #endif
 
+extern volatile sig_atomic_t g_signal;
+
 typedef struct s_token
 {
 	char *name;
@@ -211,5 +213,13 @@ void ft_freetab(char **tab);
 int check_option(char **av);
 int check_cd(char **agrv);
 
+/* **** signal **** */
+void    normal_signal(void);
+void    in_exec_signal(void);
+void    child_signal(void);
+void    handle_normal_sigint(int sig);
+void    handle_exec_sigint(int sig);
+void    handle_sigquit(int sig);
+void handle_sigchld(int sig);
 
 #endif

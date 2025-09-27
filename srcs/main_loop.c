@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-pid_t	g_signal_pid = 0;
+/*pid_t	g_signal_pid = 0;
 
 static void ctrl_c(int signal, siginfo_t *info, void *context)
 {
@@ -34,7 +34,7 @@ static void init_signal()
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
 }
-
+*/
 static void init_obj(t_obj *obj, char **env)
 {
 	obj->token = NULL;
@@ -68,13 +68,14 @@ int main(int argc, char *argv[], char **envp)
 	char **cenvp;
 	cenvp = clone_env(envp);
 	init_obj(&obj, cenvp);
+	normal_signal();
 	if (argc == 1)
 	{
-		init_signal();
+		//init_signal();
 		clear_history();
 		while (42)
 		{
-			init_signal();
+			//init_signal();
 			if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO)
 				|| !isatty(STDERR_FILENO))
 				obj.input = get_next_line(STDIN_FILENO);
@@ -85,7 +86,8 @@ int main(int argc, char *argv[], char **envp)
 			add_history(obj.input);
 			if (parsing(&obj, cenvp))
 				execute(&obj);
-			g_signal_pid = 0;
+			g_signal = 0;
+			normal_signal();
 		}
 	}
 	ft_freetab(obj.env);

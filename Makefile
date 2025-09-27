@@ -37,7 +37,8 @@ SRCS = srcs/main_loop.c srcs/signals.c parsing/check_quote.c \
 	   execution/redirections.c execution/execute.c execution/find_path.c \
 	   execution/heredoc.c builtins/built_in.c utils/get_next_line.c \
 	   builtins/ft_echo.c env/clone.c builtins/ft_env.c builtins/ft_unset.c \
-	   builtins/ft_export.c builtins/ft_pwd.c builtins/ft_cd.c
+	   builtins/ft_export.c builtins/ft_pwd.c builtins/ft_cd.c \
+	   signal/signal_config.c signal/use_signal.c
 INCLUDES = -I./include -I./libft
 LIBFT = -L./libft -lft
 
@@ -245,12 +246,12 @@ clean:
 	 @echo "╚██████╗███████╗███████╗██║  ██║██║ ╚████║"
 	 @echo " ╚═════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝"
 	 @echo "                                          "
-	rm -f $(OBJDIR)
+	rm -rf $(OBJDIR)
 	@printf "%-53b%b" "$(COM_COLOR)clean:" "$(OK_COLOR)[✓]$(NO_COLOR)\n"
 	@echo "Object files and dependancies cleaned."
 
 fclean: clean
-	rm -f $(NAME)
+	rm -rf $(NAME)
 	@echo "Full clean complete."
 
 re: fclean all
