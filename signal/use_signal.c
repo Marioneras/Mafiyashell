@@ -26,12 +26,12 @@ void    handle_exec_sigint(int sig)
     // Pas de rl_redisplay() : on ne veut pas réafficher le prompt
 }
 
-void    handle_sigquit(int sig)
+void    handle_sigquit(int sig) // = ctrl backslash
 {
     write(STDERR_FILENO, "Quit (core dumped)\n", 19);  // Message standard
     g_signal = sig;
-    rl_replace_line("", 0);        // Efface la ligne courante
-    rl_on_new_line();              // Se positionne sur nouvelle ligne                  // Évite le warning "unused parameter"
+   // rl_replace_line("", 0);        // Efface la ligne courante
+   // rl_on_new_line();              // Se positionne sur nouvelle ligne                  // Évite le warning "unused parameter"
 }
 
 void handle_sigchld(int sig)

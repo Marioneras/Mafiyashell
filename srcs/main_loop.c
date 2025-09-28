@@ -82,7 +82,19 @@ int main(int argc, char *argv[], char **envp)
 			else
 				obj.input = readline("mafiyashell> ");
 			if (!obj.input)
-				return (EXIT_FAILURE);
+			{
+				if (isatty(STDIN_FILENO))
+				{
+					write(STDOUT_FILENO, "exit\n", 5);
+					ft_freetab(obj.env);
+					return (EXIT_SUCCESS);
+				}
+				else
+				{
+					ft_freetab(obj.env);
+					return (EXIT_FAILURE);
+				}
+			}
 			add_history(obj.input);
 			if (parsing(&obj, cenvp))
 				execute(&obj);

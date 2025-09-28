@@ -29,6 +29,8 @@ static int	open_file(char *filename, int type)
 
 void	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp)
 {
+	*input_fd = -1;
+	*output_fd = -1;
 	if (cmd->infile && cmd->heredoc)
 		*input_fd = here_doc(cmd->infile, envp);
 	if (cmd->infile && !cmd->heredoc)
@@ -37,9 +39,9 @@ void	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (cmd->outfile && !cmd->append)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (*input_fd < 0)
+	if (*input_fd < 0 && cmd->infile)
 		display_error_message(errno, cmd->infile);
-	if (*output_fd < 0)
+	if (*output_fd < 0 && cmd->outfile)
 		display_error_message(errno, cmd->outfile);
 }
 

@@ -29,7 +29,8 @@ void    in_exec_signal(void)// doit etre appelle pendant l execution d'une cmd
     sa.sa_flags = SA_RESTART; //redemmarre apl syrsteme
     sigaction(SIGINT, &sa, NULL); //config SIGINT
     signal(SIGCHLD, handle_sigchld);
-    signal(SIGQUIT, handle_sigquit); 
+    signal(SIGQUIT, handle_sigquit);
+    //signal(SIGQUIT, SIG_IGN);
 }
 
 //celle la pour gerer dans le sprocess child child
