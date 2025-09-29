@@ -12,29 +12,6 @@
 
 #include "minishell.h"
 
-/*pid_t	g_signal_pid = 0;
-
-static void ctrl_c(int signal, siginfo_t *info, void *context)
-{
-	(void)signal;
-	(void)info;
-	(void)context;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	if (g_signal_pid == 0)
-		rl_redisplay();
-}
-
-static void init_signal()
-{
-	struct sigaction sa;
-	sa.sa_sigaction = ctrl_c;
-	sa.sa_flags = SA_SIGINFO;
-	sigemptyset(&sa.sa_mask);
-	sigaction(SIGINT, &sa, NULL);
-}
-*/
 static void init_obj(t_obj *obj, char **env)
 {
 	obj->token = NULL;
@@ -66,6 +43,7 @@ int main(int argc, char *argv[], char **envp)
 	(void)argc;
 	(void)argv;
 	char **cenvp;
+
 	cenvp = clone_env(envp);
 	init_obj(&obj, cenvp);
 	normal_signal();
