@@ -12,22 +12,31 @@
 
 #include "minishell.h"
 
+//extern pid_t g_signal_pid;
+
 void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 {
-	if (cmd->infile || input_fd != STDIN_FILENO)
+	if (cmd->infile && input_fd != -1 && input_fd != STDIN_FILENO)
+    {
+        if (dup2(input_fd, STDIN_FILENO) < 0)
+            display_error_message(errno, cmd->infile);
+        close(input_fd);
+    }
+	else if (cmd->previous && pipe_fd[0] != -1) // Redirige STDIN pour la commande suivante dans le pipeline
 	{
-		if (dup2(input_fd, STDIN_FILENO) < 0)
-			display_error_message(errno, cmd->infile);
-		close(input_fd);
+		if (dup2(pipe_fd[0], STDIN_FILENO) < 0)
+			display_error_message(errno, "pipe");
+		close(pipe_fd[0]);
 	}
-	if (cmd->next && !cmd->outfile)
+	if (cmd->next && !cmd->outfile && pipe_fd[1] != -1)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
 			display_error_message(errno, "pipe"); // check for the right message
 		close(pipe_fd[1]);
-		close(pipe_fd[0]);
+		if (pipe_fd[0] != -1)
+			close(pipe_fd[0]);
 	}
-	if (cmd->outfile)
+	if (cmd->outfile && output_fd != -1)
 	{
 		if (dup2(output_fd, STDOUT_FILENO) < 0)
 			display_error_message(errno, cmd->outfile);
@@ -38,19 +47,19 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
-
 	child_signal();
 	if (obj->cmd->heredoc)
 	{
-		// if (input_fd != -1 && input_fd != STDIN_FILENO)
-		close(input_fd);
+		if (input_fd != -1 && input_fd != STDIN_FILENO)
+			close(input_fd);
 		input_fd = open(".heredoc", O_RDWR | O_EXCL, 0600);
 		if (input_fd < 0)
 			return (display_error_message(errno, ".heredoc"), 127);
 		if (unlink(".heredoc") < 0)
 			display_error_message(errno, ".heredoc");
 	}
-	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
+	if (obj->cmd->infile || obj->cmd->outfile || obj->cmd->next || obj->cmd->heredoc)
+		dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
 	if (is_built_in(obj->cmd))
 	 	run_builtin(obj, obj->cmd, input_fd, output_fd);
 	else
@@ -68,15 +77,14 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 			exit (127);
 		}
 	}
-	exit (obj->exit_code);
+	return (obj->exit_code);
 }
 
 static int	execute_command(t_obj *obj, int i, int *input_fd)
 {
-	int	pipe_fd[2];
-	int	output_fd;
+	int				pipe_fd[2] = {-1, -1};
+	int				output_fd = -1;
 
-	output_fd = STDOUT_FILENO;
 	open_fd(obj->cmd, input_fd, &output_fd, obj->env);
 	if (obj->cmd->next)
 	{
@@ -84,16 +92,25 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 				return (127);
 	}
 	obj->pid[i] = fork();
+	//g_signal_pid = obj->pid[i];
 	if (obj->pid[i] == 0)
 		child_process(obj, *input_fd, output_fd, pipe_fd);
 	else if (obj->pid[i] < 0)
 		return (127);
-	if (obj->cmd->infile)
-		close(*input_fd);
-	if (obj->cmd->next)
+	else
 	{
-		close(pipe_fd[1]);
-		*input_fd = pipe_fd[0];
+		if (obj->cmd->infile)
+			close(*input_fd);
+		if (obj->cmd->next)
+		{
+			if (pipe_fd[1] != -1)
+				close(pipe_fd[1]);
+			*input_fd = pipe_fd[0];
+		}
+		if (!obj->cmd->next && pipe_fd[0] != -1)
+			close(pipe_fd[0]);
+		if (output_fd != -1)
+			close(output_fd);
 	}
 	return (0);
 }
@@ -101,10 +118,9 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 static void	wait_for_all(int number_of_commands, t_obj *obj)
 {
 	int	i;
-	int	status;
+	int	status = 0;
 
 	i = 0;
-	status = 0;
 	while (i < number_of_commands)
 	{
 		if (i + 1 == number_of_commands)
