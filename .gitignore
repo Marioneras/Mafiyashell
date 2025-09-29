@@ -2,3 +2,4 @@ minishell
 /obj
 /minishell_tester_modif
 .files_changed
+temp.h test valgrind-out.txt

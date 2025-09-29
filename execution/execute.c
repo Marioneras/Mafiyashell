@@ -12,30 +12,22 @@
 
 #include "minishell.h"
 
-
 void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 {
-	if (cmd->infile && input_fd != -1 && input_fd != STDIN_FILENO)
-    {
-        if (dup2(input_fd, STDIN_FILENO) < 0)
-            display_error_message(errno, cmd->infile);
-        close(input_fd);
-    }
-	else if (cmd->previous && pipe_fd[0] != -1) // Redirige STDIN pour la commande suivante dans le pipeline
+	if (cmd->infile && input_fd != STDIN_FILENO)
 	{
-		if (dup2(pipe_fd[0], STDIN_FILENO) < 0)
-			display_error_message(errno, "pipe");
-		close(pipe_fd[0]);
+		if (dup2(input_fd, STDIN_FILENO) < 0)
+			display_error_message(errno, cmd->infile);
+		close(input_fd);
 	}
-	if (cmd->next && !cmd->outfile && pipe_fd[1] != -1)
+	if (cmd->next && !cmd->outfile)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
-			display_error_message(errno, "pipe"); // check for the right message	
+			display_error_message(errno, "pipe"); // check for the right message
 		close(pipe_fd[1]);
-		if (pipe_fd[0] != -1)	
-			close(pipe_fd[0]);
+		close(pipe_fd[0]);
 	}
-	if (cmd->outfile && output_fd != -1)
+	if (cmd->outfile)
 	{
 		if (dup2(output_fd, STDOUT_FILENO) < 0)
 			display_error_message(errno, cmd->outfile);
@@ -57,7 +49,6 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		if (unlink(".heredoc") < 0)
 			display_error_message(errno, ".heredoc");
 	}
-	// if (obj->cmd->infile || obj->cmd->outfile || obj->cmd->next || obj->cmd->heredoc)
 	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
 	if (is_built_in(obj->cmd))
 	 	run_builtin(obj, obj->cmd, input_fd, output_fd);
