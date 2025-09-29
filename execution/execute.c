@@ -68,7 +68,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 			exit (127);
 		}
 	}
-	return (obj->exit_code);
+	exit (obj->exit_code);
 }
 
 static int	execute_command(t_obj *obj, int i, int *input_fd)
@@ -88,17 +88,12 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 		child_process(obj, *input_fd, output_fd, pipe_fd);
 	else if (obj->pid[i] < 0)
 		return (127);
-	else
+	if (obj->cmd->infile)
+		close(*input_fd);
+	if (obj->cmd->next)
 	{
-		if (obj->cmd->infile)
-			close(*input_fd);
-		if (obj->cmd->next)
-		{
-			close(pipe_fd[1]);
-			*input_fd = pipe_fd[0];
-		}
-		if (!obj->cmd->next)
-			close(pipe_fd[0]);
+		close(pipe_fd[1]);
+		*input_fd = pipe_fd[0];
 	}
 	return (0);
 }
