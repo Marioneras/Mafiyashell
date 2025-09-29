@@ -31,9 +31,9 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 	if (cmd->next && !cmd->outfile && pipe_fd[1] != -1)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
-			display_error_message(errno, "pipe"); // check for the right message
+			display_error_message(errno, "pipe"); // check for the right message	
 		close(pipe_fd[1]);
-		if (pipe_fd[0] != -1)
+		if (pipe_fd[0] != -1)	
 			close(pipe_fd[0]);
 	}
 	if (cmd->outfile && output_fd != -1)
@@ -47,7 +47,6 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
-
 	child_signal();
 	if (obj->cmd->heredoc)
 	{
@@ -103,20 +102,23 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 		close(*input_fd);
 	if (obj->cmd->next)
 	{
-		// if (obj->cmd->infile)
-		// 	close(*input_fd);
-		// if (obj->cmd->next)
-		// {
-		// 	if (pipe_fd[1] != -1)
-		// 		close(pipe_fd[1]);
-		// 	*input_fd = pipe_fd[0];
-		// }
-		// if (!obj->cmd->next && pipe_fd[0] != -1)
-		// 	close(pipe_fd[0]);
-		// if (output_fd != -1)
-		// 	close(output_fd);
+<<<<<<< Updated upstream
+		if (obj->cmd->infile)
+			close(*input_fd);
+		if (obj->cmd->next)
+		{
+			if (pipe_fd[1] != -1)
+				close(pipe_fd[1]);
+			*input_fd = pipe_fd[0];
+		}
+		if (!obj->cmd->next && pipe_fd[0] != -1)
+			close(pipe_fd[0]);
+		if (output_fd != -1)
+			close(output_fd);
+=======
 		close(pipe_fd[1]);
 		*input_fd = pipe_fd[0];
+>>>>>>> Stashed changes
 	}
 	return (0);
 }

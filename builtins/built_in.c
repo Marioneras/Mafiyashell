@@ -41,7 +41,6 @@ static void run_exit(t_obj *obj)
 	printf("exit\n");
 	free_obj(obj);
 	clear_history();
-	//free_obj(obj);
 	exit(exit_code);
 }
 
@@ -70,9 +69,11 @@ int run_single_builtin_safely(t_obj *obj)
 {
 	int save_stdin;
 	int save_stdout;
-	int infile = -1;
-	int outfile = -1;
+	int infile;
+	int outfile;
 
+	infile = 0;
+	outfile = 1;
 	save_stdin = dup(STDIN_FILENO);
 	save_stdout = dup(STDOUT_FILENO);
 	set_redirections(obj, &infile, &outfile);
