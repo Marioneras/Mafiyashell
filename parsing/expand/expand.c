@@ -12,67 +12,19 @@
 
 #include "minishell.h"
 
-char *expand_it(char *str, char **envp)
+char	*expand_it(char *str, char **envp)
 {
-	char *new;
+	char	*new;
 
 	new = NULL;
 	if (is_expand(str))
 		new = expand_var(str, envp);
 	if (new != NULL)
 	{
-		//free(str);
+		//free(str); // Libère str si new est non-NULL
 		str = new;
 	}
 	return (new ? new : str);
-}
-
-char	*expand_var(char *str, char **envp)
-{
-	char	*result;
-	char	*prefsuf;
-	char	*var;
-	int		i;
-	int		start;
-
-	i = 0;
-	start = 0;
-	if (!str)
-		return(NULL);
-	result = ft_strdup("");
-	if (!result)
-		return(NULL);
-	while(str[i] != '\0')
-	{
-		if (str[i] == '$')
-		{
-			prefsuf = ft_substr(str, start, i - start);
-			if (prefsuf)
-			{
-				result = join_and_free(result, prefsuf);
-				free(prefsuf);
-			}
-			var = after_dollar(str, &i, envp);
-			if (var)
-			{
-				result = join_and_free(result, var);
-				free(var);
-			}
-			start = i;
-		}
-		else
-			i++;
-	}
-	if (start < i)
-	{
-		prefsuf = ft_substr(str, start, i - start);
-		if (prefsuf)
-		{
-			result = join_and_free(result, prefsuf);
-			free(prefsuf);
-		}
-	}
-	return (result);
 }
 
 char	*after_dollar(char *str, int *i, char **envp)

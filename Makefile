@@ -38,7 +38,7 @@ SRCS = srcs/main_loop.c srcs/signals.c parsing/check_quote.c \
 	   execution/heredoc.c builtins/built_in.c utils/get_next_line.c \
 	   builtins/ft_echo.c env/clone.c builtins/ft_env.c builtins/ft_unset.c \
 	   builtins/ft_export.c builtins/ft_pwd.c builtins/ft_cd.c \
-	   signal/signal_config.c signal/use_signal.c
+	   signal/signal_config.c signal/use_signal.c parsing/expand/expand_utils.c
 INCLUDES = -I./include -I./libft
 LIBFT = -L./libft -lft
 
