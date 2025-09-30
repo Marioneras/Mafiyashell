@@ -107,11 +107,11 @@ typedef struct s_obj
 	int exit_code;
 } t_obj;
 
-typedef struct s_buildin
+typedef struct s_builtin
 {
-	char *str;
-	int (*function)(char **argv, t_obj *obj);
-} t_buildin;
+	char *name;
+	int (*function)(t_obj *obj);
+} t_builtin;
 
 typedef struct s_env
 {
@@ -119,6 +119,15 @@ typedef struct s_env
 	char *value;
 	struct s_env *next;
 } t_env;
+
+typedef struct s_save_fd
+{
+	int	save_stdin;
+	int	save_stdout;
+	int	infile;
+	int	outfile;
+} t_fd;
+
 
 /* ********* srcs ************* */
 int main(int argc, char *argv[], char **envp);
@@ -161,14 +170,13 @@ int here_doc(char *limiter, char **envp);
 char *get_next_line(int fd);
 
 /* ********* builtins ********** */
-bool is_built_in(t_cmd *cmd);
-void run_builtin(t_obj *obj, t_cmd *cmd, int infile, int outfile);
+int (*is_builtin(char *cmd))(t_obj *obj);
 int run_single_builtin_safely(t_obj *obj);
 int run_cd(t_obj *obj);
-int ft_echo(char **args);
-void run_env(t_obj *obj);
-void run_unset(t_obj *obj);
-void    run_pwd(t_obj *obj);
+int ft_echo(t_obj *obj);
+int run_env(t_obj *obj);
+int run_unset(t_obj *obj);
+int run_pwd(t_obj *obj);
 
 /* ***** linked list utils **** */
 t_redirections *append_redirections(t_redirections *head,
@@ -195,7 +203,6 @@ char **clone_env(char **envp);
 void search_line(char *str, t_obj *obj);
 void unset_it(t_obj *obj, int i, int len);
 int ft_tabcount(char **tab);
-void run_export(t_obj *obj);
 int clone(t_obj *obj, char **clone, int a);
 void ft_freetab(char **tab);
 void free_tab(char **tab, int i);
@@ -206,7 +213,7 @@ int check_export(char *arg);
 int is_same_var_exp(char *env, char *cmd);
 int clone_and_replace(t_obj *obj, char **clone, int a);
 int clone_and_add(t_obj *obj, char **clone, int a);
-void run_export(t_obj *obj);
+int run_export(t_obj *obj);
 void ft_freetab(char **tab);
 
 /* ***** builtin cmd functions ***** */

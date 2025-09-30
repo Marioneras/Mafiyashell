@@ -38,11 +38,11 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
+	int		(*builtin)(t_obj *obj);
 
 	child_signal();
 	if (obj->cmd->heredoc)
 	{
-		// if (input_fd != -1 && input_fd != STDIN_FILENO)
 		close(input_fd);
 		input_fd = open(".heredoc", O_RDWR | O_EXCL, 0600);
 		if (input_fd < 0)
@@ -51,8 +51,9 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 			display_error_message(errno, ".heredoc");
 	}
 	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
-	if (is_built_in(obj->cmd))
-	 	run_builtin(obj, obj->cmd, input_fd, output_fd);
+	builtin = is_builtin(obj->cmd->argv[0]);
+	if (builtin)
+		builtin(obj);
 	else
 	{
 		cmd_path = get_absolute_path(obj->cmd, obj->env);
@@ -149,6 +150,7 @@ static void	execution_routine(t_obj *obj)
 		obj->exit_code = execute_command(obj, ++i, &input_fd);
 		obj->cmd = obj->cmd->next;
 	}
+	close(input_fd);
 	wait_for_all(number_of_commands, obj);
 }
 
@@ -160,7 +162,7 @@ void	execute(t_obj *obj)
 	if (create_files(obj))
 	{
 		saved_cmd = obj->cmd;
-		if (!obj->cmd->next && is_built_in(obj->cmd))
+		if (!obj->cmd->next && is_builtin(obj->cmd->argv[0]))
 		{
 			run_single_builtin_safely(obj);
 			// check if builtin execution worked

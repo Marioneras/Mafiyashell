@@ -12,81 +12,76 @@
 
 #include "minishell.h"
 
-bool is_built_in(t_cmd *cmd)
-{
-	if (!cmd->argv[0])
-		return (false);
-	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
-		return (true);
-	if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
-		return (true);
-	if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
-		return (true);
-	if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
-		return (true);
-	if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)
-		return (true);
-	if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
-		return (true);
-	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
-		return (true);
-	return (false);
-}
-
-static void run_exit(t_obj *obj)
+static int run_exit(t_obj *obj)
 {
 	int exit_code;
+	int fd;
 
 	exit_code = obj->exit_code;
 	printf("exit\n");
+	// if (fd->save_stdin >= 0)
+	// 	close(fd->save_stdin);
+	// if (fd->save_stdout >= 0)
+	// 	close(fd->save_stdout);
+	// if (fd->infile != -1 && fd->infile != STDIN_FILENO)
+	// 	close(fd->infile);
+	// if (fd->outfile != -1 && fd->outfile != STDOUT_FILENO)
+	// 	close(fd->outfile);
 	free_obj(obj);
 	clear_history();
+	fd = 3;
+	while (fd < 1024)
+	{
+		close(fd);
+		fd++;
+	}
 	exit(exit_code);
+	return (0);
 }
 
-void run_builtin(t_obj *obj, t_cmd *cmd, int infile, int outfile)
+int (*is_builtin(char *cmd))(t_obj *obj)
 {
-	(void)infile;
-	(void)outfile;
+	const t_builtin dico[]= {
+		(t_builtin){"echo", ft_echo},
+		(t_builtin){"cd", run_cd},
+		(t_builtin){"pwd", run_pwd},
+		(t_builtin){"export", run_export},
+		(t_builtin){"unset", run_unset},
+		(t_builtin){"env", run_env},
+		(t_builtin){"exit", run_exit},
+		(t_builtin){0, 0}
+	};
+	int	i;
 
-	if (ft_strncmp(cmd->argv[0], "echo", 5) == 0)
-		ft_echo(cmd->argv);
-	else if (ft_strncmp(cmd->argv[0], "cd", 3) == 0)
-		run_cd(obj);
-	else if (ft_strncmp(cmd->argv[0], "pwd", 4) == 0)
-		run_pwd(obj);
-	else if (ft_strncmp(cmd->argv[0], "export", 7) == 0)
-		run_export(obj);
-	else if (ft_strncmp(cmd->argv[0], "unset", 6) == 0)
-		run_unset(obj);
-	else if (ft_strncmp(cmd->argv[0], "env", 4) == 0)
-		run_env(obj);
-	if (ft_strncmp(cmd->argv[0], "exit", 5) == 0)
-		run_exit(obj);
+	i = -1;
+	while (dico[++i].name)
+		if (ft_strncmp(cmd, dico[i].name, ft_strlen(cmd) + 1) == 0)
+			return (dico[i].function);
+	return (0);
 }
 
 int run_single_builtin_safely(t_obj *obj)
 {
-	int save_stdin;
-	int save_stdout;
-	int infile;
-	int outfile;
+	t_fd fd;
+	int (*builtin)(t_obj *obj);
 
-	infile = 0;
-	outfile = 1;
-	save_stdin = dup(STDIN_FILENO);
-	save_stdout = dup(STDOUT_FILENO);
-	set_redirections(obj, &infile, &outfile);
-	run_builtin(obj, obj->cmd, infile, outfile);
-	dup2(save_stdin, STDIN_FILENO);
-	dup2(save_stdout, STDOUT_FILENO);
-	if (save_stdin >= 0)
-		close(save_stdin);
-	if (save_stdout >= 0)
-		close(save_stdout);
-	if (infile != -1 && infile != STDIN_FILENO)
-		close(infile);
-	if (outfile != -1 && outfile != STDOUT_FILENO)
-		close(outfile);
+	fd.infile = 0;
+	fd.outfile = 1;
+	fd.save_stdin = dup(STDIN_FILENO);
+	fd.save_stdout = dup(STDOUT_FILENO);
+	set_redirections(obj, &fd.infile, &fd.outfile);
+	builtin = is_builtin(obj->cmd->argv[0]);
+	if (builtin)
+		builtin(obj);
+	dup2(fd.save_stdin, STDIN_FILENO);
+	dup2(fd.save_stdout, STDOUT_FILENO);
+	if (fd.save_stdin >= 0)
+		close(fd.save_stdin);
+	if (fd.save_stdout >= 0)
+		close(fd.save_stdout);
+	if (fd.infile != -1 && fd.infile != STDIN_FILENO)
+		close(fd.infile);
+	if (fd.outfile != -1 && fd.outfile != STDOUT_FILENO)
+		close(fd.outfile);
 	return (0);
 }

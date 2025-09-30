@@ -1,196 +1,331 @@
-==52365== Memcheck, a memory error detector
-==52365== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
-==52365== Using Valgrind-3.25.1-4441567fbe-20250520 and LibVEX; rerun with -h for copyright info
-==52365== Command: ./minishell
-==52365== Parent PID: 22361
-==52365== 
---52365-- 
---52365-- Valgrind options:
---52365--    --leak-check=full
---52365--    --show-leak-kinds=all
---52365--    --track-origins=yes
---52365--    --verbose
---52365--    --log-file=valgrind-out.txt
---52365--    --suppressions=./readline.supp
---52365-- Contents of /proc/version:
---52365--   Linux version 6.16.8-arch3-1 (linux@archlinux) (gcc (GCC) 15.2.1 20250813, GNU ld (GNU Binutils) 2.45.0) #1 SMP PREEMPT_DYNAMIC Mon, 22 Sep 2025 22:08:35 +0000
---52365-- 
---52365-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed-fma
---52365-- Page sizes: currently 4096, max supported 4096
---52365-- Valgrind library directory: /usr/lib/valgrind
---52365-- Reading syms from /home/marionb/Documents/Projets/Perso/Études/42/3e_cercle/Mafiyashell/minishell
---52365-- Reading syms from /usr/lib/ld-linux-x86-64.so.2
-==52365== Downloading debug info for /usr/lib/ld-linux-x86-64.so.2...
---52365--   Considering /home/marionb/.cache/debuginfod_client/df74e268173f1aa4810472e81baf36e1ad80b2bc/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/ld-linux-x86-64.so.2
---52365-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
---52365--    object doesn't have a dynamic symbol table
---52365-- Scheduler: using generic scheduler lock implementation.
---52365-- Reading suppressions file: ./readline.supp
---52365-- Reading suppressions file: /usr/lib/valgrind/default.supp
-==52365== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-52365-by-marion-on-???
-==52365== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-52365-by-marion-on-???
-==52365== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-52365-by-marion-on-???
-==52365== 
-==52365== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==52365== don't want to do, unless you know exactly what you're doing,
-==52365== or are doing some strange experiment):
-==52365==   /usr/lib/valgrind/../../bin/vgdb --pid=52365 ...command...
-==52365== 
-==52365== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==52365==   /path/to/gdb ./minishell
-==52365== and then give GDB the following command
-==52365==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=52365
-==52365== --pid is optional if only one valgrind process is running
-==52365== 
-==52365== Downloading debug info for /usr/lib/valgrind/memcheck-amd64-linux...
---52365--   Considering /home/marionb/.cache/debuginfod_client/34cb9f649364d2c6a2b0729af8119066af349816/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/valgrind/memcheck-amd64-linux
---52365-- Warning: cross-CU LIMITATION: some inlined fn names
---52365-- might be shown as UnknownInlinedFun
---52365-- REDIR: 0x4033ee0 (ld-linux-x86-64.so.2:strlen) redirected to 0x58240112 (vgPlain_amd64_linux_REDIR_FOR_strlen)
---52365-- REDIR: 0x4032880 (ld-linux-x86-64.so.2:strcmp) redirected to 0x5824012c (vgPlain_amd64_linux_REDIR_FOR_strcmp)
---52365-- REDIR: 0x4032650 (ld-linux-x86-64.so.2:index) redirected to 0x58240165 (vgPlain_amd64_linux_REDIR_FOR_index)
---52365-- REDIR: 0x40319e0 (ld-linux-x86-64.so.2:bcmp) redirected to 0x58240147 (vgPlain_amd64_linux_REDIR_FOR_memcmp)
---52365-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
---52365-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
-==52365== WARNING: new redirection conflicts with existing -- ignoring it
---52365--     old: 0x04032880 (strcmp              ) R-> (0000.0) 0x5824012c vgPlain_amd64_linux_REDIR_FOR_strcmp
-==52365== Downloading debug info for /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so...
---52365--   Considering /home/marionb/.cache/debuginfod_client/e9a36f3e427d8c0b14a69e117c7b032ad019910a/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
---52365--     new: 0x04032880 (strcmp              ) R-> (2016.0) 0x048602f0 strcmp
-==52365== WARNING: new redirection conflicts with existing -- ignoring it
---52365--     old: 0x04033ee0 (strlen              ) R-> (0000.0) 0x58240112 vgPlain_amd64_linux_REDIR_FOR_strlen
---52365--     new: 0x04033ee0 (strlen              ) R-> (2007.0) 0x0485ee80 strlen
---52365-- REDIR: 0x4031cb0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4864a80 (mempcpy)
---52365-- Reading syms from /usr/lib/libreadline.so.8.3
---52365-- Reading syms from /usr/lib/libc.so.6
-==52365== Downloading debug info for /usr/lib/libc.so.6...
---52365--   Considering /home/marionb/.cache/debuginfod_client/4fe011c94a88e8aeb6f2201b9eb369f42b4a1e9e/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/libc.so.6
---52365-- Reading syms from /usr/lib/libncursesw.so.6.5
---52365-- REDIR: 0x4034080 (ld-linux-x86-64.so.2:strncmp) redirected to 0x485fa50 (strncmp)
-==52365== Downloading debug info for /usr/lib/valgrind/vgpreload_core-amd64-linux.so...
---52365--   Considering /home/marionb/.cache/debuginfod_client/a454dac14a523aed79b1a52933fa135467ab7e9b/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/valgrind/vgpreload_core-amd64-linux.so
---52365-- REDIR: 0x49c0dc0 (libc.so.6:strncasecmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be050 (libc.so.6:mempcpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49d4510 (libc.so.6:wcpncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be3c0 (libc.so.6:stpcpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x4a38c80 (libc.so.6:__memmove_chk) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49e2c60 (libc.so.6:wmemcmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bf010 (libc.so.6:strcat) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bd660 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49d63c0 (libc.so.6:wcsncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x4a38b70 (libc.so.6:__memcpy_chk) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
-==52365== WARNING: new redirection conflicts with existing -- ignoring it
---52365--     old: 0x04a7fd50 (__memcpy_chk_avx_una) R-> (2024.0) 0x04864460 __memmove_chk
---52365--     new: 0x04a7fd50 (__memcpy_chk_avx_una) R-> (2030.0) 0x04864b90 __memcpy_chk
---52365-- REDIR: 0x49d5b00 (libc.so.6:wcslen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be1e0 (libc.so.6:memset) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49d6430 (libc.so.6:wcsnlen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c10c0 (libc.so.6:strnlen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c1140 (libc.so.6:strpbrk) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bf180 (libc.so.6:strcmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be160 (libc.so.6:memrchr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49d4920 (libc.so.6:wcschr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bf080 (libc.so.6:index) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c1170 (libc.so.6:rindex) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49d49c0 (libc.so.6:wcscmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be430 (libc.so.6:stpncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49e2be0 (libc.so.6:wmemchr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c0f60 (libc.so.6:strncmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be490 (libc.so.6:strcasecmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c0260 (libc.so.6:strcspn) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49d58e0 (libc.so.6:wcscpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c0e60 (libc.so.6:strncasecmp_l) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bf100 (libc.so.6:strchrnul) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bd570 (libc.so.6:bcmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c01f0 (libc.so.6:strcpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49be530 (libc.so.6:strcasecmp_l) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c0d40 (libc.so.6:strlen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c1000 (libc.so.6:strncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49bdf40 (libc.so.6:memmove) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
-==52365== Preferring higher priority redirection:
---52365--     old: 0x04a7fd80 (__memcpy_avx_unalign) R-> (2018.0) 0x048619a0 __memcpy_avx_unaligned_erms
---52365--     new: 0x04a7fd80 (__memcpy_avx_unalign) R-> (2018.1) 0x04863730 memmove
---52365-- REDIR: 0x49bd4f0 (libc.so.6:memchr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c1370 (libc.so.6:strspn) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
---52365-- REDIR: 0x49c0f00 (libc.so.6:strncat) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
-==52365== WARNING: new redirection conflicts with existing -- ignoring it
---52365--     old: 0x04a7fd50 (__memcpy_chk_avx_una) R-> (2024.0) 0x04864460 __memmove_chk
---52365--     new: 0x04a7fd50 (__memcpy_chk_avx_una) R-> (2030.0) 0x04864b90 __memcpy_chk
---52365-- REDIR: 0x49c1c70 (libc.so.6:strstr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
-==52365== WARNING: new redirection conflicts with existing -- ignoring it
---52365--     old: 0x04a7fd50 (__memcpy_chk_avx_una) R-> (2024.0) 0x04864460 __memmove_chk
---52365--     new: 0x04a7fd50 (__memcpy_chk_avx_una) R-> (2030.0) 0x04864b90 __memcpy_chk
---52365-- REDIR: 0x4a849b0 (libc.so.6:__strrchr_avx2) redirected to 0x485e5e0 (rindex)
---52365-- REDIR: 0x49b9970 (libc.so.6:malloc) redirected to 0x4855730 (malloc)
---52365-- REDIR: 0x4a82b00 (libc.so.6:__strlen_avx2) redirected to 0x485ed60 (strlen)
-==52365== Downloading debug info for /usr/lib/libreadline.so.8.3...
---52365--   Considering /home/marionb/.cache/debuginfod_client/644ba4138f297c50b171639efea245cf39f12d49/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/libreadline.so.8.3
---52365-- REDIR: 0x4a828b0 (libc.so.6:__strcpy_avx2) redirected to 0x485eeb0 (strcpy)
---52365-- REDIR: 0x4a82160 (libc.so.6:__strchrnul_avx2) redirected to 0x4864510 (strchrnul)
---52365-- REDIR: 0x4a7fd80 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4863730 (memmove)
---52365-- REDIR: 0x4956790 (libc.so.6:setenv) redirected to 0x48659e0 (setenv)
---52365-- REDIR: 0x4a81f20 (libc.so.6:__strchr_avx2) redirected to 0x485e860 (index)
---52365-- REDIR: 0x4a83be0 (libc.so.6:__strncmp_avx2) redirected to 0x485f820 (strncmp)
---52365-- REDIR: 0x49ba8f0 (libc.so.6:calloc) redirected to 0x485cb60 (calloc)
---52365-- REDIR: 0x4a7fd40 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4864640 (mempcpy)
---52365-- REDIR: 0x4a82350 (libc.so.6:__strcmp_avx2) redirected to 0x4860180 (strcmp)
---52365-- REDIR: 0x49ba2f0 (libc.so.6:realloc) redirected to 0x485cdd0 (realloc)
-==52365== Downloading debug info for /usr/lib/libncursesw.so.6.5...
---52365--   Considering /home/marionb/.cache/debuginfod_client/56cf168a8aba647caaf6e306e4c41f7d878bfc7f/debuginfo ..
---52365--   .. CRC is valid
-==52365== Successfully downloaded debug file for /usr/lib/libncursesw.so.6.5
---52365-- REDIR: 0x4a7fd50 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4864460 (__memmove_chk)
---52365-- REDIR: 0x4a846e0 (libc.so.6:__strnlen_avx2) redirected to 0x485ed00 (strnlen)
---52365-- REDIR: 0x49b9f30 (libc.so.6:free) redirected to 0x4858880 (free)
---52365-- REDIR: 0x4a80780 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4863600 (memset)
---52365-- REDIR: 0x4a84240 (libc.so.6:__strncpy_avx2) redirected to 0x485f070 (strncpy)
---52365-- REDIR: 0x4a7f380 (libc.so.6:__memchr_avx2) redirected to 0x48603b0 (memchr)
---52365-- REDIR: 0x4a81210 (libc.so.6:__strcasecmp_l_avx2) redirected to 0x485fd60 (strcasecmp_l)
---52365-- REDIR: 0x4a80a90 (libc.so.6:__stpcpy_avx2) redirected to 0x4862e60 (stpcpy)
---52365-- REDIR: 0x4a81200 (libc.so.6:__strcasecmp_avx2) redirected to 0x485fac0 (strcasecmp)
---52365-- REDIR: 0x4a82c80 (libc.so.6:__strncasecmp_avx2) redirected to 0x485fba0 (strncasecmp)
---52365-- REDIR: 0x4a7f620 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4862d20 (bcmp)
-==52365== 
-==52365== HEAP SUMMARY:
-==52365==     in use at exit: 243,905 bytes in 304 blocks
-==52365==   total heap usage: 628 allocs, 324 frees, 311,818 bytes allocated
-==52365== 
-==52365== Searching for pointers to 304 not-freed blocks
-==52365== Checked 251,584 bytes
-==52365== 
-==52365== 520 bytes in 1 blocks are still reachable in loss record 27 of 77
-==52365==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
-==52365==    by 0x4005949: clone_env (clone.c:25)
-==52365==    by 0x40014C7: main (main_loop.c:69)
-==52365== 
-==52365== 2,343 bytes in 64 blocks are still reachable in loss record 46 of 77
-==52365==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
-==52365==    by 0x4006B5B: ft_strdup (in /home/marionb/Documents/Projets/Perso/Études/42/3e_cercle/Mafiyashell/minishell)
-==52365==    by 0x400599C: clone_env (clone.c:31)
-==52365==    by 0x40014C7: main (main_loop.c:69)
-==52365== 
-==52365== LEAK SUMMARY:
-==52365==    definitely lost: 0 bytes in 0 blocks
-==52365==    indirectly lost: 0 bytes in 0 blocks
-==52365==      possibly lost: 0 bytes in 0 blocks
-==52365==    still reachable: 2,863 bytes in 65 blocks
-==52365==         suppressed: 241,042 bytes in 239 blocks
-==52365== 
-==52365== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
---52365-- 
---52365-- used_suppression:     74 <readline_leaks> ./readline.supp:2 suppressed: 237,026 bytes in 238 blocks
---52365-- used_suppression:      1 <history_leaks> ./readline.supp:9 suppressed: 4,016 bytes in 1 blocks
-==52365== 
-==52365== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==36991== Memcheck, a memory error detector
+==36991== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==36991== Using Valgrind-3.25.1-4441567fbe-20250520 and LibVEX; rerun with -h for copyright info
+==36991== Command: /usr/bin/hexdump -C
+==36991== Parent PID: 36947
+==36991== 
+--36991-- 
+--36991-- Valgrind options:
+--36991--    --leak-check=full
+--36991--    --show-leak-kinds=all
+--36991--    --track-origins=yes
+--36991--    --track-fds=yes
+--36991--    --verbose
+--36991--    --log-file=valgrind-out.txt
+--36991--    --trace-children=yes
+--36991--    --suppressions=./readline.supp
+--36991-- Contents of /proc/version:
+--36991--   Linux version 6.16.8-arch3-1 (linux@archlinux) (gcc (GCC) 15.2.1 20250813, GNU ld (GNU Binutils) 2.45.0) #1 SMP PREEMPT_DYNAMIC Mon, 22 Sep 2025 22:08:35 +0000
+--36991-- 
+--36991-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed-fma
+--36991-- Page sizes: currently 4096, max supported 4096
+--36991-- Valgrind library directory: /usr/lib/va--36990--36991-- Reading syms from /usr/bin/hexdump
+--36991-- Reading syms from /usr/lib/ld-linux-x==36990== D==36991== Downloading debug info for /usr/lib/ld-linux-x86---36990--  --36991--   Considering /home/marionb/.cache/debuginfod_client/df74e268173f1aa4810472e81baf36e1ad80b2bc/de--36990--  --36991--   .. CRC is valid
+==36991== Successfully downloaded debug file for /usr/lib/ld-linux-x--36990-- R--36991-- Reading syms from /usr/lib/valgrind/memcheck-a--36990--  --36991--    object doesn't have a dynamic sy--36990-- S--36991-- Scheduler: using generic scheduler lock imple--36990-- R--36991-- Reading suppressions file: ./readline.supp
+--36991-- Reading suppressions file: /usr/lib/valgrind/de==36990== e==36991== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-36991-by-marion-on-???
+==36991== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-36991-by-marion-on-???
+==36991== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-36991-by-marion-on-???
+==36991== 
+==36991== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==36991== don't want to do, unless you know exactly what you're doing,
+==36991== or are doing some strange experiment):
+==36991==   /usr/lib/valgrind/../../bin/vgdb --pid=36991 ...command...
+==36991== 
+==36991== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==36991==   /path/to/gdb /usr/bin/hexdump
+==36991== and then give GDB the following command
+==36991==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=36991
+==36991== --pid is optional if only one valgrind process is runn==36990== Downl==36991== Downloading debug info for /usr/lib/valgrind/memcheck---36990--   Con--36991--   Considering /home/marionb/.cache/debuginfod_client/34cb9f649364d2c6a2b0729af8119066af34981--36990--   .. --36991--   .. CRC is valid
+==36991== Successfully downloaded debug file for /usr/lib/valgrind/memche--36990-- Warni--36991-- Warning: cross-CU LIMITATION: some inlined fn names
+--36991-- might be shown as Unk--36990-- REDIR--36991-- REDIR: 0x4033ee0 (ld-linux-x86-64.so.2:strlen) redirected to 0x58240112 (vgPlain_amd64_linux_RED--36990-- REDIR--36991-- REDIR: 0x4032880 (ld-linux-x86-64.so.2:strcmp) redirected to 0x5824012c (vgPlain_amd64_linux_RED--36990-- REDIR--36991-- REDIR: 0x4032650 (ld-linux-x86-64.so.2:index) redirected to 0x58240165 (vgPlain_amd64_linux_REDIR_FOR_index)
+--36991-- REDIR: 0x40319e0 (ld-linux-x86-64.so.2:bcmp) redirected to 0x58240147 (vgPlain_amd64_linux_RED--36990-- Readi--36991-- Reading syms from /usr/lib/valgrind/vgpreload_core---36990-- Readi--36991-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-==36990== WARNI==36991== WARNING: new redirection conflicts with existing -- ignoring it
+--36991--     old: 0x04032880 (strcmp              ) R-> (0000.0) 0x5824012c vgPlain_amd64_linux_REDIR_FOR_strcmp
+==36991== Downloading debug info for /usr/lib/valgrind/vgpreload_memcheck-amd--36990--   Con--36991--   Considering /home/marionb/.cache/debuginfod_client/e9a36f3e427d8c0b14a69e117c7b032ad019910a/debuginfo ..
+--36991--   .. CRC is valid
+==36991== Successfully downloaded debug file for /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--36991--     new: 0x04032880 (strcmp              ) R-> (2016.0) 0x048602f0 strcmp
+==36991== WARNING: new redirection conflicts with existing -- ignoring it
+--36991--     old: 0x04033ee0 (strlen              ) R-> (0000.0) 0x58240112 vgPlain_amd64_linux_REDIR_FOR_strlen
+--36991--     new: 0x04033ee0 (strlen              ) R-> (2007.0) 0x0--36990-- REDIR--36991-- REDIR: 0x4031cb0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4864a80 (mempcpy)
+--36991-- Reading syms from /usr==36990== Downloading de--36991-- Reading syms from /usr/li--36990--   ==36991== Downloading debug info for /usr/lib/libc.so.6...
+--36991--   Considering /home/marionb/.cache/d--36990--   .. CRC is valid
+==36990== Successfully downloaded debug fil--36991--   .. CRC is val--36990-- REDIR: 0x4035080 (ld-linux-x86-64.so.2:strncmp) redirected to--36991-- REDIR: 0x40==36990== Downloading debug info for /usr/lib/valgrind/vgpreload_core-a==36991== Downloading debug info for /usr/lib/valgrind/vgpreload_core-amd64-linux.so...
+--36991--   Considering /home/marionb/.cache/debuginfod_client/a454dac14a523aed79b1a52933fa135467ab7e9b/debuginfo ..
+--36991--   .. CRC is valid
+==36991== Successfully downloaded debug file for /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--36991-- REDIR: 0x49d4dc0 (libc.so.6:strncasecmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d2050 (libc.so.6:mempcpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49e8510 (libc.so.6:wcpncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d23c0 (libc.so.6:stpcpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x4a4cc80 (libc.so.6:__memmove_chk) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49f6c60 (libc.so.6:wmemcmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d3010 (libc.so.6:strcat) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d1660 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49ea3c0 (libc.so.6:wcsncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x4a4cb70 (libc.so.6:__memcpy_chk) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+==36991== WARNING: new redirection conflicts with existing -- ignoring it
+--36991--     old: 0x04a93d50 (__memcpy_chk_avx_una) R-> (2024.0) 0x04864460 __memmove_chk
+--36991--     new: 0x04a93d50 (__memcpy_chk_avx_una) R-> (2030.0) 0x04864b90 __memcpy_chk
+--36991-- REDIR: 0x49e9b00 (libc.so.6:wcslen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d21e0 (libc.so.6:memset) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49ea430 (libc.so.6:wcsnlen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d50c0 (libc.so.6:strnlen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d5140 (libc.so.6:strpbrk) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d3180 (libc.so.6:strcmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d2160 (libc.so.6:memrchr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49e8920 (libc.so.6:wcschr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d3080 (libc.so.6:index) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d5170 (libc.so.6:rindex) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49e89c0 (libc.so.6:wcscmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d2430 (libc.so.6:stpncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49f6be0 (libc.so.6:wmemchr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d4f60 (libc.so.6:strncmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d2490 (libc.so.6:strcasecmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d4260 (libc.so.6:strcspn) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49e98e0 (libc.so.6:wcscpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d4e60 (libc.so.6:strncasecmp_l) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d3100 (libc.so.6:strchrnul) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d1570 (libc.so.6:bcmp) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d41f0 (libc.so.6:strcpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d2530 (libc.so.6:strcasecmp_l) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d4d40 (libc.so.6:strlen) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d5000 (libc.so.6:strncpy) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d1f40 (libc.so.6:memmove) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+==36991== Preferring higher priority redirection:
+--36991--     old: 0x04a93d80 (__memcpy_avx_unalign) R-> (2018.0) 0x048619a0 __memcpy_avx_unaligned_erms
+--36991--     new: 0x04a93d80 (__memcpy_avx_unalign) R-> (2018.1) 0x04863730 memmove
+--36991-- REDIR: 0x49d14f0 (libc.so.6:memchr) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d5370 (libc.so.6:strspn) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+--36991-- REDIR: 0x49d4f00 (libc.so.6:strncat) redirected to 0x484a1a0 (_vgnU_ifunc_wrapper)
+==36991== WARNING: new redirection conflicts with existing -- ignoring it
+--36991--     old--36990-- REDIR: 0x4a2a9b0 (libc.so.6:__strrchr_avx2) redirected to 0x485f5e0 (rindex)
+--36990-- REDIR: 0x4a28350 (libc.so.6:__strcmp_avx2) redirected to 0x4861180 (strcmp)
+--36990-- REDIR: 0x4a28b00 (libc.so.6:__strlen_avx2) redirected to 0x485fd60 (strlen)
+--36990-- REDIR: 0x4a29be0 (libc.so.6:__strncmp_avx2) redirected to 0x4860820 (strncmp)
+--36990-- REDIR: 0x4a27f20 (libc.so.6:__strchr_avx2) redirected to 0x485f860 (index)
+--36990-- REDIR: 0x4a25380 (libc.so.6:__memchr_avx2) redirected to 0x48613b0 (m--36991-- REDIR: 0x4a989b0 (libc.so.6:__strrchr_avx2) redirected to 0x485e5e0 (rindex)
+--36991-- REDIR: 0x49ce8f0 (libc.so.6:calloc) redirected to 0x485cb60 (calloc)
+==36991== Downloading debug info for /usr/bin/hexdump...
+--36991---36990--   Considering /home/marionb/.cache/debuginfod_client/cadf0a7950914e920df5d842a0e402304f41357a/debuginfo ..
+--36990--   .. CRC is valid
+==36990== Successfully downloaded debug file for /usr/bin/cat
+--36990-- REDIR: 0x4a25d40 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4865640 (mempcpy)
+--36990-- REDIR: 0x4a25d80 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4864730 (memmove)
+--36990-- REDIR: 0x495ff30 (libc.so.6:free) redirected to 0x4859880 (free)
+--36990-- REDIR: 0x49602f0 (libc.so.6:realloc) redirected to 0x485ddd0 (realloc)
+--36990-- REDIR: 0x4a27210 (libc.so.6:__strcasecmp_l_avx2) redirected to 0x4860d60 (strcasecmp_l)
+--36990-- REDIR: 0x4a25d50 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4865460 (__memmove_chk)
+--36990-- REDIR: 0x4a26a90 (libc.so.6:__stpcpy_avx2) redirected to 0x4863e60 (stpcpy)
+--36990-- REDIR: 0x4a2a6e0 (libc.so.6:__strnlen_avx2) redirected to 0x485fd00 (strnlen)
+--36990-- REDIR: 0x4960850 (libc.so.6:aligned_alloc) redirected to 0x485ed70 (aligned_alloc)
+==36990== 
+==36990== FILE DESCRIPTORS: 1 open (1 inherited) at exit.
+==36990== 
+==36990== HEAP SUMMARY:
+==36990==     in use at exit: 0 bytes in 0 blocks
+==36990==   total heap usage: 201 allocs, 201 frees, 283,277 bytes allocated
+==36990== 
+==36990== All heap blocks were freed -- no leaks are possible
+==36990== 
+==36990== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+rected to 0x4862e60 (stpcpy)
+--36991-- REDIR: 0x4a986e0 (libc.so.6:__strnlen_avx2) redirected to 0x485ed00 (strnlen)
+==36991== Downloading debug info for /usr/lib/libncursesw.so.6.5...
+--36991--   Considering /home/marionb/.cache/debuginfod_client/56cf168a8aba647caaf6e306e4c41f7d878bfc7f/debuginfo ..
+--36991--   .. CRC is valid
+==36991== Successfully downloaded debug file for /usr/lib/libncursesw.so.6.5
+--36991-- REDIR: 0x4a968b0 (libc.so.6:__strcpy_avx2) redirected to 0x485eeb0 (strcpy)
+--36991-- REDIR: 0x4a94780 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4863600 (memset)
+--36991-- REDIR: 0x4a98240 (libc.so.6:__strncpy_avx2) redirected to 0x485f070 (strncpy)
+==36991== 
+==36991== FILE DESCRIPTORS: 5 open (5 inherited) at exit.
+==36991== 
+==36991== HEAP SUMMARY:
+==36991==     in use at exit: 8,071 bytes in 4 blocks
+==36991==   total heap usage: 276 allocs, 272 frees, 61,239 bytes allocated
+==36991== 
+==36991== Searching for pointers to 4 not-freed blocks
+==36991== Checked 98,008 bytes
+==36991== 
+==36991== 14 bytes in 1 blocks are still reachable in loss record 1 of 4
+==36991==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36991==    by 0x49D42AF: strdup (strdup.c:42)
+==36991==    by 0x48EB87E: update_getenv (db_iterator.c:131)
+==36991==    by 0x48EED09: UnknownInlinedFun (db_iterator.c:158)
+==36991==    by 0x48EED09: UnknownInlinedFun (db_iterator.c:331)
+==36991==    by 0x48EED09: _nc_first_db (db_iterator.c:285)
+==36991==    by 0x4907BD8: _nc_read_entry2 (read_entry.c:902)
+==36991==    by 0x48F8E34: _nc_setup_tinfo (lib_setup.c:674)
+==36991==    by 0x48F8FF8: _nc_setupterm (lib_setup.c:969)
+==36991==    by 0x4007226: colors_terminal_is_ready (colors.c:562)
+==36991==    by 0x4003CFB: UnknownInlinedFun (colors.c:603)
+==36991==    by 0x4003CFB: UnknownInlinedFun (hexdump.c:159)
+==36991==    by 0x4003CFB: main (hexdump.c:214)
+==36991== 
+==36991== 32 bytes in 1 blocks are still reachable in loss record 2 of 4
+==36991==    at 0x485CC13: calloc (vg_replace_malloc.c:1675)
+==36991==    by 0x48EE8A4: UnknownInlinedFun (db_iterator.c:367)
+==36991==    by 0x48EE8A4: _nc_first_db (db_iterator.c:285)
+==36991==    by 0x4907BD8: _nc_read_entry2 (read_entry.c:902)
+==36991==    by 0x48F8E34: _nc_setup_tinfo (lib_setup.c:674)
+==36991==    by 0x48F8FF8: _nc_setupterm (lib_setup.c:969)
+==36991==    by 0x4007226: colors_terminal_is_ready (colors.c:562)
+==36991==    by 0x4003CFB: UnknownInlinedFun (colors.c:603)
+==36991==    by 0x4003CFB: UnknownInlinedFun (hexdump.c:159)
+==36991==    by 0x4003CFB: main (hexdump.c:214)
+==36991== 
+==36991== 73 bytes in 1 blocks are still reachable in loss record 3 of 4
+==36991==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36991==    by 0x48EE7FA: UnknownInlinedFun (db_iterator.c:352)
+==36991==    by 0x48EE7FA: _nc_first_db (db_iterator.c:285)
+==36991==    by 0x4907BD8: _nc_read_entry2 (read_entry.c:902)
+==36991==    by 0x48F8E34: _nc_setup_tinfo (lib_setup.c:674)
+==36991==    by 0x48F8FF8: _nc_setupterm (lib_setup.c:969)
+==36991==    by 0x4007226: colors_terminal_is_ready (colors.c:562)
+==36991==    by 0x4003CFB: UnknownInlinedFun (colors.c:603)
+==36991==    by 0x4003CFB: UnknownInlinedFun (hexdump.c:159)
+==36991==    by 0x4003CFB: main (hexdump.c:214)
+==36991== 
+==36991== 7,952 bytes in 1 blocks are still reachable in loss record 4 of 4
+==36991==    at 0x485CC13: calloc (vg_replace_malloc.c:1675)
+==36991==    by 0x48EB228: _nc_build_names.lto_priv.0 (comp_captab.c:3285)
+==36991==    by 0x48ED312: _nc_find_type_entry (comp_hash.c:104)
+==36991==    by 0x48F1015: tigetnum_sp (lib_ti.c:110)
+==36991==    by 0x40072AF: colors_terminal_is_ready (colors.c:563)
+==36991==    by 0x4003CFB: UnknownInlinedFun (colors.c:603)
+==36991==    by 0x4003CFB: UnknownInlinedFun (hexdump.c:159)
+==36991==    by 0x4003CFB: main (hexdump.c:214)
+==36991== 
+==36991== LEAK SUMMARY:
+==36991==    definitely lost: 0 bytes in 0 blocks
+==36991==    indirectly lost: 0 bytes in 0 blocks
+==36991==      possibly lost: 0 bytes in 0 blocks
+==36991==    still reachable: 8,071 bytes in 4 blocks
+==36991==         suppressed: 0 bytes in 0 blocks
+==36991== 
+==36991== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+  by 0x40015C4: main (main_loop.c:78)
+==36989== 
+==36989== 
+==36989== HEAP SUMMARY:
+==36989==     in use at exit: 252,662 bytes in 323 blocks
+==36989==   total heap usage: 594 allocs, 271 frees, 278,692 bytes allocated
+==36989== 
+==36989== Searching for pointers to 323 not-freed blocks
+==36989== Checked 252,520 bytes
+==36989== 
+==36989== 7 bytes in 2 blocks are still reachable in loss record 1 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x4006C1B: ft_strdup (in /home/marionb/Documents/Projets/Perso/Études/42/3e_cercle/Mafiyashell/minishell)
+==36989==    by 0x4003395: get_cmd (command_creation.c:95)
+==36989==    by 0x4003447: create_cmd (command_creation.c:113)
+==36989==    by 0x4002BFA: parsing (parsing.c:80)
+==36989==    by 0x40015B4: main (main_loop.c:77)
+==36989== 
+==36989== 12 bytes in 1 blocks are still reachable in loss record 9 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x400462B: execution_routine (execute.c:144)
+==36989==    by 0x400473C: execute (execute.c:171)
+==36989==    by 0x40015C4: main (main_loop.c:78)
+==36989== 
+==36989== 15 bytes in 3 blocks are still reachable in loss record 16 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x4006C1B: ft_strdup (in /home/marionb/Documents/Projets/Perso/Études/42/3e_cercle/Mafiyashell/minishell)
+==36989==    by 0x4003395: get_cmd (command_creation.c:95)
+==36989==    by 0x4003471: create_cmd (command_creation.c:119)
+==36989==    by 0x4002BFA: parsing (parsing.c:80)
+==36989==    by 0x40015B4: main (main_loop.c:77)
+==36989== 
+==36989== 24 bytes in 1 blocks are still reachable in loss record 21 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x400310A: init_cmd (command_creation.c:36)
+==36989==    by 0x400332D: get_cmd (command_creation.c:88)
+==36989==    by 0x4003447: create_cmd (command_creation.c:113)
+==36989==    by 0x4002BFA: parsing (parsing.c:80)
+==36989==    by 0x40015B4: main (main_loop.c:77)
+==36989== 
+==36989== 40 bytes in 2 blocks are still reachable in loss record 26 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x400310A: init_cmd (command_creation.c:36)
+==36989==    by 0x400332D: get_cmd (command_creation.c:88)
+==36989==    by 0x4003471: create_cmd (command_creation.c:119)
+==36989==    by 0x4002BFA: parsing (parsing.c:80)
+==36989==    by 0x40015B4: main (main_loop.c:77)
+==36989== 
+==36989== 56 bytes in 1 blocks are still reachable in loss record 29 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x4003302: get_cmd (command_creation.c:85)
+==36989==    by 0x4003447: create_cmd (command_creation.c:113)
+==36989==    by 0x4002BFA: parsing (parsing.c:80)
+==36989==    by 0x40015B4: main (main_loop.c:77)
+==36989== 
+==36989== 112 bytes in 2 blocks are still reachable in loss record 34 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x4003302: get_cmd (command_creation.c:85)
+==36989==    by 0x4003471: create_cmd (command_creation.c:119)
+==36989==    by 0x4002BFA: parsing (parsing.c:80)
+==36989==    by 0x40015B4: main (main_loop.c:77)
+==36989== 
+==36989== 536 bytes in 1 blocks are still reachable in loss record 38 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x400566A: clone_env (clone.c:25)
+==36989==    by 0x40014C7: main (main_loop.c:47)
+==36989== 
+==36989== 2,538 bytes in 66 blocks are still reachable in loss record 57 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x4006C1B: ft_strdup (in /home/marionb/Documents/Projets/Perso/Études/42/3e_cercle/Mafiyashell/minishell)
+==36989==    by 0x40056BD: clone_env (clone.c:31)
+==36989==    by 0x40014C7: main (main_loop.c:47)
+==36989== 
+==36989== 8,192 bytes in 1 blocks are still reachable in loss record 76 of 89
+==36989==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36989==    by 0x40013C5: init_obj (main_loop.c:20)
+==36989==    by 0x40014DE: main (main_loop.c:48)
+==36989== 
+==36989== LEAK SUMMARY:
+==36989==    definitely lost: 0 bytes in 0 blocks
+==36989==    indirectly lost: 0 bytes in 0 blocks
+==36989==      possibly lost: 0 bytes in 0 blocks
+==36989==    still reachable: 11,532 bytes in 80 blocks
+==36989==         suppressed: 241,130 bytes in 243 blocks
+==36989== 
+==36989== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+--36989-- 
+--36989-- used_suppression:     75 <readline_leaks> ./readline.supp:2 suppressed: 237,052 bytes in 239 blocks
+--36989-- used_suppression:      4 <history_leaks> ./readline.supp:9 suppressed: 4,078 bytes in 4 blocks
+==36989== 
+==36989== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==36947== 
+==36947== FILE DESCRIPTORS: 3 open (3 inherited) at exit.
+==36947== 
+==36947== HEAP SUMMARY:
+==36947==     in use at exit: 244,116 bytes in 306 blocks
+==36947==   total heap usage: 612 allocs, 306 frees, 278,945 bytes allocated
+==36947== 
+==36947== Searching for pointers to 306 not-freed blocks
+==36947== Checked 252,008 bytes
+==36947== 
+==36947== 536 bytes in 1 blocks are still reachable in loss record 27 of 77
+==36947==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36947==    by 0x400566A: clone_env (clone.c:25)
+==36947==    by 0x40014C7: main (main_loop.c:47)
+==36947== 
+==36947== 2,538 bytes in 66 blocks are still reachable in loss record 46 of 77
+==36947==    at 0x48557A8: malloc (vg_replace_malloc.c:446)
+==36947==    by 0x4006C1B: ft_strdup (in /home/marionb/Documents/Projets/Perso/Études/42/3e_cercle/Mafiyashell/minishell)
+==36947==    by 0x40056BD: clone_env (clone.c:31)
+==36947==    by 0x40014C7: main (main_loop.c:47)
+==36947== 
+==36947== LEAK SUMMARY:
+==36947==    definitely lost: 0 bytes in 0 blocks
+==36947==    indirectly lost: 0 bytes in 0 blocks
+==36947==      possibly lost: 0 bytes in 0 blocks
+==36947==    still reachable: 3,074 bytes in 67 blocks
+==36947==         suppressed: 241,042 bytes in 239 blocks
+==36947== 
+==36947== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+--36947-- 
+--36947-- used_suppression:     74 <readline_leaks> ./readline.supp:2 suppressed: 237,026 bytes in 238 blocks
+--36947-- used_suppression:      1 <history_leaks> ./readline.supp:9 suppressed: 4,016 bytes in 1 blocks
+==36947== 
+==36947== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -17,20 +17,20 @@ int new_tab(t_obj *obj, int a)
     }
     char **old_env = obj->env;
     obj->env = new;
-    ft_freetab(old_env);  
+    ft_freetab(old_env);
     return 1;
 }
 
 
-void run_export(t_obj *obj)
+int run_export(t_obj *obj)
 {
-    int i;
-    char **clone_av;
+    int		i;
+    char	**clone_av;
 
     if (check_option(obj->cmd->argv) == 0)
     {
         ft_putstr_fd("export: No options\n", 2);
-        return;
+        return (EXIT_FAILURE);
     }
     i = 1;
     clone_av = clone_env(obj->cmd->argv);
@@ -39,11 +39,12 @@ void run_export(t_obj *obj)
         if (!new_tab(obj, i))
         {
             ft_freetab(clone_av);
-            return; 
+			return (EXIT_FAILURE);
         }
         i++;
     }
     ft_freetab(clone_av);
+	return (EXIT_SUCCESS);
 }
 
 int clone(t_obj *obj, char **clone, int a)

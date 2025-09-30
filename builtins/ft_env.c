@@ -1,14 +1,14 @@
 
 #include "minishell.h"
 
-void run_env(t_obj *obj)
+int run_env(t_obj *obj)
 {
     int i;
     i = 0;
     if (check_option(obj->cmd->argv) == 0)
     {
         printf("env: No options\n");
-        return;
+        return (EXIT_FAILURE);
     }
     while (obj->env[i] != NULL)
     {
@@ -16,4 +16,5 @@ void run_env(t_obj *obj)
         write(1, "\n", 1);
         i++;
     }
+	return (EXIT_SUCCESS);
 }

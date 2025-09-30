@@ -40,12 +40,13 @@ static bool check_arguments(char **args)
 	return (true);
 }
 
-int ft_echo(char **args)
+int ft_echo(t_obj *obj)
 {
-	bool new_line;
-	int i;
+	bool	new_line;
+	int		i;
+	char	**args;
 
-	args++;
+	args = &obj->cmd->argv[1];
 	new_line = check_arguments(args);
 	while ((args && *args) && is_flag(*args))
 		args++;

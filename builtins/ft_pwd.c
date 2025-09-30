@@ -1,23 +1,23 @@
 #include "minishell.h"
 
-void    run_pwd(t_obj *obj)
+int    run_pwd(t_obj *obj)
 {
     char *str;
     if (check_option(obj->cmd->argv) == 0)
     {
         ft_putstr_fd("pwd: No options\n", 2);
-        return;
+        return (EXIT_FAILURE);
     }
     str = getcwd(NULL, 0);
     if (!str)
     {
         perror("");
-        return;
+        return (EXIT_FAILURE);
     }
     else if (str)
         printf("%s\n", str);
     free(str);
-    return;
+	return (EXIT_SUCCESS);
 }
 
 int check_option(char **av)
