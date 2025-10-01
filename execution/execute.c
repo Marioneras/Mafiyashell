@@ -154,7 +154,8 @@ static void	execution_routine(t_obj *obj)
 		obj->exit_code = execute_command(obj, ++i, &input_fd);
 		obj->cmd = obj->cmd->next;
 	}
-	close(input_fd);
+	if (input_fd != STDIN_FILENO)
+		close(input_fd);
 	wait_for_all(number_of_commands, obj);
 }
 

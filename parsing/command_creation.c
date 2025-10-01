@@ -21,8 +21,9 @@ static int	count_arguments(t_token *node)
 	count = 0;
 	while (current && current->type != PIPE)
 	{
-		if (current->type == CMD || current->type == ARGUMENT)
-			count++;
+		if (current->type == CMD || current->type == ARGUMENT
+			|| current->type == EMPTY)
+ 			count++;
 		current = current->next;
 	}
 	return (count);

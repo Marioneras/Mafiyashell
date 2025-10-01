@@ -28,16 +28,6 @@ static int	is_only_space(char *str)
 	return(1);
 }
 
-// static void	just_enter(void)
-// {
-// 	//write(1, "\n", 1);
-// 	rl_replace_line("", 0);
-// 	rl_on_new_line();
-// 	//rl_redisplay();
-// }
-
-
-
 static void	racine_ex(t_token *head, char **envp)
 {
 	t_token	*current;
