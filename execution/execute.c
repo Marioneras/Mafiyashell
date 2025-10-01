@@ -76,6 +76,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 {
 	int	pipe_fd[2];
 	int	output_fd;
+	int	old_fd;
 
 	output_fd = STDOUT_FILENO;
 	open_fd(obj->cmd, input_fd, &output_fd, obj->env);
@@ -94,7 +95,10 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	if (obj->cmd->next)
 	{
 		close(pipe_fd[1]);
+		old_fd = *input_fd;
 		*input_fd = pipe_fd[0];
+		if (old_fd != STDIN_FILENO)
+			close(old_fd);
 	}
 	return (0);
 }

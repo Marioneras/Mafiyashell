@@ -96,11 +96,20 @@ typedef struct s_cmd
 	struct s_cmd *previous;
 } t_cmd;
 
+typedef struct s_save_fd
+{
+	int	save_stdin;
+	int	save_stdout;
+	int	infile;
+	int	outfile;
+} t_fd;
+
 typedef struct s_obj
 {
 	t_token *token;
 	t_cmd *cmd;
 	t_tool *tool;
+	t_fd	*fd;
 	char **env;
 	char *input;
 	int *pid;
@@ -119,15 +128,6 @@ typedef struct s_env
 	char *value;
 	struct s_env *next;
 } t_env;
-
-typedef struct s_save_fd
-{
-	int	save_stdin;
-	int	save_stdout;
-	int	infile;
-	int	outfile;
-} t_fd;
-
 
 /* ********* srcs ************* */
 int main(int argc, char *argv[], char **envp);

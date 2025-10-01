@@ -90,7 +90,8 @@ static t_cmd	*get_cmd(t_token **current)
 	i = 0;
 	while ((*current) && (*current)->type != PIPE)
 	{
-		if ((*current)->type == CMD || (*current)->type == ARGUMENT)
+		if ((*current)->type == CMD || (*current)->type == ARGUMENT
+			|| (*current)->type == EMPTY)
 		{
 			new_cmd->argv[i] = ft_strdup((*current)->name);
 			if (!new_cmd->argv[i])
