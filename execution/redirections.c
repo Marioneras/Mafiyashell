@@ -55,6 +55,8 @@ bool	create_files(t_obj *obj)
 		current_red = current_cmd->redirections;
 		while (current_red)
 		{
+			if (!current_red->next)
+				break;
 			if (current_red->type == HEREDOC)
 			{
 				tmp_file = here_doc(current_red->name, obj->env);
@@ -138,8 +140,6 @@ void	set_redirections(t_obj *obj, int *infile, int *outfile)
 {
 	if (obj->cmd->infile)
 	{
-		/* if (obj->cmd->here_doc) */
-		/* *infile = here_doc(); */
 		*infile = open(obj->cmd->infile, O_RDONLY);
 		if (*infile < 0)
 			exit(127);
