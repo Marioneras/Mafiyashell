@@ -164,8 +164,7 @@ char *get_env_variable(char **env, char *variable);
 void set_redirections(t_obj *obj, int *infile,
 					  int *outfile);
 bool create_files(t_obj *obj);
-void open_fd(t_cmd *cmd, int *input_fd, int *output_fd,
-			 char **envp);
+bool open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp);
 int here_doc(char *limiter, char **envp);
 char *get_next_line(int fd);
 

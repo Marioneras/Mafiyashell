@@ -79,7 +79,8 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	int	old_fd;
 
 	output_fd = STDOUT_FILENO;
-	open_fd(obj->cmd, input_fd, &output_fd, obj->env);
+	if (!open_fd(obj->cmd, input_fd, &output_fd, obj->env))
+		return (1);
 	if (obj->cmd->next)
 	{
 		if (pipe(pipe_fd) < 0)
@@ -156,7 +157,8 @@ static void	execution_routine(t_obj *obj)
 	}
 	if (input_fd != STDIN_FILENO)
 		close(input_fd);
-	wait_for_all(number_of_commands, obj);
+	if (obj->exit_code != 1)
+		wait_for_all(number_of_commands, obj);
 }
 
 void	execute(t_obj *obj)

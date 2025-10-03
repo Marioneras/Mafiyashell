@@ -27,7 +27,7 @@ static int	open_file(char *filename, int type)
 	return (fd);
 }
 
-void	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp)
+bool	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp)
 {
 	if (cmd->infile && cmd->heredoc)
 		*input_fd = here_doc(cmd->infile, envp);
@@ -38,9 +38,10 @@ void	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp)
 	else if (cmd->outfile && !cmd->append)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (*input_fd < 0)
-		display_error_message(errno, cmd->infile);
+		return (display_error_message(errno, cmd->infile), false);
 	if (*output_fd < 0)
-		display_error_message(errno, cmd->outfile);
+		return (display_error_message(errno, cmd->outfile), false);
+	return (true);
 }
 
 bool	create_files(t_obj *obj)
