@@ -42,6 +42,31 @@ static void init_obj(t_obj *obj, char **env)
 	obj->exit_code = 0;
 }
 
+char	**safe_env(void)
+{
+	char **tab;
+	char *pwd;
+	
+	tab = malloc(sizeof(char *) * 4);
+	if (!tab)
+		return (NULL);
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+		return (free(tab), NULL);
+	tab[0] = ft_strjoin("PWD=", pwd);
+	if (!tab[0])
+		return(free(pwd), free_tab(tab, 0), NULL);
+	tab[1] = ft_strdup("SHLVL=1");
+	if (!tab[1])
+		return(free(pwd), free_tab(tab, 1), NULL);
+	tab[2] = ft_strdup("_=/usr/bin/env");
+	if (!tab[2])
+		return(free(pwd), free_tab(tab, 2), NULL);
+	tab[3] = NULL;
+	free(pwd);
+	return (tab);
+}
+
 int main(int argc, char *argv[], char **envp)
 {
 	t_obj obj;
@@ -49,7 +74,10 @@ int main(int argc, char *argv[], char **envp)
 	(void)argv;
 	char **cenvp;
 
-	cenvp = clone_env(envp);
+	if (!envp || !envp[0])
+		cenvp = safe_env();
+	else
+		cenvp = clone_env(envp);
 	init_obj(&obj, cenvp);
 	normal_signal();
 	if (argc == 1)

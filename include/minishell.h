@@ -132,6 +132,7 @@ typedef struct s_env
 /* ********* srcs ************* */
 int main(int argc, char *argv[], char **envp);
 void ctrl_c_inside_child(int signal);
+char	**safe_env(void);
 
 /* ********* parsing ********** */
 bool parsing(t_obj *obj);
