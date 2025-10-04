@@ -79,7 +79,7 @@ int main(int argc, char *argv[], char **envp)
 				}
 			}
 			add_history(obj.input);
-			if (parsing(&obj, cenvp))
+			if (parsing(&obj))
 				execute(&obj);
 			g_signal = 0;
 			normal_signal();

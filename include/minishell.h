@@ -134,7 +134,7 @@ int main(int argc, char *argv[], char **envp);
 void ctrl_c_inside_child(int signal);
 
 /* ********* parsing ********** */
-bool parsing(t_obj *obj, char **envp);
+bool parsing(t_obj *obj);
 void quote_error(char *str);
 int check_quotes(char *str);
 void track_quotes(char c, bool *s_quote, bool *d_quote);

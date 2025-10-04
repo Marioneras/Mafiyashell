@@ -47,7 +47,7 @@ static void	racine_ex(t_token *head, char **envp)
 	}
 }
 
-bool	parsing(t_obj *obj, char **envp)
+bool	parsing(t_obj *obj)
 {
 	int	syntax_error;
 
@@ -65,7 +65,7 @@ bool	parsing(t_obj *obj, char **envp)
 		}
 		else
 		{
-			racine_ex(obj->token, envp);
+			racine_ex(obj->token, obj->env);
 			quote_removal(obj->token);
 			obj->cmd = create_cmd(obj);
 			free_token(obj->token);
