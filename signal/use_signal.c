@@ -20,10 +20,18 @@ void    handle_normal_sigint(int sig)
 void    handle_exec_sigint(int sig)
 {
     g_signal = sig;             // Sauvegarde le signal
-    write(1, "\n", 1); 
+    write(1, "\n", 1);
     rl_replace_line("", 0);        // Efface la ligne courante
     rl_on_new_line();              // Se positionne sur nouvelle ligne
     // Pas de rl_redisplay() : on ne veut pas réafficher le prompt
+}
+
+void	handle_heredoc_sigint(int sig)
+{
+	g_signal = sig;
+	write(1, "\n", 1);
+	close(STDIN_FILENO);
+	unlink(".heredoc");
 }
 
 void    handle_sigquit(int sig) // = ctrl backslash

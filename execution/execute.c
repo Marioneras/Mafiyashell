@@ -170,10 +170,7 @@ void	execute(t_obj *obj)
 	{
 		saved_cmd = obj->cmd;
 		if (!obj->cmd->next && is_builtin(obj->cmd->argv[0]))
-		{
 			run_single_builtin_safely(obj);
-			// check if builtin execution worked
-		}
 		else
 			execution_routine(obj);
 		free_cmd(saved_cmd);

@@ -224,8 +224,10 @@ int check_cd(char **agrv);
 void    normal_signal(void);
 void    in_exec_signal(void);
 void    child_signal(void);
+void	heredoc_signal(void);
 void    handle_normal_sigint(int sig);
 void    handle_exec_sigint(int sig);
+void	handle_heredoc_sigint(int sig);
 void    handle_sigquit(int sig);
 void handle_sigchld(int sig);
 

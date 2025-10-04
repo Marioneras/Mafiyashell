@@ -82,11 +82,9 @@ int main(int argc, char *argv[], char **envp)
 	normal_signal();
 	if (argc == 1)
 	{
-		//init_signal();
 		clear_history();
 		while (42)
 		{
-			//init_signal();
 			if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO)
 				|| !isatty(STDERR_FILENO))
 				obj.input = get_next_line(STDIN_FILENO);
