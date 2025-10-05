@@ -18,14 +18,14 @@ static int run_exit(t_obj *obj)
 
 	exit_code = obj->exit_code;
 	printf("exit\n");
-	if (obj->fd->save_stdin >= 0)
-		close(obj->fd->save_stdin);
-	if (obj->fd->save_stdout >= 0)
-		close(obj->fd->save_stdout);
-	if (obj->fd->infile != -1 && obj->fd->infile != STDIN_FILENO)
-		close(obj->fd->infile);
-	if (obj->fd->outfile != -1 && obj->fd->outfile != STDOUT_FILENO)
-		close(obj->fd->outfile);
+	if (obj->fd.save_stdin >= 0)
+		close(obj->fd.save_stdin);
+	if (obj->fd.save_stdout >= 0)
+		close(obj->fd.save_stdout);
+	if (obj->fd.infile != -1 && obj->fd.infile != STDIN_FILENO)
+		close(obj->fd.infile);
+	if (obj->fd.outfile != -1 && obj->fd.outfile != STDOUT_FILENO)
+		close(obj->fd.outfile);
 	free_obj(obj);
 	clear_history();
 	exit(exit_code);
@@ -57,23 +57,23 @@ int run_single_builtin_safely(t_obj *obj)
 {
 	int (*builtin)(t_obj *obj);
 
-	obj->fd->infile = 0;
-	obj->fd->outfile = 1;
-	obj->fd->save_stdin = dup(STDIN_FILENO);
-	obj->fd->save_stdout = dup(STDOUT_FILENO);
-	set_redirections(obj, &obj->fd->infile, &obj->fd->outfile);
+	obj->fd.infile = 0;
+	obj->fd.outfile = 1;
+	obj->fd.save_stdin = dup(STDIN_FILENO);
+	obj->fd.save_stdout = dup(STDOUT_FILENO);
+	set_redirections(obj, &obj->fd.infile, &obj->fd.outfile);
 	builtin = is_builtin(obj->cmd->argv[0]);
 	if (builtin)
 		builtin(obj);
-	dup2(obj->fd->save_stdin, STDIN_FILENO);
-	dup2(obj->fd->save_stdout, STDOUT_FILENO);
-	if (obj->fd->save_stdin >= 0)
-		close(obj->fd->save_stdin);
-	if (obj->fd->save_stdout >= 0)
-		close(obj->fd->save_stdout);
-	if (obj->fd->infile != -1 && obj->fd->infile != STDIN_FILENO)
-		close(obj->fd->infile);
-	if (obj->fd->outfile != -1 && obj->fd->outfile != STDOUT_FILENO)
-		close(obj->fd->outfile);
+	dup2(obj->fd.save_stdin, STDIN_FILENO);
+	dup2(obj->fd.save_stdout, STDOUT_FILENO);
+	if (obj->fd.save_stdin >= 0)
+		close(obj->fd.save_stdin);
+	if (obj->fd.save_stdout >= 0)
+		close(obj->fd.save_stdout);
+	if (obj->fd.infile != -1 && obj->fd.infile != STDIN_FILENO)
+		close(obj->fd.infile);
+	if (obj->fd.outfile != -1 && obj->fd.outfile != STDOUT_FILENO)
+		close(obj->fd.outfile);
 	return (0);
 }

@@ -108,8 +108,8 @@ typedef struct s_obj
 {
 	t_token *token;
 	t_cmd *cmd;
-	t_tool *tool;
-	t_fd	*fd;
+	t_tool tool;
+	t_fd	fd;
 	char **env;
 	char *input;
 	int *pid;

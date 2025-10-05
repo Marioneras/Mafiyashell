@@ -79,8 +79,6 @@ void	free_obj(t_obj *obj)
 		free_cmd(obj->cmd);
 	/* if (obj->env) */
 	/* 	free_env(obj->env); */
-	if (obj->tool)
-		free(obj->tool);
 	if (obj->input)
 		free(obj->input);
 	}

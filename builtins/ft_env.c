@@ -12,7 +12,7 @@ int run_env(t_obj *obj)
     }
     while (obj->env[i] != NULL)
     {
-        ft_putstr_fd(obj->env[i], 2);
+        ft_putstr_fd(obj->env[i], 1);
         write(1, "\n", 1);
         i++;
     }
