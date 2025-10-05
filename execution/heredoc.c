@@ -64,6 +64,7 @@ int	here_doc(char *limiter, char **envp)
 			break ;
 		process_input(&line, quoted, envp);
 		ft_putstr_fd(line, fd);
+		ft_clear(&line);
 		line = readline("> ");
 	}
 	if (!line)
