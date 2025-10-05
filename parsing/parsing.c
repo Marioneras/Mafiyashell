@@ -28,7 +28,7 @@ static int	is_only_space(char *str)
 	return(1);
 }
 
-static void	racine_ex(t_token *head, char **envp)
+static void	racine_ex(t_token *head, char **envp, t_obj *obj)
 {
 	t_token	*current;
 	char	*result;
@@ -36,7 +36,7 @@ static void	racine_ex(t_token *head, char **envp)
 	current = head;
 	while (current)
 	{
-		result = expand_it(current->name, envp);
+		result = expand_it(current->name, envp, obj);
 		if (result && result != current->name)
 		{
 			free(current->name);
@@ -65,7 +65,7 @@ bool	parsing(t_obj *obj)
 		}
 		else
 		{
-			racine_ex(obj->token, obj->env);
+			racine_ex(obj->token, obj->env, obj);
 			quote_removal(obj->token);
 			obj->cmd = create_cmd(obj);
 			free_token(obj->token);

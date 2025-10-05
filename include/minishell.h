@@ -148,15 +148,16 @@ t_redirections *handle_redirections(t_token *token);
 
 /* ********* expand ********** */
 int nb_quote(char *str);
-char *expand_var(char *str, char **envp);
+char *expand_var(char *str, char **envp, t_obj *obj);
 int is_expand(char *str);
-char *after_dollar(char *str, int *i, char **envp);
+char *after_dollar(char *str, int *i, char **envp, t_obj *obj);
 char *get_value(char *var_name, char **envp);
 int check_char(char c);
 char *special_case(char *str, int *i);
 char *join_and_free(char *s1, char *s2);
-char *expand_it(char *str, char **envp);
+char *expand_it(char *str, char **envp, t_obj *obj);
 char *get_varname(char *str, int *i, int start);
+char	*process_segment(char *str, int *i, int start, char **envp, char *result, t_obj *obj);
 
 /* ********* execute ********** */
 void execute(t_obj *obj);
@@ -165,8 +166,8 @@ char *get_env_variable(char **env, char *variable);
 void set_redirections(t_obj *obj, int *infile,
 					  int *outfile);
 bool create_files(t_obj *obj);
-bool open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp);
-int here_doc(char *limiter, char **envp);
+bool open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp, t_obj *obj);
+int here_doc(char *limiter, char **envp, t_obj *obj);
 char *get_next_line(int fd);
 
 /* ********* builtins ********** */

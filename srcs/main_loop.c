@@ -47,7 +47,7 @@ char	**safe_env(void)
 	char **tab;
 	char *pwd;
 	
-	tab = malloc(sizeof(char *) * 4);
+	tab = malloc(sizeof(char *) * 5);
 	if (!tab)
 		return (NULL);
 	pwd = getcwd(NULL, 0);
@@ -62,7 +62,8 @@ char	**safe_env(void)
 	tab[2] = ft_strdup("_=/usr/bin/env");
 	if (!tab[2])
 		return(free(pwd), free_tab(tab, 2), NULL);
-	tab[3] = NULL;
+	tab[3] = ft_strdup("PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin");
+	tab[4] = NULL;
 	free(pwd);
 	return (tab);
 }

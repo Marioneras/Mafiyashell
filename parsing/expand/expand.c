@@ -12,13 +12,13 @@
 
 #include "minishell.h"
 
-char	*expand_it(char *str, char **envp)
+char	*expand_it(char *str, char **envp, t_obj *obj)
 {
 	char	*new;
 
 	new = NULL;
 	if (is_expand(str))
-		new = expand_var(str, envp);
+		new = expand_var(str, envp, obj);
 	if (new != NULL)
 	{
 		//free(str); // Libère str si new est non-NULL
@@ -27,7 +27,7 @@ char	*expand_it(char *str, char **envp)
 	return (new ? new : str);
 }
 
-char	*after_dollar(char *str, int *i, char **envp)
+char	*after_dollar(char *str, int *i, char **envp, t_obj *obj)
 {
 	char	*var_name;
 	char	*replace;
@@ -37,6 +37,11 @@ char	*after_dollar(char *str, int *i, char **envp)
 	original_i = *i;
 	(*i)++;
 	
+	if (str[*i] == '?' || check_char(str[*i]) == 0)
+	{
+		*i = original_i + 2;
+		return (ft_itoa(obj->exit_code));
+	}
 	if (str[*i] == '\0' || check_char(str[*i]) == 0 )
 	{
 		*i = original_i + 1;

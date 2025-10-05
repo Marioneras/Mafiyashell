@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "minishell.h"  
 
 static char	*strip_quotes(char *limiter, bool *quoted)
 {
@@ -23,14 +23,14 @@ static char	*strip_quotes(char *limiter, bool *quoted)
 	return (limiter);
 }
 
-static void	process_input(char **line, bool quoted, char **envp)
+static void	process_input(char **line, bool quoted, char **envp, t_obj *obj)
 {
 	char	*tmp;
-
+	(void)envp;
 	if (quoted == false)
 	{
 		tmp = (*line);
-		(*line) = expand_var(tmp, envp);
+		(*line) = expand_var(tmp, envp, obj);
 		ft_clear(&tmp);
 	}
 	tmp = (*line);
@@ -53,7 +53,7 @@ int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout)
 	return (-2);
 }
 
-int	here_doc(char *limiter, char **envp)
+int	here_doc(char *limiter, char **envp, t_obj *obj)
 {
 	int		fd;
 	int		save_stdin;
@@ -77,7 +77,7 @@ int	here_doc(char *limiter, char **envp)
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
 			&& line[ft_strlen(limiter)] == '\0')
 			break ;
-		process_input(&line, quoted, envp);
+		process_input(&line, quoted, envp, obj);
 		ft_putstr_fd(line, fd);
 		line = readline("> ");
 	}

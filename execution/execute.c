@@ -79,7 +79,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	int	old_fd;
 
 	output_fd = STDOUT_FILENO;
-	if (!open_fd(obj->cmd, input_fd, &output_fd, obj->env))
+	if (!open_fd(obj->cmd, input_fd, &output_fd, obj->env, obj))
 		return (1);
 	if (obj->cmd->next)
 	{
