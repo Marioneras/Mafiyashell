@@ -53,7 +53,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
 	builtin = is_builtin(obj->cmd->argv[0]);
 	if (builtin)
-		builtin(obj);
+		obj->exit_code = builtin(obj);
 	else
 	{
 		cmd_path = get_absolute_path(obj->cmd, obj->env);

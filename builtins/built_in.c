@@ -73,7 +73,7 @@ int run_single_builtin_safely(t_obj *obj)
 	set_redirections(obj, &obj->fd.infile, &obj->fd.outfile);
 	builtin = is_builtin(obj->cmd->argv[0]);
 	if (builtin)
-		builtin(obj);
+		obj->exit_code = builtin(obj);
 	dup2(obj->fd.save_stdin, STDIN_FILENO);
 	dup2(obj->fd.save_stdout, STDOUT_FILENO);
 	if (obj->fd.save_stdin >= 0)
