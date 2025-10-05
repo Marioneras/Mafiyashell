@@ -50,7 +50,7 @@ int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout)
 	ft_putstr_fd("delimited by end-of-file (wanted `", 2);
 	ft_putstr_fd(limiter, 2);
 	ft_putstr_fd("')\n", 2);
-	return (-2);
+	return (0);
 }
 
 int	here_doc(char *limiter, char **envp)
