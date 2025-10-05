@@ -39,7 +39,7 @@ bool	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (*input_fd < 0)
 		return (display_error_message(errno, cmd->infile), false);
-	if (*input_fd == 130 || *input_fd == 131 || *input_fd == 0)
+	if (*input_fd == 130 || *input_fd == 131 || *input_fd == 150)
 		return (false);
 	if (*output_fd < 0)
 		return (display_error_message(errno, cmd->outfile), false);

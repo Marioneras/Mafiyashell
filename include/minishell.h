@@ -195,6 +195,7 @@ char *ft_clear(char **array);
 /* ***** display functions ***** */
 void display_error_message(int error_code, char *error_message);
 int redirection_error(char *str);
+int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout);
 void print_cmd(t_cmd *cmd);
 void print_list(t_token *list);
 

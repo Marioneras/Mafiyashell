@@ -31,7 +31,6 @@ void	handle_heredoc_sigint(int sig)
 	g_signal = sig;
 	write(1, "\n", 1);
 	close(STDIN_FILENO);
-	unlink(".heredoc");
 }
 
 void    handle_sigquit(int sig) // = ctrl backslash

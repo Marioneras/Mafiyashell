@@ -38,21 +38,6 @@ static void	process_input(char **line, bool quoted, char **envp)
 	ft_clear(&tmp);
 }
 
-int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout)
-{
-	dup2(save_stdin, STDIN_FILENO);
-	dup2(save_stdout, STDOUT_FILENO);
-	if (g_signal == SIGINT)
-		return (130);
-	if (g_signal == SIGQUIT)
-		return (131);
-	ft_putstr_fd("mafiyashell: warning: here-document ", 2);
-	ft_putstr_fd("delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(limiter, 2);
-	ft_putstr_fd("')\n", 2);
-	return (0);
-}
-
 int	here_doc(char *limiter, char **envp)
 {
 	int		fd;
