@@ -38,7 +38,7 @@ static void	process_input(char **line, bool quoted, char **envp, t_obj *obj)
 	ft_clear(&tmp);
 }
 
-int	here_doc(char *limiter, char **envp)
+int	here_doc(char *limiter, char **envp, t_obj *obj)
 {
 	int		fd;
 	int		save_stdin;
