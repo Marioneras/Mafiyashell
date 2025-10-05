@@ -16,8 +16,16 @@ static int run_exit(t_obj *obj)
 {
 	int exit_code;
 
-	exit_code = obj->exit_code;
-	printf("exit\n");
+	ft_putstr_fd("exit\n", 1);
+	if (obj->cmd->argv[1] && obj->cmd->argv[2])
+		return (ft_putstr_fd("mafiyashell: exit: too many arguments", 2), 130);
+	if (obj->cmd->argv[1] && !ft_strevery(obj->cmd->argv[1], ft_isdigit))
+	{
+		ft_putstr_fd("mafiyashell: ", 2);
+		ft_putstr_fd(obj->cmd->argv[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		obj->exit_code = 2;
+	}
 	if (obj->fd.save_stdin >= 0)
 		close(obj->fd.save_stdin);
 	if (obj->fd.save_stdout >= 0)
@@ -26,6 +34,7 @@ static int run_exit(t_obj *obj)
 		close(obj->fd.infile);
 	if (obj->fd.outfile != -1 && obj->fd.outfile != STDOUT_FILENO)
 		close(obj->fd.outfile);
+	exit_code = obj->exit_code;
 	free_obj(obj);
 	clear_history();
 	exit(exit_code);
