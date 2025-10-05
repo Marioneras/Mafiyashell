@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-static bool is_flag(char *str)
+static bool	is_flag(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[i] != '-')
@@ -31,7 +31,7 @@ static bool is_flag(char *str)
 	return (true);
 }
 
-static bool check_arguments(char **args)
+static bool	check_arguments(char **args)
 {
 	if (!args || !*args)
 		return (true);
@@ -40,7 +40,7 @@ static bool check_arguments(char **args)
 	return (true);
 }
 
-int ft_echo(t_obj *obj)
+int	ft_echo(t_obj *obj)
 {
 	bool	new_line;
 	int		i;

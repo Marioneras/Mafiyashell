@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-static int run_exit(t_obj *obj)
+static int	run_exit(t_obj *obj)
 {
-	int exit_code;
+	int	exit_code;
 
 	ft_putstr_fd("exit\n", 1);
 	if (obj->cmd->argv[1] && obj->cmd->argv[2])
@@ -41,9 +41,9 @@ static int run_exit(t_obj *obj)
 	return (0);
 }
 
-int (*is_builtin(char *cmd))(t_obj *obj)
+int	(*is_builtin(char *cmd))(t_obj *obj)
 {
-	const t_builtin dico[]= {
+	const t_builtin	dico[] =	{
 		(t_builtin){"echo", ft_echo},
 		(t_builtin){"cd", run_cd},
 		(t_builtin){"pwd", run_pwd},
@@ -53,7 +53,7 @@ int (*is_builtin(char *cmd))(t_obj *obj)
 		(t_builtin){"exit", run_exit},
 		(t_builtin){0, 0}
 	};
-	int	i;
+	int				i;
 
 	i = -1;
 	while (dico[++i].name)
@@ -62,9 +62,9 @@ int (*is_builtin(char *cmd))(t_obj *obj)
 	return (0);
 }
 
-int run_single_builtin_safely(t_obj *obj)
+int	run_single_builtin_safely(t_obj *obj)
 {
-	int (*builtin)(t_obj *obj);
+	int	(*builtin)(t_obj *obj);
 
 	obj->fd.infile = 0;
 	obj->fd.outfile = 1;
