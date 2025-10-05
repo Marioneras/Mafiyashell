@@ -13,6 +13,7 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
@@ -40,6 +41,8 @@ char				*ft_strchr(const char *s, int c);
 char				*ft_strnstr(const char *big, const char *little,
 						size_t len);
 char				**ft_split(char const *s, char c);
+
+bool				ft_strevery(char *str, int (*f)(int));
 
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 void				ft_putchar_fd(char c, int fd);

@@ -17,26 +17,16 @@ static void init_obj(t_obj *obj, char **env)
 	obj->token = NULL;
 	obj->cmd = NULL;
 	obj->env = env;
-	obj->fd = (t_fd *)malloc(sizeof(t_fd));
-	obj->tool = (t_tool *)malloc(sizeof(t_tool));
-	if (!obj->fd || !obj->tool)
-		exit(2);
-	if (getcwd(obj->tool->pwd, sizeof(obj->tool->pwd)) == NULL)
+	if (getcwd(obj->tool.pwd, sizeof(obj->tool.pwd)) == NULL
+		|| getcwd(obj->tool.old_pwd, sizeof(obj->tool.pwd)) == NULL)
 	{
 		perror("getcwd() error");
-		free(obj->tool);
 		exit(2);
 	}
-	if (getcwd(obj->tool->old_pwd, sizeof(obj->tool->pwd)) == NULL)
-	{
-		perror("getcwd() error");
-		free(obj->tool);
-		exit(2);
-	}
-	obj->fd->save_stdin = -1;
-	obj->fd->save_stdout = -1;
-	obj->fd->infile = -1;
-	obj->fd->outfile = -1;
+	obj->fd.save_stdin = -1;
+	obj->fd.save_stdout = -1;
+	obj->fd.infile = -1;
+	obj->fd.outfile = -1;
 	obj->input = NULL;
 	obj->pid = 0;
 	obj->exit_code = 0;
@@ -46,7 +36,7 @@ char	**safe_env(void)
 {
 	char **tab;
 	char *pwd;
-	
+
 	tab = malloc(sizeof(char *) * 5);
 	if (!tab)
 		return (NULL);

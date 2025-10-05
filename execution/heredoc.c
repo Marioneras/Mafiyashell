@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"  
+#include "minishell.h"
 
 static char	*strip_quotes(char *limiter, bool *quoted)
 {
@@ -38,22 +38,7 @@ static void	process_input(char **line, bool quoted, char **envp, t_obj *obj)
 	ft_clear(&tmp);
 }
 
-int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout)
-{
-	dup2(save_stdin, STDIN_FILENO);
-	dup2(save_stdout, STDOUT_FILENO);
-	if (g_signal == SIGINT)
-		return (130);
-	if (g_signal == SIGQUIT)
-		return (131);
-	ft_putstr_fd("mafiyashell: warning: here-document ", 2);
-	ft_putstr_fd("delimited by end-of-file (wanted `", 2);
-	ft_putstr_fd(limiter, 2);
-	ft_putstr_fd("')\n", 2);
-	return (-2);
-}
-
-int	here_doc(char *limiter, char **envp, t_obj *obj)
+int	here_doc(char *limiter, char **envp)
 {
 	int		fd;
 	int		save_stdin;
@@ -79,6 +64,7 @@ int	here_doc(char *limiter, char **envp, t_obj *obj)
 			break ;
 		process_input(&line, quoted, envp, obj);
 		ft_putstr_fd(line, fd);
+		ft_clear(&line);
 		line = readline("> ");
 	}
 	if (!line)
