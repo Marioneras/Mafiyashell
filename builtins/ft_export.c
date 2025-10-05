@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+int is_var_exist(char *var, char **env)
+{
+    int i;
+    int var_len;
+
+    i = 0;
+    var_len = 0;
+    while(var[var_len] && var[var_len] != '=')
+        var_len++;
+    while(env[i])
+    {
+        if (ft_strncmp(var, env[i], var_len) == 0 && env[i][var_len] == '=')
+            return i;
+        i++;
+    }
+    return -1;
+}
+
 int new_tab(t_obj *obj, int a)
 {
     char **new;
@@ -26,6 +44,7 @@ int run_export(t_obj *obj)
 {
     int		i;
     char	**clone_av;
+    int var_index;
 
     if (check_option(obj->cmd->argv) == 0)
     {
@@ -36,10 +55,24 @@ int run_export(t_obj *obj)
     clone_av = clone_env(obj->cmd->argv);
     while (clone_av[i] != NULL)
     {
-        if (!new_tab(obj, i))
+        var_index = is_var_exist(clone_av[i], obj->env);
+        if (var_index >= 0)
         {
-            ft_freetab(clone_av);
-			return (EXIT_FAILURE);
+            free(obj->env[var_index]);
+            obj->env[var_index] = ft_strdup(clone_av[1]);
+            if(!obj->env[var_index])
+            {
+                ft_freetab(clone_av);
+                return (EXIT_FAILURE);
+            }
+        }
+        else
+        {
+            if (!new_tab(obj, i))
+            {
+                ft_freetab(clone_av);
+			    return (EXIT_FAILURE);
+            }        
         }
         i++;
     }

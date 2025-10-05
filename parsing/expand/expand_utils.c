@@ -37,7 +37,7 @@ char	*process_string(char *str, int *i, int *start, char **envp, char *result, t
 {
 	while (str[*i] != '\0')
 	{
-		if (str[*i] == '\\' && str[*i + 1] == '$')
+		if (str[*i] == '\\' && str[*i + 1] == '$' && str[*i + 1] != '\0')
 		{
 			char *prefsuf = ft_substr(str, *start, *i - *start);
 			if (prefsuf)

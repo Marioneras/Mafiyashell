@@ -36,7 +36,11 @@ char	*after_dollar(char *str, int *i, char **envp, t_obj *obj)
 
 	original_i = *i;
 	(*i)++;
-	
+	if (str[*i] == '\0')
+	{
+		*i = original_i + 1;
+		return (ft_strdup("$"));
+	}
 	if (str[*i] == '?' || check_char(str[*i]) == 0)
 	{
 		*i = original_i + 2;
