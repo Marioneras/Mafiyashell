@@ -34,7 +34,10 @@ static int	run_exit(t_obj *obj)
 		close(obj->fd.infile);
 	if (obj->fd.outfile != -1 && obj->fd.outfile != STDOUT_FILENO)
 		close(obj->fd.outfile);
-	exit_code = obj->exit_code;
+	if (obj->cmd->argv[1])
+		exit_code = ft_atoi(obj->cmd->argv[1]);
+	else
+		exit_code = obj->exit_code;
 	ft_freetab(obj->env);
 	free_obj(obj);
 	clear_history();

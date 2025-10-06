@@ -46,7 +46,10 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		close(input_fd);
 		input_fd = open(".heredoc", O_RDWR | O_EXCL, 0600);
 		if (input_fd < 0)
-			return (display_error_message(errno, ".heredoc"), 127);
+		{
+			display_error_message(errno, ".heredoc");
+			exit (127);
+		}
 		if (unlink(".heredoc") < 0)
 			display_error_message(errno, ".heredoc");
 	}
@@ -63,13 +66,10 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 			free_obj(obj);
 			exit (126);
 		}
-		if (execve(cmd_path, obj->cmd->argv, obj->env) < 0)
-		{
-			display_error_message(errno, obj->cmd->argv[0]);
-			exit (127);
-		}
+		execve(cmd_path, obj->cmd->argv, obj->env);
+		display_error_message(errno, obj->cmd->argv[0]);
 	}
-	exit (obj->exit_code);
+	exit (127);
 }
 
 static int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
