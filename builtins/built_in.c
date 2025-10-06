@@ -18,7 +18,7 @@ static int	run_exit(t_obj *obj)
 
 	ft_putstr_fd("exit\n", 1);
 	if (obj->cmd->argv[1] && obj->cmd->argv[2])
-		return (ft_putstr_fd("mafiyashell: exit: too many arguments", 2), 130);
+		return (ft_putstr_fd("mafiyashell: exit: too many arguments\n", 2), 130);
 	if (obj->cmd->argv[1] && !ft_strevery(obj->cmd->argv[1], ft_isdigit))
 	{
 		ft_putstr_fd("mafiyashell: ", 2);
