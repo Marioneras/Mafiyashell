@@ -122,7 +122,6 @@ t_cmd	*create_cmd(t_obj *obj)
 		if (!new_cmd)
 			return (NULL);
 		append_cmd(head, new_cmd);
-		new_cmd = new_cmd->next;
 	}
 	return (head);
 }

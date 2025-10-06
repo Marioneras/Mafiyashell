@@ -97,6 +97,21 @@ static t_redirections	*get_redirection(t_token *current)
 	return (new_red);
 }
 
+static bool	is_end_of_pipeline(t_token *current)
+{
+	if (!current || !current->next)
+		return (false);
+	if (current->next->type == PIPE)
+		return (true);
+	if (current->next->next
+		&& current->next->type == LIMITER
+		&& current->next->next->type == PIPE)
+		return (true);
+	if (!current->next->next)
+		return (true);
+	return (false);
+}
+
 t_redirections	*handle_redirections(t_token *token)
 {
 	t_token			*current;
@@ -109,9 +124,7 @@ t_redirections	*handle_redirections(t_token *token)
 		current = current->next;
 	if (!current)
 		return (NULL);
-	if ((current->next && current->next->type == PIPE)
-		|| (current->next->next && (current->next->type == LIMITER
-		&& current->next->next->type == PIPE)) || !current->next->next)
+	if (is_end_of_pipeline(current))
 		return (NULL);
 	head = get_redirection(current);
 	if (!head)
@@ -127,7 +140,6 @@ t_redirections	*handle_redirections(t_token *token)
 			if (!new_red)
 				return (NULL);
 			append_redirections(head, new_red);
-			new_red = new_red->next;
 		}
 		current = current->next;
 	}

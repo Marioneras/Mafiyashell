@@ -162,7 +162,6 @@ static void	execution_routine(t_obj *obj)
 		number_of_commands++;
 		current = current->next;
 	}
-	current = obj->cmd;
 	obj->pid = (int *)malloc(sizeof(int) * number_of_commands);
 	if (!obj->pid)
 		exit(127);

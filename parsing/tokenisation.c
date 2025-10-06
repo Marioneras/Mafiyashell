@@ -155,7 +155,6 @@ t_token	*tokenize(char *str)
 			return (NULL);
 		append_token(head, new_token);
 		find_type(new_token);
-		new_token = new_token->next;
 	}
 	return (head);
 }
