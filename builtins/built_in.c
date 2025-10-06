@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 11:57:01 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/13 18:02:10 by safamran         ###   ########.fr       */
+/*   Updated: 2025/10/06 15:18:09 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static int	run_exit(t_obj *obj)
 	if (obj->fd.outfile != -1 && obj->fd.outfile != STDOUT_FILENO)
 		close(obj->fd.outfile);
 	exit_code = obj->exit_code;
+	ft_freetab(obj->env);
 	free_obj(obj);
 	clear_history();
 	exit(exit_code);
