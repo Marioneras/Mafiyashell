@@ -142,6 +142,8 @@ t_token	*tokenize(char *str)
 	t_token	*head;
 	t_token	*new_token;
 
+	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+		str++;
 	head = get_token(&str);
 	find_type(head);
 	if (!head)
