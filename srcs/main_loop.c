@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 17:36:22 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/27 10:44:49 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/06 15:37:02 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ int main(int argc, char *argv[], char **envp)
 					return (EXIT_FAILURE);
 				}
 			}
-			add_history(obj.input);
+			if (obj.input[0] && obj.input[0] != '\0')
+				add_history(obj.input);
 			if (parsing(&obj))
 				execute(&obj);
 			g_signal = 0;
