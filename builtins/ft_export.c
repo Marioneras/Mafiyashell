@@ -43,7 +43,7 @@ int	check_alpha(t_obj *obj)
 	int i;
 	
 	i = 0;
-	while(obj->cmd->argv != NULL)
+	while(obj->cmd->argv[i] != NULL)
 	{
 		if(ft_isalpha(obj->cmd->argv[i][0]) == 0)
 			return (i);
