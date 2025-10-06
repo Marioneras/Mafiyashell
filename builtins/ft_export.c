@@ -38,16 +38,38 @@ int	new_tab(t_obj *obj, int a)
 	return (1);
 }
 
+int	check_alpha(t_obj *obj)
+{
+	int i;
+	
+	i = 0;
+	while(obj->cmd->argv != NULL)
+	{
+		if(ft_isalpha(obj->cmd->argv[i][0]) == 0)
+			return (i);
+		i++;
+	}
+	return (0);
+}
 
 int	run_export(t_obj *obj)
 {
 	int		i;
 	char	**clone_av;
 	int		var_index;
-
-	if (check_option(obj->cmd->argv) == 0)
+	
+	if (!obj->cmd->argv[1])
 	{
-		ft_putstr_fd("export: No options\n", 2);
+		ft_putstr_fd("mafiyashell: export: No argument\n", 2);
+		return (EXIT_FAILURE);
+	}
+	int a =	check_alpha(obj); 
+	if (a != 0)
+	{
+		obj->exit_code = 1;
+		ft_putstr_fd("mafiyashell: export: `", 2);
+		ft_putstr_fd(obj->cmd->argv[a], 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
 		return (EXIT_FAILURE);
 	}
 	i = 1;
