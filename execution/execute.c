@@ -72,6 +72,18 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 	exit (obj->exit_code);
 }
 
+static int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
+{
+	obj->pid[i] = -1;
+	if (obj->cmd->heredoc)
+	{
+		close(input_fd);
+		if (unlink(".heredoc") < 0)
+			display_error_message(errno, ".heredoc");
+	}
+	return (0);
+}
+
 static int	execute_command(t_obj *obj, int i, int *input_fd)
 {
 	int	pipe_fd[2];
@@ -81,6 +93,8 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	output_fd = STDOUT_FILENO;
 	if (!open_fd(obj->cmd, input_fd, &output_fd, obj->env, obj))
 		return (1);
+	if (!obj->cmd->argv[0])
+		return (execute_alone_redirections(obj, i, *input_fd));
 	if (obj->cmd->next)
 	{
 		if (pipe(pipe_fd) < 0)
@@ -113,7 +127,9 @@ static void	wait_for_all(int number_of_commands, t_obj *obj)
 	status = 0;
 	while (i < number_of_commands)
 	{
-		if (i + 1 == number_of_commands)
+		if (obj->pid[i] == -1)
+			;
+		else if (i + 1 == number_of_commands)
 			waitpid(obj->pid[i], &status, 0);
 		else
 			waitpid(obj->pid[i], NULL, 0);
@@ -146,6 +162,7 @@ static void	execution_routine(t_obj *obj)
 		number_of_commands++;
 		current = current->next;
 	}
+	current = obj->cmd;
 	obj->pid = (int *)malloc(sizeof(int) * number_of_commands);
 	if (!obj->pid)
 		exit(127);

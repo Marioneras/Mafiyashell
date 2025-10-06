@@ -56,6 +56,8 @@ int	(*is_builtin(char *cmd))(t_obj *obj)
 	};
 	int				i;
 
+	if (!cmd)
+		return (0);
 	i = -1;
 	while (dico[++i].name)
 		if (ft_strncmp(cmd, dico[i].name, ft_strlen(cmd) + 1) == 0)

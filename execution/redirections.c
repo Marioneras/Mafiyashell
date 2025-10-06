@@ -56,10 +56,8 @@ bool	create_files(t_obj *obj)
 	while (current_cmd)
 	{
 		current_red = current_cmd->redirections;
-		while (current_red)
+		while (current_red && current_red->next)
 		{
-			if (!current_red->next)
-				break;
 			if (current_red->type == HEREDOC)
 			{
 				tmp_file = here_doc(current_red->name, obj->env, obj);
@@ -68,11 +66,8 @@ bool	create_files(t_obj *obj)
 				close(tmp_file);
 				unlink(".heredoc");
 			}
-			else
-			{
-				if (open_file(current_red->name, current_red->type) < 0)
-					return (false);
-			}
+			else if (open_file(current_red->name, current_red->type) < 0)
+				return (false);
 			current_red = current_red->next;
 		}
 		current_cmd = current_cmd->next;
