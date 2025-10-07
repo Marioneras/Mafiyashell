@@ -119,9 +119,9 @@ static void	find_type(t_token *token)
 		token->type = TRUNC;
 	else if (ft_strncmp(token->name, "<", 2) == 0)
 		token->type = INPUT;
-	else if (ft_strncmp(token->name, ">>", 3) == 0)
+	else if (ft_strncmp(token->name, ">>", 2) == 0)
 		token->type = APPEND;
-	else if (ft_strncmp(token->name, "<<", 3) == 0)
+	else if (ft_strncmp(token->name, "<<", 2) == 0)
 		token->type = HEREDOC;
 	else if (!token->previous || token->previous->type == EMPTY)
 		token->type = CMD;
@@ -152,7 +152,7 @@ t_token	*tokenize(char *str)
 	{
 		new_token = get_token(&str);
 		if (!new_token)
-			return (NULL);
+			return (free_token(head), NULL);
 		append_token(head, new_token);
 		find_type(new_token);
 	}

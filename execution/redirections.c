@@ -84,7 +84,7 @@ static t_redirections	*get_redirection(t_token *current)
 		return (NULL);
 	new_red->name = ft_strdup(current->next->name);
 	if (!new_red->name)
-		return (NULL);
+		return (free_redirections(new_red), NULL);
 	if (current->type == INPUT)
 		new_red->type = INPUT;
 	else if (current->type == APPEND)
@@ -138,7 +138,7 @@ t_redirections	*handle_redirections(t_token *token)
 		{
 			new_red = get_redirection(current);
 			if (!new_red)
-				return (NULL);
+				return (free_redirections(head), NULL);
 			append_redirections(head, new_red);
 		}
 		current = current->next;

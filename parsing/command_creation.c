@@ -96,7 +96,7 @@ static t_cmd	*get_cmd(t_token **current)
 		{
 			new_cmd->argv[i] = ft_strdup((*current)->name);
 			if (!new_cmd->argv[i])
-				return (NULL);
+				return (free_cmd(new_cmd), NULL);
 			i++;
 		}
 		(*current) = (*current)->next;
@@ -120,7 +120,7 @@ t_cmd	*create_cmd(t_obj *obj)
 		current = current->next;
 		new_cmd = get_cmd(&current);
 		if (!new_cmd)
-			return (NULL);
+			return (free_cmd(head), NULL);
 		append_cmd(head, new_cmd);
 	}
 	return (head);
