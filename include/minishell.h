@@ -146,7 +146,7 @@ char *remove_quotes(char *str);
 t_token *tokenize(char *str);
 int check_syntax(t_token *head);
 t_cmd *create_cmd(t_obj *obj);
-t_redirections *handle_redirections(t_token *token);
+t_redirections	*handle_redirections(t_token *token, t_cmd *current_cmd);
 
 /* ********* expand ********** */
 int nb_quote(char *str);

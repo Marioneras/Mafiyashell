@@ -93,7 +93,7 @@ static t_cmd	*get_cmd(t_token **current)
 	if (!new_cmd)
 		return (NULL);
 	init_cmd(new_cmd, (*current));
-	new_cmd->redirections = handle_redirections((*current));
+	new_cmd->redirections = handle_redirections((*current), new_cmd);
 	i = 0;
 	while ((*current) && (*current)->type != PIPE)
 	{

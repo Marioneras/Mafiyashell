@@ -56,7 +56,7 @@ bool	create_files(t_obj *obj)
 	while (current_cmd)
 	{
 		current_red = current_cmd->redirections;
-		while (current_red && current_red->next)
+		while (current_red)
 		{
 			if (current_red->type == HEREDOC)
 			{
@@ -119,19 +119,35 @@ static bool	is_end_of_pipeline(t_token *current)
 	return (false);
 }
 
-t_redirections	*handle_redirections(t_token *token)
+static bool is_last_infile_or_outfile(t_cmd *cmd, t_token *token)
+{
+	if (!token->next)
+		return (true);
+	if (token->type != HEREDOC
+		&& ft_strncmp(cmd->infile, token->next->name, ft_strlen(cmd->infile) + 1) == 0)
+		return (true);
+	else if (token->type == HEREDOC
+		&& ft_strncmp(cmd->limiter, token->next->name, ft_strlen(cmd->limiter) + 1) == 0)
+		return (true);
+	if (ft_strncmp(cmd->outfile, token->next->name, ft_strlen(cmd->outfile) + 1) == 0)
+		return (true);
+	return (false);
+}
+
+t_redirections	*handle_redirections(t_token *token, t_cmd *current_cmd)
 {
 	t_token			*current;
 	t_redirections	*head;
 	t_redirections	*new_red;
 
 	current = token;
-	while (current && (current->type != INPUT && current->type != APPEND
-			&& current->type != TRUNC && current->type != HEREDOC))
-		current = current->next;
+	while ((current && (current->type != INPUT && current->type != APPEND
+			&& current->type != TRUNC && current->type != HEREDOC)))
+				current = current->next;
 	if (!current)
 		return (NULL);
-	if (is_end_of_pipeline(current))
+	if (is_end_of_pipeline(current)
+		|| is_last_infile_or_outfile(current_cmd, current))
 		return (NULL);
 	head = get_redirection(current);
 	if (!head)
@@ -143,10 +159,13 @@ t_redirections	*handle_redirections(t_token *token)
 			|| current->type == TRUNC || current->type == HEREDOC)
 			&& (current->next && current->next->type != PIPE))
 		{
-			new_red = get_redirection(current);
-			if (!new_red)
-				return (free_redirections(head), NULL);
-			append_redirections(head, new_red);
+			if (!is_last_infile_or_outfile(current_cmd, current))
+			{
+				new_red = get_redirection(current);
+				if (!new_red)
+					return (free_redirections(head), NULL);
+				append_redirections(head, new_red);
+			}
 		}
 		current = current->next;
 	}
@@ -177,5 +196,3 @@ void	set_redirections(t_obj *obj, int *infile, int *outfile)
 			display_error_message(errno, obj->cmd->outfile);
 	}
 }
-
-/* still need to exit in case the files cannot be opened */
