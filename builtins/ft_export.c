@@ -26,7 +26,7 @@ int	new_tab(t_obj *obj, int a)
 	new = malloc(sizeof(char *) * len);
 	if (!new)
 		return 0;
-	if (!clone(obj, new, a))
+	if (clone(obj, new, a))
 	{
 		free(new);
 		return 0;

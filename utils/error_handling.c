@@ -54,9 +54,9 @@ int	redirection_error(char *str)
 	return (INVALID_OPERATOR);
 }
 
-int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout)
+int	handle_heredoc_error(char *filename, char *limiter, int save_stdin, int save_stdout)
 {
-	unlink(".heredoc");
+	unlink(filename);
 	dup2(save_stdin, STDIN_FILENO);
 	dup2(save_stdout, STDOUT_FILENO);
 	if (g_signal == SIGINT)

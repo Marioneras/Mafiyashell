@@ -40,6 +40,7 @@ static void	init_cmd(t_cmd *new_cmd, t_token *token)
 	new_cmd->redirections = NULL;
 	new_cmd->outfile = NULL;
 	new_cmd->infile = NULL;
+	new_cmd->limiter = NULL;
 	new_cmd->heredoc = false;
 	new_cmd->append = false;
 	while (token && token->type != PIPE)
@@ -47,28 +48,33 @@ static void	init_cmd(t_cmd *new_cmd, t_token *token)
 		if (token->type == INPUT)
 		{
 			if (new_cmd->infile)
-				free(new_cmd->infile);
+				ft_clear(&new_cmd->infile);
 			new_cmd->infile = ft_strdup(token->next->name);
+			if (new_cmd->limiter)
+				ft_clear(&new_cmd->limiter);
 			new_cmd->heredoc = false;
 		}
 		else if (token->type == HEREDOC)
 		{
 			if (new_cmd->infile)
-				free(new_cmd->infile);
-			new_cmd->infile = ft_strdup(token->next->name);
+				ft_clear(&new_cmd->infile);
+			new_cmd->infile = name_heredoc_file();
+			if (new_cmd->limiter)
+				ft_clear(&new_cmd->limiter);
+			new_cmd->limiter = ft_strdup(token->next->name);
 			new_cmd->heredoc = true;
 		}
 		else if (token->type == TRUNC)
 		{
 			if (new_cmd->outfile)
-				free(new_cmd->outfile);
+				ft_clear(&new_cmd->outfile);
 			new_cmd->outfile = ft_strdup(token->next->name);
 			new_cmd->append = false;
 		}
 		else if (token->type == APPEND)
 		{
 			if (new_cmd->outfile)
-				free(new_cmd->outfile);
+				ft_clear(&new_cmd->outfile);
 			new_cmd->outfile = ft_strdup(token->next->name);
 			new_cmd->append = true;
 		}
@@ -87,7 +93,7 @@ static t_cmd	*get_cmd(t_token **current)
 	if (!new_cmd)
 		return (NULL);
 	init_cmd(new_cmd, (*current));
-	new_cmd->redirections = handle_redirections((*current));
+	new_cmd->redirections = handle_redirections((*current), new_cmd);
 	i = 0;
 	while ((*current) && (*current)->type != PIPE)
 	{
@@ -96,7 +102,7 @@ static t_cmd	*get_cmd(t_token **current)
 		{
 			new_cmd->argv[i] = ft_strdup((*current)->name);
 			if (!new_cmd->argv[i])
-				return (NULL);
+				return (free_cmd(new_cmd), NULL);
 			i++;
 		}
 		(*current) = (*current)->next;
@@ -120,9 +126,8 @@ t_cmd	*create_cmd(t_obj *obj)
 		current = current->next;
 		new_cmd = get_cmd(&current);
 		if (!new_cmd)
-			return (NULL);
+			return (free_cmd(head), NULL);
 		append_cmd(head, new_cmd);
-		new_cmd = new_cmd->next;
 	}
 	return (head);
 }

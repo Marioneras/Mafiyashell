@@ -85,7 +85,7 @@ void	quote_removal(t_token *token)
 			current->name = remove_quotes(tmp);
 			if (!current->name)
 				return ;
-			free(tmp);
+			ft_clear(&tmp);
 		}
 		current = current->next;
 	}

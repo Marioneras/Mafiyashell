@@ -16,6 +16,9 @@ static char	is_sep(char c, char *token, bool track_s_quote, bool track_d_quote)
 {
 	if (!token)
 		return (false);
+	if ((c == '\'' || c == '"') && (*token == '|' || *token == '<'
+		|| *token == '>'))
+		return (true);
 	if (track_s_quote || track_d_quote)
 		return (false);
 	if (c == ' ' || (c >= '\t' && c <= '\r'))
@@ -142,6 +145,8 @@ t_token	*tokenize(char *str)
 	t_token	*head;
 	t_token	*new_token;
 
+	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+		str++;
 	head = get_token(&str);
 	find_type(head);
 	if (!head)
@@ -150,10 +155,9 @@ t_token	*tokenize(char *str)
 	{
 		new_token = get_token(&str);
 		if (!new_token)
-			return (NULL);
+			return (free_token(head), NULL);
 		append_token(head, new_token);
 		find_type(new_token);
-		new_token = new_token->next;
 	}
 	return (head);
 }

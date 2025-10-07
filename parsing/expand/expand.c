@@ -88,7 +88,6 @@ char	*get_value(char *var_name, char **envp)
         return (NULL);
     }
 
-	envlen = 0;
 	varlen = ft_strlen(var_name);
 	i = 0;
 	while(envp[i] != NULL)

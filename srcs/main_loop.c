@@ -95,6 +95,8 @@ int main(int argc, char *argv[], char **envp)
 					return (EXIT_FAILURE);
 				}
 			}
+			if (g_signal == SIGINT)
+				obj.exit_code = 130;
 			if (obj.input[0] && obj.input[0] != '\0')
 				add_history(obj.input);
 			if (parsing(&obj))
