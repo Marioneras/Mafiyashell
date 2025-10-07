@@ -16,6 +16,9 @@ static char	is_sep(char c, char *token, bool track_s_quote, bool track_d_quote)
 {
 	if (!token)
 		return (false);
+	if ((c == '\'' || c == '"') && (*token == '|' || *token == '<'
+		|| *token == '>'))
+		return (true);
 	if (track_s_quote || track_d_quote)
 		return (false);
 	if (c == ' ' || (c >= '\t' && c <= '\r'))
@@ -119,9 +122,9 @@ static void	find_type(t_token *token)
 		token->type = TRUNC;
 	else if (ft_strncmp(token->name, "<", 2) == 0)
 		token->type = INPUT;
-	else if (ft_strncmp(token->name, ">>", 2) == 0)
+	else if (ft_strncmp(token->name, ">>", 3) == 0)
 		token->type = APPEND;
-	else if (ft_strncmp(token->name, "<<", 2) == 0)
+	else if (ft_strncmp(token->name, "<<", 3) == 0)
 		token->type = HEREDOC;
 	else if (!token->previous || token->previous->type == EMPTY)
 		token->type = CMD;
