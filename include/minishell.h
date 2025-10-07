@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/06 19:39:31 by safamran         ###   ########.fr       */
+/*   Updated: 2025/10/07 19:56:00 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,11 @@ int run_unset(t_obj *obj);
 int run_pwd(t_obj *obj);
 void    replace_pwd(t_obj *obj, char *str);
 int	is_var_exist(char *str, char **env);
+char    **get_pwd(void);
+char    **get_oldpwd(char **env);
+int update_env(t_obj *obj);
+int     check_cd(char **argv);
+
 /* ***** linked list utils **** */
 t_redirections *append_redirections(t_redirections *head,
 									t_redirections *node);

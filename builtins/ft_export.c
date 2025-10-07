@@ -22,7 +22,6 @@ int	new_tab(t_obj *obj, int a)
 {
 	char **new;
 	int len;
-
 	len = ft_tabcount(obj->env) + 2;
 	new = malloc(sizeof(char *) * len);
 	if (!new)
@@ -31,7 +30,7 @@ int	new_tab(t_obj *obj, int a)
 	{
 		free(new);
 		return 0;
-    }
+	}
 	char **old_env = obj->env;
 	obj->env = new;
 	ft_freetab(old_env);
@@ -51,6 +50,48 @@ int	check_alpha(t_obj *obj)
 	}
 	return (0);
 }
+/*
+void	expand_export(t_obj *obj)
+{
+	int	i;
+	char	*result;
+	i = 1;
+	while(obj->cmd->argv[i] != NULL)
+	{
+		//ft_putstr_fd(obj->cmd->argv[i], 2);
+		//ft_putstr_fd("\n", 2);
+		if (is_export_expand(obj->cmd->argv[i]) == 1)
+			result = expand_var(obj->cmd->argv[i], obj->env, obj);
+		if (result && result != obj->cmd->argv[i])
+		{
+			free(obj->cmd->argv[i]);
+			obj->cmd->argv[i] = ft_strdup(result);
+			free(result);
+		}
+		i++;
+	}	
+}
+
+int	is_export_expand(char *str)
+{
+	if (nb_dollar(str) == 0)
+		return (0);
+	int i;
+	while(str[i] != '=' && str[i])
+		i++;
+	if (str[i] != '\0')
+		return (0);
+	if (nb_quote(str + i + 1) != 0)
+	{
+		if (quote_check(str + i + 1) == 0)
+		{
+			//printf("\n%s\n\n", str);
+			//printf("\nhere\n");
+			return (0);
+		}
+	}
+	return (1);
+}*/
 
 int	run_export(t_obj *obj)
 {
@@ -63,7 +104,7 @@ int	run_export(t_obj *obj)
 		ft_putstr_fd("mafiyashell: export: No argument\n", 2);
 		return (EXIT_FAILURE);
 	}
-	int a =	check_alpha(obj); 
+	int a =	check_alpha(obj);
 	if (a != 0)
 	{
 		obj->exit_code = 1;
@@ -73,6 +114,7 @@ int	run_export(t_obj *obj)
 		return (EXIT_FAILURE);
 	}
 	i = 1;
+	//expand_export(obj);
 	clone_av = clone_env(obj->cmd->argv);
 	while (clone_av[i] != NULL)
 	{

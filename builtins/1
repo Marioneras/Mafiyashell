@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_cd.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: safamran <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/07 20:11:37 by safamran          #+#    #+#             */
-/*   Updated: 2025/10/07 21:25:11 by safamran         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 int	run_cd(t_obj *obj)
@@ -36,7 +24,6 @@ int	run_cd(t_obj *obj)
 	}
 	if (update_env(obj) != 0)
 	{
-		
 		ft_putstr_fd("mafiyashell: cd: error\n", 2);
 		return (1);
 	}
@@ -69,22 +56,10 @@ char	**get_pwd(void)
 	return (result);
 }
 
-char *get_cd_value(const char *key, char **env)
-{
-    size_t key_len = strlen(key);
-    for (int i = 0; env[i]; i++)
-    {
-        if (strncmp(env[i], key, key_len) == 0 && env[i][key_len] == '=')
-            return ft_strdup(env[i] + key_len + 1); // Alloue une nouvelle chaîne
-    }
-    return NULL;
-}
-
 char	**get_oldpwd(char **env)
 {
 	char	**result;
 	char	*pwd_value;
-	char	buffer[PATH_MAX];
 
 	result = malloc(sizeof(char *) * 3);
 	if (!result)
@@ -95,16 +70,12 @@ char	**get_oldpwd(char **env)
 		free(result);
 		return (NULL);
 	}
-	pwd_value = get_cd_value("PWD", env);
+	pwd_value = get_value("PWD", env);
 	if (!pwd_value)
 	{
-		pwd_value = ft_strdup(getcwd(buffer, PATH_MAX));
-		if (!pwd_value)
-		{
-			free(result[0]);
-			free(result);
-			return (NULL);
-		}
+		free(result[0]);
+		free(result);
+		return (NULL);
 	}
 	result[1] = ft_strjoin("OLDPWD=", pwd_value);
 	free(pwd_value);
@@ -122,22 +93,17 @@ int update_env(t_obj *obj)
 {
 	char	**oldpwd;
 	char	**pwd;
-	char	**saved_argv = obj->cmd->argv;
 
 	oldpwd = get_oldpwd(obj->env);
 	if (!oldpwd)
-        	return (1);
-	obj->cmd->argv = oldpwd;
+		return (1);
 	run_export(obj);
-	obj->cmd->argv = saved_argv;
 	ft_freetab(oldpwd);
 
 	pwd = get_pwd();
 	if (!pwd)
-		return (1);
-	obj->cmd->argv = pwd;
-	run_export(obj);
-	obj->cmd->argv = saved_argv;
+	return (1);
+    	run_export(obj);
 	ft_freetab(pwd);
 	return (0);
 }
