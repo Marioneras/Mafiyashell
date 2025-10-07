@@ -27,10 +27,10 @@ static int	open_file(char *filename, int type)
 	return (fd);
 }
 
-bool	open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp, t_obj *obj)
+bool	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)
 {
 	if (cmd->infile && cmd->heredoc)
-		*input_fd = here_doc(cmd->infile, envp, obj);
+		*input_fd = here_doc(obj, cmd->infile, cmd->limiter);
 	if (cmd->infile && !cmd->heredoc)
 		*input_fd = open(cmd->infile, O_RDONLY);
 	if (cmd->outfile && cmd->append)
@@ -60,11 +60,11 @@ bool	create_files(t_obj *obj)
 		{
 			if (current_red->type == HEREDOC)
 			{
-				tmp_file = here_doc(current_red->name, obj->env, obj);
+				tmp_file = here_doc(obj, current_red->name, current_red->limiter);
 				if (tmp_file < 0 || tmp_file == 130 || tmp_file == 131)
 					return (false);
 				close(tmp_file);
-				unlink(".heredoc");
+				unlink(current_red->name);
 			}
 			else if (open_file(current_red->name, current_red->type) < 0)
 				return (false);
@@ -79,12 +79,9 @@ static t_redirections	*get_redirection(t_token *current)
 {
 	t_redirections	*new_red;
 
-	new_red = (t_redirections *)malloc(sizeof(t_redirections));
+	new_red = (t_redirections *)ft_calloc(sizeof(t_redirections), 1);
 	if (!new_red)
 		return (NULL);
-	new_red->name = ft_strdup(current->next->name);
-	if (!new_red->name)
-		return (free_redirections(new_red), NULL);
 	if (current->type == INPUT)
 		new_red->type = INPUT;
 	else if (current->type == APPEND)
@@ -93,7 +90,17 @@ static t_redirections	*get_redirection(t_token *current)
 		new_red->type = TRUNC;
 	else if (current->type == HEREDOC)
 		new_red->type = HEREDOC;
-	new_red->next = NULL;
+	if (new_red->type != HEREDOC)
+		new_red->name = ft_strdup(current->next->name);
+	else
+	{
+		new_red->name = name_heredoc_file();
+		new_red->limiter = ft_strdup(current->next->name);
+		if (!new_red->limiter)
+			return (free_redirections(new_red), NULL);
+	}
+	if (!new_red->name)
+		return (free_redirections(new_red), NULL);
 	return (new_red);
 }
 

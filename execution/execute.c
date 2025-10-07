@@ -44,14 +44,14 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 	if (obj->cmd->heredoc)
 	{
 		close(input_fd);
-		input_fd = open(".heredoc", O_RDWR | O_EXCL, 0600);
+		input_fd = open(obj->cmd->infile, O_RDWR | O_EXCL, 0600);
 		if (input_fd < 0)
 		{
-			display_error_message(errno, ".heredoc");
+			display_error_message(errno, obj->cmd->infile);
 			exit (127);
 		}
-		if (unlink(".heredoc") < 0)
-			display_error_message(errno, ".heredoc");
+		if (unlink(obj->cmd->infile) < 0)
+			display_error_message(errno, obj->cmd->infile);
 	}
 	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
 	builtin = is_builtin(obj->cmd->argv[0]);
@@ -78,8 +78,8 @@ static int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
 	if (obj->cmd->heredoc)
 	{
 		close(input_fd);
-		if (unlink(".heredoc") < 0)
-			display_error_message(errno, ".heredoc");
+		if (unlink(obj->cmd->infile) < 0)
+			display_error_message(errno, obj->cmd->infile);
 	}
 	return (0);
 }
@@ -91,7 +91,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	int	old_fd;
 
 	output_fd = STDOUT_FILENO;
-	if (!open_fd(obj->cmd, input_fd, &output_fd, obj->env, obj))
+	if (!open_fd(obj, obj->cmd, input_fd, &output_fd))
 		return (1);
 	if (!obj->cmd->argv[0])
 		return (execute_alone_redirections(obj, i, *input_fd));

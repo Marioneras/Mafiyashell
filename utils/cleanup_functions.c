@@ -38,7 +38,9 @@ void	free_redirections(t_redirections *red)
 	{
 		tmp = red;
 		red = red->next;
-		free(tmp->name);
+		ft_clear(&tmp->name);
+		if (tmp->limiter)
+			ft_clear(&tmp->limiter);
 		free(tmp);
 	}
 }
@@ -61,9 +63,11 @@ void	free_cmd(t_cmd *cmd)
 		}
 		free(tmp->argv);
 		if (tmp->infile)
-			free(tmp->infile);
+			ft_clear(&tmp->infile);
 		if (tmp->outfile)
-			free(tmp->outfile);
+			ft_clear(&tmp->outfile);
+		if (tmp->limiter)
+			ft_clear(&tmp->limiter);
 		free_redirections(tmp->redirections);
 		free(tmp);
 	}

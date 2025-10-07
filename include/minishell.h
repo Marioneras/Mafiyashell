@@ -80,6 +80,7 @@ typedef struct s_tool
 typedef struct s_redirections
 {
 	char *name;
+	char *limiter;
 	int type;
 	struct s_redirections *next;
 } t_redirections;
@@ -88,6 +89,7 @@ typedef struct s_cmd
 {
 	char **argv;
 	char *infile;
+	char *limiter;
 	char *outfile;
 	int append;
 	int heredoc;
@@ -166,8 +168,9 @@ char *get_env_variable(char **env, char *variable);
 void set_redirections(t_obj *obj, int *infile,
 					  int *outfile);
 bool create_files(t_obj *obj);
-bool open_fd(t_cmd *cmd, int *input_fd, int *output_fd, char **envp, t_obj *obj);
-int here_doc(char *limiter, char **envp, t_obj *obj);
+bool	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd);
+char	*name_heredoc_file(void);
+int	here_doc(t_obj *obj, char *filename, char *limiter);
 char *get_next_line(int fd);
 
 /* ********* builtins ********** */
@@ -196,7 +199,7 @@ char *ft_clear(char **array);
 /* ***** display functions ***** */
 void display_error_message(int error_code, char *error_message);
 int redirection_error(char *str);
-int	handle_heredoc_error(char *limiter, int save_stdin, int save_stdout);
+int	handle_heredoc_error(char *filename, char *limiter, int save_stdin, int save_stdout);
 void print_cmd(t_cmd *cmd);
 void print_list(t_token *list);
 
