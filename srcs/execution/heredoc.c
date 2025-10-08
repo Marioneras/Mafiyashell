@@ -58,7 +58,7 @@ int	here_doc(t_obj *obj, char *file, char *limit)
 	tmp = limit;
 	limit = strip_quotes(tmp, &quoted);
 	line = readline("> ");
-	while (line && is_end_of_input(line, limit))
+	while (line && !is_end_of_input(line, limit))
 	{
 		write_heredoc_line(fd, &line, quoted, obj);
 		line = readline("> ");
