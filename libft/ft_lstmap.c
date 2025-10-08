@@ -57,8 +57,8 @@ void	ft_printList(t_list *node)
   curr = node;
   while (curr != NULL)
   {
-    printf(" %d", *(int *)curr->content);
-    curr = curr->next;
+	printf(" %d", *(int *)curr->content);
+	curr = curr->next;
   }
   printf("\n");
 }
@@ -76,21 +76,21 @@ int	main(void)
   i = 0;
   while (i < 5)
   {
-    list[i] = ft_lstnew(&content[i]);
-    if (!list[i])
-    {
-      printf("Memory allocation failed !");
-      while (i-- > 0)
-        free(list[i]);
-      return (1);
-    }
-    i++;
+	list[i] = ft_lstnew(&content[i]);
+	if (!list[i])
+	{
+		printf("Memory allocation failed !");
+		while (i-- > 0)
+		free(list[i]);
+		return (1);
+	}
+	i++;
   }
   i = 0;
   while (i < 4)
   {
-    list[i].next = list[i + 1];
-    i++;
+	list[i].next = list[i + 1];
+	i++;
   }
   list[4].next = NULL;
   printf("Linked list before modifications:");
@@ -98,11 +98,11 @@ int	main(void)
   new_list = ft_lstmap(&list[0], f, del);
   printf("Linked list after modifications:");
   ft_printList(new_list);
-    while (new_list)
-    {
-        temp = new_list->next;
-        free(new_list);
-        new_list = temp;
-    }
+	while (new_list)
+	{
+		temp = new_list->next;
+		free(new_list);
+		new_list = temp;
+	}
   return (0);
 }*/

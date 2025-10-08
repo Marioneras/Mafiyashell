@@ -17,17 +17,17 @@ static char	is_sep(char c, char *token, bool track_s_quote, bool track_d_quote)
 	if (!token)
 		return (false);
 	if ((c == '\'' || c == '"') && (*token == '|' || *token == '<'
-		|| *token == '>'))
+			|| *token == '>'))
 		return (true);
 	if (track_s_quote || track_d_quote)
 		return (false);
 	if (c == ' ' || (c >= '\t' && c <= '\r'))
 		return (true);
-	if ((c == '|' || c == '<' || c == '>')
-	 && (*token != '|' && *token != '<' && *token != '>'))
+	if ((c == '|' || c == '<' || c == '>') && (*token != '|' && *token != '<'
+			&& *token != '>'))
 		return (true);
-	if ((c != '|' && c != '<' && c != '>')
-	 && (*token == '|' || *token == '<' || *token == '>'))
+	if ((c != '|' && c != '<' && c != '>') && (*token == '|' || *token == '<'
+			|| *token == '>'))
 		return (true);
 	else
 		return (false);
@@ -42,24 +42,19 @@ static char	*str_append(char const *src, char c)
 		return (NULL);
 	if (!src)
 	{
-		str = (char *)malloc(sizeof(char) + 1);
+		str = (char *)ft_calloc(sizeof(char), 2);
 		if (!str)
 			return (NULL);
 		*str = c;
-		str[1] = '\0';
 		return (str);
 	}
-	str = (char *)malloc(sizeof(char) * (ft_strlen(src) + 2));
+	str = (char *)ft_calloc(sizeof(char), (ft_strlen(src) + 2));
 	if (!str)
 		return (NULL);
-	i = 0;
-	while (src[i])
-	{
+	i = -1;
+	while (src[++i])
 		str[i] = src[i];
-		i++;
-	}
 	str[i++] = c;
-	str[i] = '\0';
 	free((char *)src);
 	return (str);
 }
@@ -103,7 +98,7 @@ static t_token	*get_token(char **str)
 		{
 			while (**str == ' ' || (**str >= '\t' && **str <= '\r'))
 				(*str)++;
-			break;
+			break ;
 		}
 		new_token->name = str_append(new_token->name, **str);
 		(*str)++;
@@ -113,8 +108,8 @@ static t_token	*get_token(char **str)
 
 static void	find_type(t_token *token)
 {
-	if (ft_strncmp(token->name, "\"\"", 3) == 0
-		|| ft_strncmp(token->name, "''", 3) == 0)
+	if (ft_strncmp(token->name, "\"\"", 3) == 0 || ft_strncmp(token->name, "''",
+			3) == 0)
 		token->type = EMPTY;
 	else if (ft_strncmp(token->name, "|", 2) == 0)
 		token->type = PIPE;
@@ -128,8 +123,7 @@ static void	find_type(t_token *token)
 		token->type = HEREDOC;
 	else if (!token->previous || token->previous->type == EMPTY)
 		token->type = CMD;
-	else if (token->previous->type == PIPE
-		|| token->previous->type == FD)
+	else if (token->previous->type == PIPE || token->previous->type == FD)
 		token->type = CMD;
 	else if (token->previous->type == HEREDOC)
 		token->type = LIMITER;

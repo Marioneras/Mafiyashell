@@ -23,7 +23,7 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 	if (cmd->next && !cmd->outfile)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
-			display_error_message(errno, "pipe"); // check for the right message
+			display_error_message(errno, "pipe");
 		close(pipe_fd[1]);
 		close(pipe_fd[0]);
 	}
@@ -35,6 +35,19 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 	}
 }
 
+void	reset_offset(int *input_fd, char *infile)
+{
+	close(*input_fd);
+	*input_fd = open(infile, O_RDWR | O_EXCL, 0600);
+	if (*input_fd < 0)
+	{
+		display_error_message(errno, infile);
+		exit(127);
+	}
+	if (unlink(infile) < 0)
+		display_error_message(errno, infile);
+}
+
 static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
 	char	*cmd_path;
@@ -42,17 +55,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 
 	child_signal();
 	if (obj->cmd->heredoc)
-	{
-		close(input_fd);
-		input_fd = open(obj->cmd->infile, O_RDWR | O_EXCL, 0600);
-		if (input_fd < 0)
-		{
-			display_error_message(errno, obj->cmd->infile);
-			exit (127);
-		}
-		if (unlink(obj->cmd->infile) < 0)
-			display_error_message(errno, obj->cmd->infile);
-	}
+		reset_offset(&input_fd, obj->cmd->infile);
 	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
 	builtin = is_builtin(obj->cmd->argv[0]);
 	if (builtin)
@@ -64,12 +67,12 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		{
 			free(obj->pid);
 			free_obj(obj);
-			exit (126);
+			exit(126);
 		}
 		execve(cmd_path, obj->cmd->argv, obj->env);
 		display_error_message(errno, obj->cmd->argv[0]);
 	}
-	exit (127);
+	exit(127);
 }
 
 static int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
@@ -84,30 +87,13 @@ static int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
 	return (0);
 }
 
-static int	execute_command(t_obj *obj, int i, int *input_fd)
+void	close_fd(t_cmd *cmd, int *input_fd, int pipe_fd[2])
 {
-	int	pipe_fd[2];
-	int	output_fd;
 	int	old_fd;
 
-	output_fd = STDOUT_FILENO;
-	if (!open_fd(obj, obj->cmd, input_fd, &output_fd))
-		return (1);
-	if (!obj->cmd->argv[0])
-		return (execute_alone_redirections(obj, i, *input_fd));
-	if (obj->cmd->next)
-	{
-		if (pipe(pipe_fd) < 0)
-				return (127);
-	}
-	obj->pid[i] = fork();
-	if (obj->pid[i] == 0)
-		child_process(obj, *input_fd, output_fd, pipe_fd);
-	else if (obj->pid[i] < 0)
-		return (127);
-	if (obj->cmd->infile)
+	if (cmd->infile)
 		close(*input_fd);
-	if (obj->cmd->next)
+	if (cmd->next)
 	{
 		close(pipe_fd[1]);
 		old_fd = *input_fd;
@@ -115,6 +101,27 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 		if (old_fd != STDIN_FILENO)
 			close(old_fd);
 	}
+}
+
+static int	execute_command(t_obj *obj, int i, int *input_fd)
+{
+	int	pipe_fd[2];
+	int	output_fd;
+
+	output_fd = STDOUT_FILENO;
+	if (!open_fd(obj, obj->cmd, input_fd, &output_fd))
+		return (1);
+	if (!obj->cmd->argv[0])
+		return (execute_alone_redirections(obj, i, *input_fd));
+	if (obj->cmd->next)
+		if (pipe(pipe_fd) < 0)
+			return (127);
+	obj->pid[i] = fork();
+	if (obj->pid[i] == 0)
+		child_process(obj, *input_fd, output_fd, pipe_fd);
+	else if (obj->pid[i] < 0)
+		return (127);
+	close_fd(obj->cmd, input_fd, pipe_fd);
 	return (0);
 }
 
@@ -137,14 +144,27 @@ static void	wait_for_all(int number_of_commands, t_obj *obj)
 	}
 	if (g_signal == SIGQUIT)
 	{
-    	obj->exit_code = 128 + SIGQUIT; // 131
-    	g_signal = 0;
+		obj->exit_code = 128 + SIGQUIT;
+		g_signal = 0;
 	}
 	if (WIFEXITED(status))
 		obj->exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
-        obj->exit_code = 128 + WTERMSIG(status); // Gère les terminaisons par signal (ex. SIGINT)
+		obj->exit_code = 128 + WTERMSIG(status);
 	free(obj->pid);
+}
+
+static int	count_cmds(t_cmd *current)
+{
+	int	number_of_commands;
+
+	number_of_commands = 0;
+	while (current)
+	{
+		number_of_commands++;
+		current = current->next;
+	}
+	return (number_of_commands);
 }
 
 static void	execution_routine(t_obj *obj)
@@ -156,12 +176,7 @@ static void	execution_routine(t_obj *obj)
 
 	input_fd = STDIN_FILENO;
 	current = obj->cmd;
-	number_of_commands = 0;
-	while (current)
-	{
-		number_of_commands++;
-		current = current->next;
-	}
+	number_of_commands = count_cmds(current);
 	obj->pid = (int *)malloc(sizeof(int) * number_of_commands);
 	if (!obj->pid)
 		exit(127);

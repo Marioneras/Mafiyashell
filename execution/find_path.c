@@ -5,79 +5,76 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/13 16:14:32 by mberthou          #+#    #+#             */
-/*   Updated: 2025/06/17 16:04:54 by mberthou         ###   ########.fr       */
+/*   Created: 2025/10/08 15:31:06 by mberthou          #+#    #+#             */
+/*   Updated: 2025/10/08 15:36:48 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_env_variable(char **env, char *variable)
+static bool	is_absolute_or_relative(char *cmd_name)
 {
-	int	i;
-	int	variable_len;
+	return (cmd_name[0] == '/' || ft_strncmp(cmd_name, "./", 2) == 0);
+}
 
-	variable = ft_strjoin(variable, "=");
-	if (!variable)
+static char	*join_path(const char *dir, const char *cmd)
+{
+	char	*prefix;
+	char	*full_path;
+
+	prefix = ft_strjoin(dir, "/");
+	if (!prefix)
 		return (NULL);
-	variable_len = ft_strlen(variable);
-	i = 0;
-	while (env[i])
+	full_path = ft_strjoin(prefix, cmd);
+	ft_clear(&prefix);
+	return (full_path);
+}
+
+static char	*find_executable_in_paths(char *cmd_name, char **paths)
+{
+	int		i;
+	char	*exec;
+
+	if (!paths)
+		return (NULL);
+	i = -1;
+	while (paths[++i])
 	{
-		if (ft_strncmp(env[i], variable, variable_len) == 0)
-			return (free(variable), &env[i][variable_len]);
-		i++;
+		exec = join_path(paths[i], cmd_name);
+		if (!exec)
+			return (NULL);
+		if (access(exec, F_OK | X_OK) == 0)
+			return (exec);
+		ft_clear(&exec);
 	}
-	free(variable);
 	return (NULL);
 }
 
-int	is_directory(const char *path)
+static char	*handle_direct_command(char *cmd_name)
 {
-	struct stat	statbuf;
-
-	if (stat(path, &statbuf) != 0)
-		return (0);
-	return (S_ISDIR(statbuf.st_mode));
+	if (is_directory(cmd_name))
+		return (display_error_message(21, cmd_name), NULL);
+	return (ft_strdup(cmd_name));
 }
 
 char	*get_absolute_path(t_cmd *cmd, char **env)
 {
-	int		i;
-	char	*exec;
 	char	**paths;
-	char	*path;
+	char	*exec;
 
-	if (!cmd->argv[0][0])
+	if (!cmd->argv[0] || !cmd->argv[0][0])
 		return (NULL);
-	if (cmd->argv[0][0] == '/' || ft_strncmp(cmd->argv[0], "./", 2) == 0)
-	{
-		if (is_directory(cmd->argv[0]))
-		{
-			display_error_message(21, cmd->argv[0]);
-			return (NULL);
-		}
-		return (ft_strdup(cmd->argv[0]));
-	}
+	if (is_absolute_or_relative(cmd->argv[0]))
+		return (handle_direct_command(cmd->argv[0]));
 	paths = ft_split(get_env_variable(env, "PATH"), ':');
 	if (!paths)
 		return (NULL);
-	i = 0;
-	while (paths[i])
-	{
-		path = ft_strjoin(paths[i], "/");
-		if (!path)
-			return (NULL);
-		exec = ft_strjoin(path, cmd->argv[0]);
-		free(path);
-		if (!exec)
-			return (NULL);
-		if (access(exec, F_OK | X_OK) == 0)
-			return (ft_clear_tab(paths), exec);
-		free(exec);
-		i++;
-	}
+	exec = find_executable_in_paths(cmd->argv[0], paths);
 	ft_clear_tab(paths);
-	display_error_message(NO_COMMAND, cmd->argv[0]);
-	return (NULL);
+	if (!exec)
+	{
+		display_error_message(NO_COMMAND, cmd->argv[0]);
+		return (NULL);
+	}
+	return (exec);
 }

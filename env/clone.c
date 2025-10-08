@@ -1,59 +1,59 @@
-
 #include "minishell.h"
 
-void free_tab(char **tab, int i)
+void	free_tab(char **tab, int i)
 {
-    int a;
-    a = 0;
+	int	a;
 
-    while (a < i)
-    {
-        free(tab[a]);
-        a++;
-    }
-    free(tab);
+	a = 0;
+	while (a < i)
+	{
+		free(tab[a]);
+		a++;
+	}
+	free(tab);
 }
 
-char **clone_env(char **envp)
+char	**clone_env(char **envp)
 {
-    char **clone;
-    int i;
+	char	**clone;
+	int		i;
 
-    i = 0;
-    while (envp[i] != NULL)
-        i++;
-    clone = malloc(sizeof(char *) * (i + 1));
-    if (!clone)
-        return (NULL);
-    i = 0;
-    while (envp[i] != NULL)
-    {
-        clone[i] = ft_strdup(envp[i]);
-        if (!clone[i])
-        {
-            free_tab(clone, i);
-            return (NULL);
-        }
-        i++;
-    }
-    clone[i] = NULL;
-    return (clone);
+	i = 0;
+	while (envp[i] != NULL)
+		i++;
+	clone = malloc(sizeof(char *) * (i + 1));
+	if (!clone)
+		return (NULL);
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		clone[i] = ft_strdup(envp[i]);
+		if (!clone[i])
+		{
+			free_tab(clone, i);
+			return (NULL);
+		}
+		i++;
+	}
+	clone[i] = NULL;
+	return (clone);
 }
 /*
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
-    (void)ac;
-    (void)av;
+	char	**test;
+	int		i;
 
-    char **test;
-    test = clone_env(envp);
-    int i = 0;
-    while (test[i] != NULL)
-    {
-        printf("%s\n", test[i]);
-        i++;
-    }
-    free_tab(test, i);
-    return 0;
+	(void)ac;
+	(void)av;
+	test = clone_env(envp);
+	i = 0;
+	while (test[i] != NULL)
+	{
+		printf("%s\n", test[i]);
+		i++;
+	}
+	free_tab(test, i);
+	return (0);
 }
 */

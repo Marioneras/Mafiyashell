@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/20 16:36:59 by mberthou          #+#    #+#             */
-/*   Updated: 2025/05/20 19:52:59 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 18:57:58 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,44 @@ static bool	check_redirection(t_token *current)
 	return (true);
 }
 
+static int	check_pipe_syntax(t_token *token)
+{
+	if (token->type == PIPE && !check_pipe(token))
+		return (display_error_message(PIPE_ERROR, NULL), PIPE_ERROR);
+	if (is_pipe_char_in_wrong_context(token))
+		return (display_error_message(PIPE_ERROR, NULL), PIPE_ERROR);
+	return (EXIT_SUCCESS);
+}
+
+static int	check_redirection_syntax(t_token *token)
+{
+	if (is_redirection_type(token->type) && !check_redirection(token))
+		return (display_error_message(INVALID_OPERATOR, token->name),
+			INVALID_OPERATOR);
+	if (is_invalid_redirection_symbol(token))
+		return (redirection_error(token->name));
+	if (!token->next && is_redirection_type(token->type))
+		return (display_error_message(MISSING_FILENAME, "newline"),
+			MISSING_FILENAME);
+	return (EXIT_SUCCESS);
+}
+
 int	check_syntax(t_token *head)
 {
 	t_token	*current;
+	int		status;
 
 	if (!head)
 		return (false);
 	current = head;
 	while (current)
 	{
-		if (current->type == PIPE && !check_pipe(current))
-			return (display_error_message(PIPE_ERROR, NULL), PIPE_ERROR);
-		if (current->name[0] == '|' && current->type != PIPE)
-			return (display_error_message(PIPE_ERROR, NULL), PIPE_ERROR);
-		if ((current->type == TRUNC || current->type == APPEND
-			|| current->type == INPUT || current->type == HEREDOC)
-			&& !check_redirection(current))
-			return (display_error_message(INVALID_OPERATOR, current->name), INVALID_OPERATOR);
-		if ((current->name[0] == '<' && (current->type != INPUT
-			&& current->type != HEREDOC)) || (current->name[0] == '>'
-			&& (current->type != TRUNC && current->type != APPEND)))
-			return (redirection_error(current->name));
-		if (!current->next && (current->type == TRUNC || current->type == APPEND
-			|| current->type == INPUT || current->type == HEREDOC))
-			return (display_error_message(MISSING_FILENAME, "newline"), MISSING_FILENAME);
+		status = check_pipe_syntax(current);
+		if (status != EXIT_SUCCESS)
+			return (status);
+		status = check_redirection_syntax(current);
+		if (status != EXIT_SUCCESS)
+			return (status);
 		current = current->next;
 	}
 	return (EXIT_SUCCESS);

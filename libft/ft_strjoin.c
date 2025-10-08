@@ -43,8 +43,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 /*#include <stdio.h>
 int	main(void)
 {
-    char *s1 = "Hello ";
-    char *s2 = "World";
-    printf("%s\n", ft_strjoin(s1, s2));
-    return (0);
+	char *s1 = "Hello ";
+	char *s2 = "World";
+	printf("%s\n", ft_strjoin(s1, s2));
+	return (0);
 }*/

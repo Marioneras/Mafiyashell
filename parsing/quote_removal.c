@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static bool to_rm(char c, bool track_s_quote, bool track_d_quote)
+static bool	to_rm(char c, bool track_s_quote, bool track_d_quote)
 {
 	if ((c == '\'' && track_s_quote) || (c == '"' && track_d_quote))
 		return (true);

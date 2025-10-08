@@ -37,8 +37,8 @@ void	printList(t_list *node)
   curr = head;
   while (curr != NULL)
   {
-    printf(" %d", *(int *)curr->content);
-    curr = curr->next;
+	printf(" %d", *(int *)curr->content);
+	curr = curr->next;
   }
   printf("\n");
 }
@@ -52,21 +52,21 @@ int	main(void)
   i = 0;
   while (i < 5)
   {
-    list[i] = ft_lstnew(&content[i]);
-    if (!list[i])
-    {
-      printf("Memory allocation failed for node %d\n", i);
-      while (i-- > 0)
-        free(list[i]);
-      return (1);
-    }
-    i++;
+	list[i] = ft_lstnew(&content[i]);
+	if (!list[i])
+	{
+		printf("Memory allocation failed for node %d\n", i);
+		while (i-- > 0)
+		free(list[i]);
+		return (1);
+	}
+	i++;
   }
   i = 0;
   while (i < 4)
   {
-    list[i].next = &list[i + 1];
-    i++;
+	list[i].next = &list[i + 1];
+	i++;
   }
   list[4].next = NULL;
   printf("Orginal Linked List:");

@@ -23,7 +23,7 @@ static int	count_arguments(t_token *node)
 	{
 		if (current->type == CMD || current->type == ARGUMENT
 			|| current->type == EMPTY)
- 			count++;
+			count++;
 		current = current->next;
 	}
 	return (count);

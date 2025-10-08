@@ -6,7 +6,7 @@
 #    By: safamran <safamran@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/18 14:38:01 by mberthou          #+#    #+#              #
-#    Updated: 2025/09/27 10:17:36 by mberthou         ###   ########.fr        #
+#    Updated: 2025/10/08 15:43:36 by mberthou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,12 +28,12 @@ NOVISU = 0 #1 = no progress bar (usefull when tty is not available)
 ################################################################################
 
 FILE_EXTENSION = .c
-SRCS = srcs/main_loop.c srcs/signals.c parsing/check_quote.c \
+SRCS = srcs/main_loop.c parsing/check_quote.c \
 	   parsing/syntax_check.c parsing/tokenisation.c utils/cleanup_functions.c \
 	   parsing/expand/expand.c parsing/expand/start.c \
 	   utils/utils_functions.c parsing/parsing.c parsing/quote_removal.c\
 	   utils/linked_list_utils.c parsing/command_creation.c \
-	   utils/display_functions.c utils/error_handling.c\
+	   utils/error_handling.c execution/find_path_helpers.c \
 	   execution/redirections.c execution/execute.c execution/find_path.c \
 	   execution/heredoc.c builtins/built_in.c utils/get_next_line.c \
 	   builtins/ft_echo.c env/clone.c builtins/ft_env.c builtins/ft_unset.c \

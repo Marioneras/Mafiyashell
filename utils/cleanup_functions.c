@@ -48,7 +48,7 @@ void	free_redirections(t_redirections *red)
 void	free_cmd(t_cmd *cmd)
 {
 	t_cmd	*tmp;
-	int	i;
+	int		i;
 
 	while (cmd)
 	{
@@ -75,17 +75,11 @@ void	free_cmd(t_cmd *cmd)
 
 void	free_obj(t_obj *obj)
 {
-	/* int	i; */
-
-	// if (obj->token)
-		// free_token(obj->token);
 	if (obj->cmd)
 		free_cmd(obj->cmd);
-	/* if (obj->env) */
-	/* 	free_env(obj->env); */
 	if (obj->input)
 		free(obj->input);
-	}
+}
 
 void	ft_clear_tab(char **tab)
 {
@@ -93,13 +87,9 @@ void	ft_clear_tab(char **tab)
 
 	if (!tab || !*tab)
 		return ;
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		tab[i] = NULL;
-		i++;
-	}
+	i = -1;
+	while (tab[++i])
+		ft_clear(&tab[i]);
 	free(tab);
 }
 

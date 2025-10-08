@@ -36,13 +36,13 @@ int	main(void)
   i = 0;
   while (i < 4)
   {
-    list[i] = *ft_lstnew(&content[i]);
-    i++;
+	list[i] = *ft_lstnew(&content[i]);
+	i++;
   }
   i = 0;
   while (i < 3)
   {
-    list[i].next = &list[i + 1];
+	list[i].next = &list[i + 1];
 		i++;
   }
   list[3].next = NULL;

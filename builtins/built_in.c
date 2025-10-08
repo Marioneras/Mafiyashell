@@ -6,11 +6,23 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 11:57:01 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/06 15:18:09 by safamran         ###   ########.fr       */
+/*   Updated: 2025/10/08 15:44:55 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	close_save_files(t_fd *fd)
+{
+	if (fd.save_stdin >= 0)
+		close(fd.save_stdin);
+	if (fd.save_stdout >= 0)
+		close(fd.save_stdout);
+	if (fd.infile != -1 && fd.infile != STDIN_FILENO)
+		close(fd.infile);
+	if (fd.outfile != -1 && fd.outfile != STDOUT_FILENO)
+		close(fd.outfile);
+}
 
 static int	run_exit(t_obj *obj)
 {
@@ -25,29 +37,21 @@ static int	run_exit(t_obj *obj)
 		obj->exit_code = 2;
 	}
 	else if (obj->cmd->argv[1] && obj->cmd->argv[2])
-		return (ft_putstr_fd("mafiyashell: exit: too many arguments\n", 2), 130);
-	if (obj->fd.save_stdin >= 0)
-		close(obj->fd.save_stdin);
-	if (obj->fd.save_stdout >= 0)
-		close(obj->fd.save_stdout);
-	if (obj->fd.infile != -1 && obj->fd.infile != STDIN_FILENO)
-		close(obj->fd.infile);
-	if (obj->fd.outfile != -1 && obj->fd.outfile != STDOUT_FILENO)
-		close(obj->fd.outfile);
+		return (ft_putstr_fd("mafiyashell: exit: too many arguments\n", 2),
+			130);
+	close_save_files(obj->fd);
+	exit_code = obj->exit_code;
 	if (obj->cmd->argv[1])
 		exit_code = ft_atoi(obj->cmd->argv[1]);
-	else
-		exit_code = obj->exit_code;
-	ft_freetab(obj->env);
+	ft_clear_tab(obj->env);
 	free_obj(obj);
 	clear_history();
 	exit(exit_code);
-	return (0);
 }
 
 int	(*is_builtin(char *cmd))(t_obj *obj)
 {
-	const t_builtin	dico[] =	{
+	const t_builtin	dico[] = {
 		(t_builtin){"echo", ft_echo},
 		(t_builtin){"cd", run_cd},
 		(t_builtin){"pwd", run_pwd},

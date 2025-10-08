@@ -96,8 +96,7 @@ static char	*ft_extract_line(char **stash, char *end_of_line)
 	return (line);
 }
 
-__attribute__((destructor))
-static void	_get_next_line_destroy(void)
+__attribute__((destructor)) static void	_get_next_line_destroy(void)
 {
 	get_next_line(-1);
 }

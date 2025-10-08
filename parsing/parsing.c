@@ -19,13 +19,13 @@ static int	is_only_space(char *str)
 	i = 0;
 	if (!str)
 		return (1);
-	while(str[i] != '\0')
+	while (str[i] != '\0')
 	{
 		if (str[i] != ' ')
 			return (0);
 		i++;
 	}
-	return(1);
+	return (1);
 }
 
 static void	racine_ex(t_token *head, char **envp, t_obj *obj)
@@ -63,18 +63,12 @@ bool	parsing(t_obj *obj)
 			obj->exit_code = 2;
 			return (free_token(obj->token), false);
 		}
-		else
-		{
-			racine_ex(obj->token, obj->env, obj);
-			quote_removal(obj->token);
-			obj->cmd = create_cmd(obj);
-			free_token(obj->token);
-		}
+		racine_ex(obj->token, obj->env, obj);
+		quote_removal(obj->token);
+		obj->cmd = create_cmd(obj);
+		free_token(obj->token);
 	}
 	else if (check_quotes(obj->input) == 0)
-	{
-		quote_error(obj->input);
-		return (false);
-	}
+		return (quote_error(obj->input), false);
 	return (true);
 }

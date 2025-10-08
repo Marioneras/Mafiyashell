@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static void init_obj(t_obj *obj, char **env)
+static void	init_obj(t_obj *obj, char **env)
 {
 	obj->token = NULL;
 	obj->cmd = NULL;
@@ -34,8 +34,8 @@ static void init_obj(t_obj *obj, char **env)
 
 char	**safe_env(void)
 {
-	char **tab;
-	char *pwd;
+	char	**tab;
+	char	*pwd;
 
 	tab = malloc(sizeof(char *) * 5);
 	if (!tab)
@@ -45,26 +45,26 @@ char	**safe_env(void)
 		return (free(tab), NULL);
 	tab[0] = ft_strjoin("PWD=", pwd);
 	if (!tab[0])
-		return(free(pwd), free_tab(tab, 0), NULL);
+		return (free(pwd), free_tab(tab, 0), NULL);
 	tab[1] = ft_strdup("SHLVL=1");
 	if (!tab[1])
-		return(free(pwd), free_tab(tab, 1), NULL);
+		return (free(pwd), free_tab(tab, 1), NULL);
 	tab[2] = ft_strdup("_=/usr/bin/env");
 	if (!tab[2])
-		return(free(pwd), free_tab(tab, 2), NULL);
+		return (free(pwd), free_tab(tab, 2), NULL);
 	tab[3] = ft_strdup("PATH=/usr/local/bin:/usr/bin:/bin:/sbin:/usr/sbin");
 	tab[4] = NULL;
 	free(pwd);
 	return (tab);
 }
 
-int main(int argc, char *argv[], char **envp)
+int	main(int argc, char *argv[], char **envp)
 {
-	t_obj obj;
+	t_obj	obj;
+	char	**cenvp;
+
 	(void)argc;
 	(void)argv;
-	char **cenvp;
-
 	if (!envp || !envp[0])
 		cenvp = safe_env();
 	else

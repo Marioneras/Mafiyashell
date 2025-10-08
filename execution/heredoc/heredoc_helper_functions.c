@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   heredoc_helper_functions.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/09/04 14:37:51 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/04 19:31:17 by mberthou         ###   ########.fr       */
+/*   Created: 2025/10/08 17:54:18 by mberthou          #+#    #+#             */
+/*   Updated: 2025/10/08 18:14:00 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,7 @@ char	*name_heredoc_file(void)
 	return (file_name);
 }
 
-static char	*strip_quotes(char *limiter, bool *quoted)
-{
-	char	*tmp;
-
-	if (nb_quote(limiter) == 1)
-		(*quoted) = true;
-	tmp = limiter;
-	if (quoted)
-		limiter = remove_quotes(tmp);
-	return (limiter);
-}
-
-static void	process_input(char **line, bool quoted, t_obj *obj)
+void	process_input(char **line, bool quoted, t_obj *obj)
 {
 	char	*tmp;
 
@@ -55,44 +43,26 @@ static void	process_input(char **line, bool quoted, t_obj *obj)
 	ft_clear(&tmp);
 }
 
-int	here_doc(t_obj *obj, char *filename, char *limiter)
+bool	is_end_of_input(const char *line, const char *limiter)
 {
-	int		fd;
-	int		save_stdin;
-	int		save_stdout;
-	char	*line;
-	char	*tmp;
-	bool	quoted;
+	return (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+		&& line[ft_strlen(limiter)] == '\0');
+}
 
-	save_stdin = dup(STDIN_FILENO);
-	save_stdout = dup(STDOUT_FILENO);
-	heredoc_signal();
+int	open_heredoc_file(const char *filename)
+{
+	int	fd;
+
 	fd = open(filename, O_RDWR | O_CREAT | O_EXCL, 0600);
 	if (fd < 0)
-		return (fd);
-	quoted = false;
-	tmp = limiter;
-	limiter = strip_quotes(tmp, &quoted);
-	line = readline("> ");
-	while (line)
-	{
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
-			&& line[ft_strlen(limiter)] == '\0')
-			break ;
-		process_input(&line, quoted, obj);
-		ft_putstr_fd(line, fd);
-		ft_clear(&line);
-		line = readline("> ");
-	}
-	if (!line)
-		return (handle_heredoc_error(filename, limiter, save_stdin, save_stdout));
-	else
-		ft_clear(&line);
-	child_signal();
+		perror(filename);
+	return (fd);
+}
+
+void	reset_fd(int save_stdin, int save_stdout)
+{
 	if (save_stdin >= 0)
 		close(save_stdin);
 	if (save_stdout >= 0)
 		close(save_stdout);
-	ft_clear(&limiter);
-	return (fd);
 }

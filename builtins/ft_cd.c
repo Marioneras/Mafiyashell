@@ -6,7 +6,7 @@
 /*   By: safamran <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 20:11:37 by safamran          #+#    #+#             */
-/*   Updated: 2025/10/07 21:25:11 by safamran         ###   ########.fr       */
+/*   Updated: 2025/10/08 05:13:45 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	run_cd(t_obj *obj)
 {
-	DIR *dir;
-	char *path;
+	DIR		*dir;
+	char	*path;
 
 	if (check_cd(obj->cmd->argv) == 1)
 		return (1);
@@ -36,7 +36,6 @@ int	run_cd(t_obj *obj)
 	}
 	if (update_env(obj) != 0)
 	{
-		
 		ft_putstr_fd("mafiyashell: cd: error\n", 2);
 		return (1);
 	}
@@ -56,7 +55,7 @@ char	**get_pwd(void)
 	if (!result[0])
 	{
 		free(result);
-	return (NULL);
+		return (NULL);
 	}
 	result[1] = ft_strjoin("PWD=", getcwd(buffer, PATH_MAX));
 	if (!result[1])
@@ -71,13 +70,15 @@ char	**get_pwd(void)
 
 char *get_cd_value(const char *key, char **env)
 {
-    size_t key_len = strlen(key);
-    for (int i = 0; env[i]; i++)
-    {
-        if (strncmp(env[i], key, key_len) == 0 && env[i][key_len] == '=')
-            return ft_strdup(env[i] + key_len + 1); // Alloue une nouvelle chaîne
-    }
-    return NULL;
+	int	i;
+	size_t	key_len;
+
+	key_len = ft_strlen(key);
+	i = -1;
+	while (env[++i])
+		if (ft_strncmp(env[i], key, key_len) == 0 && env[i][key_len] == '=')
+			return (ft_strdup(env[i] + key_len + 1));
+	return (NULL);
 }
 
 char	**get_oldpwd(char **env)
@@ -112,7 +113,7 @@ char	**get_oldpwd(char **env)
 	{
 		free(result[0]);
 		free(result);
-	return (NULL);
+		return (NULL);
 	}
 	result[2] = NULL;
 	return (result);
@@ -131,7 +132,6 @@ int update_env(t_obj *obj)
 	run_export(obj);
 	obj->cmd->argv = saved_argv;
 	ft_freetab(oldpwd);
-
 	pwd = get_pwd();
 	if (!pwd)
 		return (1);
