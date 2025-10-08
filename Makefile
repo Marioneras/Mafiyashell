@@ -152,6 +152,7 @@ define draw_bar
  		FILE_DONE=1; \
  	fi; \
  	RES=`echo "scale=2; $$FILE_DONE/$$FILE_TOTAL*48" | bc`; \
+	RES=1; \
  	RES=`echo $${RES%%.*}`; \
  	printf "$(OBJ_COLOR)[$(NO_COLOR)"; \
  	i=0; \
