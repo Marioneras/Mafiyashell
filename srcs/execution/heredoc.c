@@ -24,13 +24,13 @@ static char	*strip_quotes(char *limiter, bool *quoted)
 	return (limiter);
 }
 
-static int	handle_ctrl_c(const char *filename, char *limiter, int save_stdin,
+static int	handle_ctrl_c(char *filename, char *limiter, int save_stdin,
 	int save_stdout)
 {
 	int	fd;
 
 	fd = handle_heredoc_error(filename, limiter, save_stdin, save_stdout);
-	restore_std_fds(save_stdin, save_stdout);
+	reset_fd(save_stdin, save_stdout);
 	return (fd);
 }
 

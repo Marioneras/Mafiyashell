@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cleanup_functions.c                                :+:      :+:    :+:   */
+/*   cleanup_linked_list.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 19:06:30 by mberthou          #+#    #+#             */
-/*   Updated: 2025/06/13 17:33:11 by mberthou         ###   ########.fr       */
+/*   Created: 2025/10/08 19:53:22 by mberthou          #+#    #+#             */
+/*   Updated: 2025/10/08 19:53:39 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,26 +79,4 @@ void	free_obj(t_obj *obj)
 		free_cmd(obj->cmd);
 	if (obj->input)
 		free(obj->input);
-}
-
-void	ft_clear_tab(char **tab)
-{
-	int	i;
-
-	if (!tab || !*tab)
-		return ;
-	i = -1;
-	while (tab[++i])
-		ft_clear(&tab[i]);
-	free(tab);
-}
-
-char	*ft_clear(char **array)
-{
-	if (*array)
-	{
-		free(*array);
-		*array = NULL;
-	}
-	return (NULL);
 }

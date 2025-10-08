@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-bool	is_redirection_type(t_token_type type)
+bool	is_redirection_type(int type)
 {
 	return (type == TRUNC || type == APPEND || type == INPUT
 		|| type == HEREDOC);

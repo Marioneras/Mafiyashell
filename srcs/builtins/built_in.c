@@ -6,13 +6,13 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 11:57:01 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 15:44:55 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 21:48:16 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	close_save_files(t_fd *fd)
+static void	close_save_files(t_fd fd)
 {
 	if (fd.save_stdin >= 0)
 		close(fd.save_stdin);

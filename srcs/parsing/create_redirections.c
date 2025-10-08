@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 18:40:27 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 18:49:20 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 21:55:32 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static t_redirections	*get_redirection(t_token *current)
 	return (new_red);
 }
 
-static bool	is_last_infile_or_outfile(t_cmd *cmd, t_token *token)
+bool	is_last_infile_or_outfile(t_cmd *cmd, t_token *token)
 {
 	if (!token->next)
 		return (true);

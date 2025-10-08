@@ -6,11 +6,9 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 15:44:20 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 21:55:16 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// shakkuyakuu
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -135,6 +133,8 @@ typedef struct s_env
 int								main(int argc, char *argv[], char **envp);
 void							ctrl_c_inside_child(int signal);
 char							**safe_env(void);
+char							*get_next_line(int fd);
+char							*find_char(const char *s, int c);
 
 /* ********* parsing ********** */
 bool							parsing(t_obj *obj);
@@ -149,6 +149,21 @@ int								check_syntax(t_token *head);
 t_cmd							*create_cmd(t_obj *obj);
 t_redirections					*handle_redirections(t_token *token,
 									t_cmd *current_cmd);
+bool							is_redirection_type(int type);
+bool							is_pipe_char_in_wrong_context(t_token *token);
+bool							is_invalid_redirection_symbol(t_token *token);
+char							is_sep(char c, char *token, bool track_s_quote,
+									bool track_d_quote);
+
+/* ********* redirection ********** */
+bool							is_end_of_pipeline(t_token *current);
+bool							is_last_infile_or_outfile(t_cmd *cmd,
+									t_token *token);
+bool							is_redirection_token(t_token *token);
+t_token							*find_first_redirection(t_token *token);
+bool							is_ignored_redirection(t_token *token,
+									t_cmd *cmd);
+bool							is_valid_redirection(t_token *token);
 
 /* ********* expand ********** */
 int								nb_quote(char *str);
@@ -175,13 +190,28 @@ void							set_redirections(t_obj *obj, int *infile,
 bool							create_files(t_obj *obj);
 bool							open_fd(t_obj *obj, t_cmd *cmd, int *input_fd,
 									int *output_fd);
+int								count_cmds(t_cmd *current);
+void							dup_files(t_cmd *cmd, int input_fd,
+									int output_fd, int *pipe_fd);
+void							reset_offset(int *input_fd, char *infile);
+int								execute_alone_redirections(t_obj *obj, int i,
+									int input_fd);
+void							close_fd(t_cmd *cmd, int *input_fd,
+									int pipe_fd[2]);
+
+/* ********* heredoc ********** */
 char							*name_heredoc_file(void);
 int								here_doc(t_obj *obj, char *filename,
 									char *limiter);
-char							*get_next_line(int fd);
+void							process_input(char **line, bool quoted,
+									t_obj *obj);
+bool							is_end_of_input(const char *line,
+									const char *limiter);
+int								open_heredoc_file(const char *filename);
+void							reset_fd(int save_stdin, int save_stdout);
 
 /* ********* builtins ********** */
-int (*is_builtin(char *cmd))(t_obj *obj);
+int								(*is_builtin(char *cmd))(t_obj *obj);
 int								run_single_builtin_safely(t_obj *obj);
 int								run_cd(t_obj *obj);
 int								ft_echo(t_obj *obj);

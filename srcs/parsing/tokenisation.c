@@ -6,32 +6,11 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 10:34:57 by mberthou          #+#    #+#             */
-/*   Updated: 2025/08/24 19:30:28 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 19:47:43 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	is_sep(char c, char *token, bool track_s_quote, bool track_d_quote)
-{
-	if (!token)
-		return (false);
-	if ((c == '\'' || c == '"') && (*token == '|' || *token == '<'
-			|| *token == '>'))
-		return (true);
-	if (track_s_quote || track_d_quote)
-		return (false);
-	if (c == ' ' || (c >= '\t' && c <= '\r'))
-		return (true);
-	if ((c == '|' || c == '<' || c == '>') && (*token != '|' && *token != '<'
-			&& *token != '>'))
-		return (true);
-	if ((c != '|' && c != '<' && c != '>') && (*token == '|' || *token == '<'
-			|| *token == '>'))
-		return (true);
-	else
-		return (false);
-}
 
 static char	*str_append(char const *src, char c)
 {
@@ -57,18 +36,6 @@ static char	*str_append(char const *src, char c)
 	str[i++] = c;
 	free((char *)src);
 	return (str);
-}
-
-void	track_quotes(char c, bool *s_quote, bool *d_quote)
-{
-	if (c == '"' && (!*d_quote && !*s_quote))
-		*d_quote = true;
-	else if (c == '\'' && (!*s_quote && !*d_quote))
-		*s_quote = true;
-	else if (c == '"' && *d_quote)
-		*d_quote = false;
-	else if (c == '\'' && *s_quote)
-		*s_quote = false;
 }
 
 static void	initialize_tolkien(t_token *new_token)

@@ -6,29 +6,11 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 19:09:35 by mberthou          #+#    #+#             */
-/*   Updated: 2025/01/22 12:57:51 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 19:51:27 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static char	*find_char(const char *s, int c)
-{
-	size_t	i;
-
-	i = 0;
-	if (!s || !c)
-		return (NULL);
-	while (s[i])
-	{
-		if (s[i] == c)
-			return ((char *)&s[i]);
-		i++;
-	}
-	if (c == '\0')
-		return ((char *)&s[i]);
-	return (NULL);
-}
 
 static char	*ft_read_file(int fd, char **stash)
 {

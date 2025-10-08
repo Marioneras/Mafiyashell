@@ -6,47 +6,11 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 17:12:59 by mberthou          #+#    #+#             */
-/*   Updated: 2025/09/27 10:44:40 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/08 19:42:26 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
-{
-	if (cmd->infile || input_fd != STDIN_FILENO)
-	{
-		if (dup2(input_fd, STDIN_FILENO) < 0)
-			display_error_message(errno, cmd->infile);
-		close(input_fd);
-	}
-	if (cmd->next && !cmd->outfile)
-	{
-		if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
-			display_error_message(errno, "pipe");
-		close(pipe_fd[1]);
-		close(pipe_fd[0]);
-	}
-	if (cmd->outfile)
-	{
-		if (dup2(output_fd, STDOUT_FILENO) < 0)
-			display_error_message(errno, cmd->outfile);
-		close(output_fd);
-	}
-}
-
-void	reset_offset(int *input_fd, char *infile)
-{
-	close(*input_fd);
-	*input_fd = open(infile, O_RDWR | O_EXCL, 0600);
-	if (*input_fd < 0)
-	{
-		display_error_message(errno, infile);
-		exit(127);
-	}
-	if (unlink(infile) < 0)
-		display_error_message(errno, infile);
-}
 
 static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 {
@@ -73,34 +37,6 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		display_error_message(errno, obj->cmd->argv[0]);
 	}
 	exit(127);
-}
-
-static int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
-{
-	obj->pid[i] = -1;
-	if (obj->cmd->heredoc)
-	{
-		close(input_fd);
-		if (unlink(obj->cmd->infile) < 0)
-			display_error_message(errno, obj->cmd->infile);
-	}
-	return (0);
-}
-
-void	close_fd(t_cmd *cmd, int *input_fd, int pipe_fd[2])
-{
-	int	old_fd;
-
-	if (cmd->infile)
-		close(*input_fd);
-	if (cmd->next)
-	{
-		close(pipe_fd[1]);
-		old_fd = *input_fd;
-		*input_fd = pipe_fd[0];
-		if (old_fd != STDIN_FILENO)
-			close(old_fd);
-	}
 }
 
 static int	execute_command(t_obj *obj, int i, int *input_fd)
@@ -152,19 +88,6 @@ static void	wait_for_all(int number_of_commands, t_obj *obj)
 	else if (WIFSIGNALED(status))
 		obj->exit_code = 128 + WTERMSIG(status);
 	free(obj->pid);
-}
-
-static int	count_cmds(t_cmd *current)
-{
-	int	number_of_commands;
-
-	number_of_commands = 0;
-	while (current)
-	{
-		number_of_commands++;
-		current = current->next;
-	}
-	return (number_of_commands);
 }
 
 static void	execution_routine(t_obj *obj)
