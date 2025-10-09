@@ -12,3 +12,9 @@
    ...
    fun:add_history
 }
+{
+   ignore_basic_commands_leaks
+   Memcheck:Leak
+   ...
+   obj:/usr/bin/*
+}
