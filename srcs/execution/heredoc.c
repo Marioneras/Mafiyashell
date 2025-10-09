@@ -16,6 +16,7 @@ static char	*strip_quotes(char *limiter, bool *quoted)
 {
 	char	*tmp;
 
+	(*quoted) = false;
 	if (nb_quote(limiter) == 1)
 		(*quoted) = true;
 	tmp = limiter;
@@ -31,6 +32,7 @@ static int	handle_ctrl_c(char *filename, char *limiter, int save_stdin,
 
 	fd = handle_heredoc_error(filename, limiter, save_stdin, save_stdout);
 	reset_fd(save_stdin, save_stdout);
+	ft_clear(&limiter);
 	return (fd);
 }
 

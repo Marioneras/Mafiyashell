@@ -22,9 +22,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		reset_offset(&input_fd, obj->cmd->infile);
 	dup_files(obj->cmd, input_fd, output_fd, pipe_fd);
 	builtin = is_builtin(obj->cmd->argv[0]);
-	if (builtin)
-		obj->exit_code = builtin(obj);
-	else
+	if (!builtin)
 	{
 		cmd_path = get_absolute_path(obj->cmd, obj->env);
 		if (!cmd_path)
@@ -37,6 +35,7 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		display_error_message(errno, obj->cmd->argv[0]);
 		exit(127);
 	}
+	obj->exit_code = builtin(obj);
 	ft_clear_tab(obj->env);
 	free_obj(obj);
 	exit(0);
@@ -136,6 +135,7 @@ void	execute(t_obj *obj)
 		obj->exit_code = 1;
 		free_cmd(obj->cmd);
 	}
+	ft_clear((char **)&obj->pid);
 	free(obj->input);
 	normal_signal();
 }
