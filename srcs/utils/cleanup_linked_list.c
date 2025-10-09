@@ -79,4 +79,6 @@ void	free_obj(t_obj *obj)
 		free_cmd(obj->cmd);
 	if (obj->input)
 		free(obj->input);
+	if (obj->pid)
+		ft_clear((char **)&obj->pid);
 }

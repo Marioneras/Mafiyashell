@@ -29,14 +29,17 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		cmd_path = get_absolute_path(obj->cmd, obj->env);
 		if (!cmd_path)
 		{
-			free(obj->pid);
+			ft_clear_tab(obj->env);
 			free_obj(obj);
 			exit(126);
 		}
 		execve(cmd_path, obj->cmd->argv, obj->env);
 		display_error_message(errno, obj->cmd->argv[0]);
+		exit(127);
 	}
-	exit(127);
+	ft_clear_tab(obj->env);
+	free_obj(obj);
+	exit(0);
 }
 
 static int	execute_command(t_obj *obj, int i, int *input_fd)
@@ -87,7 +90,6 @@ static void	wait_for_all(int number_of_commands, t_obj *obj)
 		obj->exit_code = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		obj->exit_code = 128 + WTERMSIG(status);
-	free(obj->pid);
 }
 
 static void	execution_routine(t_obj *obj)
