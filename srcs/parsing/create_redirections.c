@@ -45,14 +45,16 @@ bool	is_last_infile_or_outfile(t_cmd *cmd, t_token *token)
 {
 	if (!token->next)
 		return (true);
-	if (token->type != HEREDOC && ft_strncmp(cmd->infile, token->next->name,
-			ft_strlen(cmd->infile) + 1) == 0)
+	if (cmd->infile && token->type != HEREDOC
+		&& ft_strncmp(cmd->infile, token->next->name,
+		ft_strlen(cmd->infile) + 1) == 0)
 		return (true);
 	else if (token->type == HEREDOC && ft_strncmp(cmd->limiter,
 			token->next->name, ft_strlen(cmd->limiter) + 1) == 0)
 		return (true);
-	if (ft_strncmp(cmd->outfile, token->next->name, ft_strlen(cmd->outfile)
-			+ 1) == 0)
+	if (cmd->outfile
+		&& ft_strncmp(cmd->outfile, token->next->name, ft_strlen(cmd->outfile)
+		+ 1) == 0)
 		return (true);
 	return (false);
 }
