@@ -34,8 +34,8 @@ int	main(void)
   node = ft_lstnew(content);
   if (node == NULL)
   {
-	printf("Memory allocation failed\n");
-	return (1);
+    printf("Memory allocation failed\n");
+    return (1);
   }
   printf("Node content: %s\n", (char *)node->content);
   free(node);

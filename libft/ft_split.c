@@ -105,8 +105,8 @@ int	main(void)
   i = 0;
   while (tab[i])
   {
-	printf("%s\n", tab[i]);
-	i++;
+    printf("%s\n", tab[i]);
+    i++;
   }
   return (0);
 }*/

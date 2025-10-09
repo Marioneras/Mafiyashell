@@ -6,7 +6,7 @@
 #    By: safamran <safamran@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/18 14:38:01 by mberthou          #+#    #+#              #
-#    Updated: 2025/10/08 21:54:04 by mberthou         ###   ########.fr        #
+#    Updated: 2025/10/08 16:42:21 by safamran         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,6 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -ggdb3
 DFLAGS = -MMD -MF $(@:.o=.d)
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all
-	--track-origins=yes -s --trace-children=yes --track-fds=yes $(V_FLAG)
-V_FLAG = --suppressions="readline.supp"
 AUTHOR = mberthou
 DATE = 29/04/2025
 
@@ -31,24 +28,18 @@ NOVISU = 0 #1 = no progress bar (usefull when tty is not available)
 ################################################################################
 
 FILE_EXTENSION = .c
-SRCS = srcs/main_loop.c srcs/parsing/check_quote.c srcs/parsing/syntax_check.c \
-	   srcs/parsing/syntax_check_helper.c srcs/parsing/tokenisation_helper.c \
-	   srcs/parsing/tokenisation.c srcs/utils/cleanup_functions.c \
-	   srcs/parsing/expand/expand.c srcs/parsing/expand/start.c \
-	   srcs/utils/utils_functions.c srcs/parsing/parsing.c \
-	   srcs/parsing/quote_removal.c srcs/utils/cleanup_linked_list.c \
-	   srcs/utils/linked_list_utils.c srcs/parsing/command_creation.c \
-	   srcs/utils/error_handling.c srcs/execution/find_path_helpers.c \
-	   srcs/execution/redirections.c srcs/execution/execute.c \
-	   srcs/execution/execute_helper.c srcs/execution/find_path.c \
-	   srcs/execution/heredoc_helper_functions.c srcs/execution/heredoc.c \
-	   srcs/builtins/built_in.c srcs/utils/get_next_line.c \
-	   srcs/utils/get_next_line_helper.c srcs/builtins/ft_echo.c \
-	   srcs/env/clone.c srcs/builtins/ft_env.c srcs/builtins/ft_unset.c \
-	   srcs/builtins/ft_export.c srcs/builtins/ft_pwd.c srcs/builtins/ft_cd.c \
-	   srcs/signal/signal_config.c srcs/signal/use_signal.c \
-	   srcs/parsing/create_redirections.c srcs/parsing/create_redirections_helper.c \
-	   srcs/parsing/expand/expand_utils.c
+SRCS = srcs/main_loop.c srcs/signals.c parsing/check_quote.c \
+	   parsing/syntax_check.c parsing/tokenisation.c utils/cleanup_functions.c \
+	   parsing/expand/expand.c parsing/expand/start.c \
+	   utils/utils_functions.c parsing/parsing.c parsing/quote_removal.c\
+	   utils/linked_list_utils.c parsing/command_creation.c \
+	   utils/display_functions.c utils/error_handling.c\
+	   execution/redirections.c execution/execute.c execution/find_path.c \
+	   execution/heredoc.c builtins/built_in.c utils/get_next_line.c \
+	   builtins/ft_echo.c env/clone.c builtins/ft_env.c builtins/ft_unset.c \
+	   builtins/ft_export.c builtins/ft_pwd.c builtins/ft_cd.c \
+	   signal/signal_config.c signal/use_signal.c parsing/expand/expand_utils.c \
+	   builtins/ft_export_utils.c builtins/ft_cd_utils.c
 INCLUDES = -I./include -I./libft
 LIBFT = -L./libft -lft
 
@@ -155,7 +146,6 @@ define draw_bar
  		FILE_DONE=1; \
  	fi; \
  	RES=`echo "scale=2; $$FILE_DONE/$$FILE_TOTAL*48" | bc`; \
-	RES=1; \
  	RES=`echo $${RES%%.*}`; \
  	printf "$(OBJ_COLOR)[$(NO_COLOR)"; \
  	i=0; \
@@ -247,9 +237,6 @@ $(OBJDIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(call display_progress_bar)
 	@$(call run_and_test,$(CC) $(CFLAGS) -MMD -MF $(OBJDIR)/$*.d $(INCLUDES) -c $< -o $@)
-
-valgrind: $(NAME)
-	$(VALGRIND) ./$(NAME)
 
 clean:
 	 @echo "                                          "

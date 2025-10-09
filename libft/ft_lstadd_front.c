@@ -24,13 +24,13 @@ void	printList(t_list *head)
 {
 	t_list	*curr;
 
-	curr = head;
-	while (curr != NULL)
-	{
-		printf(" %d", *(int *)curr->content);
-		curr = curr->next;
-	}
-	printf("\n");
+    curr = head;
+    while (curr != NULL) 
+    {
+        printf(" %d", *(int *)curr->content);
+        curr = curr->next;
+    }
+    printf("\n");
 }
 
 int	main(void)
@@ -70,11 +70,11 @@ int	main(void)
   ft_lstadd_front(&head, new_head);
   printList(head);
   while (head != NULL)
-	{
-		t_list *temp = head;
-		head = head->next;
-		free(temp);
-	}
+    {
+        t_list *temp = head;
+        head = head->next;
+        free(temp);
+    }
 
-	return (0);
+    return (0);
 }*/
