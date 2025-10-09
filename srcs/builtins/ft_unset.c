@@ -1,9 +1,22 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safamran <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/08 15:16:56 by safamran          #+#    #+#             */
+/*   Updated: 2025/10/08 15:16:57 by safamran         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minishell.h"
 
 int	ft_tabcount(char **tab)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!tab)
 		return (0);
 	while (tab[i])
@@ -13,10 +26,11 @@ int	ft_tabcount(char **tab)
 
 int	env_match(char *line, char *var_name)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if (!line || !var_name)
 		return (0);
-
 	while (var_name[i] && line[i] && line[i] != '=')
 	{
 		if (line[i] != var_name[i])
@@ -35,19 +49,17 @@ void	unset_it(t_obj *obj, int i, int len)
 		obj->env[len - 1] = NULL;
 	}
 	else
-	{
 		obj->env[i] = NULL;
-	}
 }
 
 void	search_line(char *str, t_obj *obj)
 {
-	int i = 0;
-	int len;
+	int	i;
+	int	len;
 
+	i = 0;
 	if (!str || !obj || !obj->env)
 		return ;
-
 	len = ft_tabcount(obj->env);
 	while (obj->env[i])
 	{
@@ -62,7 +74,7 @@ void	search_line(char *str, t_obj *obj)
 
 int	run_unset(t_obj *obj)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (!obj || !obj->cmd || !obj->cmd->argv[1])

@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 21:55:16 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:51:36 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,21 @@ typedef struct s_env
 	struct s_env				*next;
 }								t_env;
 
+typedef struct s_handle
+{
+	int						i;
+	int 						start;
+}								t_handle;
+
+
 /* ********* srcs ************* */
 int								main(int argc, char *argv[], char **envp);
 void							ctrl_c_inside_child(int signal);
 char							**safe_env(void);
 char							*get_next_line(int fd);
 char							*find_char(const char *s, int c);
+void							signal_in_loop(t_obj *obj);
+void							loop(t_obj *obj);
 
 /* ********* parsing ********** */
 bool							parsing(t_obj *obj);
@@ -177,8 +186,7 @@ char							*special_case(char *str, int *i);
 char							*join_and_free(char *s1, char *s2);
 char							*expand_it(char *str, char **envp, t_obj *obj);
 char							*get_varname(char *str, int *i, int start);
-char							*process_segment(char *str, int *i, int start,
-									char **envp, char *result, t_obj *obj);
+char							*process_segment(char *str, t_handle *hdl, char *result, t_obj *obj);
 
 /* ********* execute ********** */
 void							execute(t_obj *obj);
@@ -224,6 +232,9 @@ char							**get_pwd(void);
 char							**get_oldpwd(char **env);
 int								update_env(t_obj *obj);
 int								check_cd(char **argv);
+int								clone(t_obj *obj, char **clone, int a);
+int								check_alpha(t_obj *obj);
+char								*get_cd_value(const char *key, char **env);
 
 /* ***** linked list utils **** */
 t_redirections					*append_redirections(t_redirections *head,

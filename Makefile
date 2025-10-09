@@ -6,7 +6,7 @@
 #    By: safamran <safamran@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/18 14:38:01 by mberthou          #+#    #+#              #
-#    Updated: 2025/10/08 21:54:04 by mberthou         ###   ########.fr        #
+#    Updated: 2025/10/09 22:34:32 by safamran         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ SRCS = srcs/main_loop.c srcs/parsing/check_quote.c srcs/parsing/syntax_check.c \
 	   srcs/builtins/ft_export.c srcs/builtins/ft_pwd.c srcs/builtins/ft_cd.c \
 	   srcs/signal/signal_config.c srcs/signal/use_signal.c \
 	   srcs/parsing/create_redirections.c srcs/parsing/create_redirections_helper.c \
-	   srcs/parsing/expand/expand_utils.c
+	   srcs/parsing/expand/expand_utils.c srcs/builtins/ft_export_utils.c \
+	   srcs/builtins/ft_cd_utils.c
 INCLUDES = -I./include -I./libft
 LIBFT = -L./libft -lft
 
