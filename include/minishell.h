@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/09 22:51:36 by safamran         ###   ########.fr       */
+/*   Updated: 2025/10/10 16:31:04 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,10 +132,9 @@ typedef struct s_env
 
 typedef struct s_handle
 {
-	int						i;
-	int 						start;
+	int							i;
+	int							start;
 }								t_handle;
-
 
 /* ********* srcs ************* */
 int								main(int argc, char *argv[], char **envp);
@@ -187,7 +186,8 @@ char							*special_case(char *str, int *i);
 char							*join_and_free(char *s1, char *s2);
 char							*expand_it(char *str, char **envp, t_obj *obj);
 char							*get_varname(char *str, int *i, int start);
-char							*process_segment(char *str, t_handle *hdl, char *result, t_obj *obj);
+char							*process_segment(char *str, t_handle *hdl,
+									char *result, t_obj *obj);
 
 /* ********* execute ********** */
 void							execute(t_obj *obj);
@@ -235,7 +235,7 @@ int								update_env(t_obj *obj);
 int								check_cd(char **argv);
 int								clone(t_obj *obj, char **clone, int a);
 int								check_alpha(t_obj *obj);
-char								*get_cd_value(const char *key, char **env);
+char							*get_cd_value(const char *key, char **env);
 
 /* ***** linked list utils **** */
 t_redirections					*append_redirections(t_redirections *head,

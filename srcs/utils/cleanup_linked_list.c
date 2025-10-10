@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 19:53:22 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 19:53:39 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/10 16:30:01 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,9 @@ void	free_cmd(t_cmd *cmd)
 	{
 		tmp = cmd;
 		cmd = cmd->next;
-		i = 0;
-		while (tmp->argv[i])
-		{
+		i = -1;
+		while (tmp->argv[++i])
 			ft_clear(&tmp->argv[i]);
-			i++;
-		}
 		free(tmp->argv);
 		if (tmp->infile)
 			ft_clear(&tmp->infile);

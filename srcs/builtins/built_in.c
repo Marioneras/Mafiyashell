@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/16 11:57:01 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 21:48:16 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/10 16:24:53 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,10 @@ static void	close_save_files(t_fd fd)
 static int	run_exit(t_obj *obj)
 {
 	int	exit_code;
+	int	value;
 
 	ft_putstr_fd("exit\n", 1);
-	if (obj->cmd->argv[1] && !ft_strevery(obj->cmd->argv[1], ft_isdigit))
+	if (obj->cmd->argv[1] && !ft_strevery(obj->cmd->argv[1] + 1, ft_isdigit))
 	{
 		ft_putstr_fd("mafiyashell: ", 2);
 		ft_putstr_fd(obj->cmd->argv[1], 2);
@@ -37,12 +38,14 @@ static int	run_exit(t_obj *obj)
 		obj->exit_code = 2;
 	}
 	else if (obj->cmd->argv[1] && obj->cmd->argv[2])
-		return (ft_putstr_fd("mafiyashell: exit: too many arguments\n", 2),
-			130);
+		return (ft_putstr_fd("mafiyashell: exit: too many arguments\n", 2), 1);
 	close_save_files(obj->fd);
 	exit_code = obj->exit_code;
-	if (obj->cmd->argv[1])
-		exit_code = ft_atoi(obj->cmd->argv[1]);
+	if (obj->cmd->argv[1] && obj->exit_code != 2)
+	{
+		value = ft_atoll(obj->cmd->argv[1]);
+		exit_code = (unsigned char)value;
+	}
 	ft_clear_tab(obj->env);
 	free_obj(obj);
 	clear_history();

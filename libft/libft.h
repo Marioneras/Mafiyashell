@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 18:51:37 by mberthou          #+#    #+#             */
-/*   Updated: 2024/11/19 18:53:46 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/10 16:10:54 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef LIBFT_H
@@ -14,6 +14,7 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
@@ -25,6 +26,7 @@ int					ft_tolower(int c);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
 int					ft_atoi(const char *nptr);
+long long			ft_atoll(char *str);
 
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);

@@ -51,7 +51,7 @@ SRCS = srcs/main_loop.c srcs/parsing/check_quote.c srcs/parsing/syntax_check.c \
 	   srcs/parsing/expand/expand_utils.c srcs/builtins/ft_export_utils.c \
 	   srcs/builtins/ft_cd_utils.c
 INCLUDES = -I./include -I./libft
-LIBFT = -L./libft -lft
+LIBFT = libft/libft.a
 
 ################################################################################
 #                                  Makefile  objs                              #
@@ -208,21 +208,25 @@ endef
 ################################################################################
 #                                 Makefile rules                             #
 ################################################################################
-all: setup $(NAME)
+all: header setup $(NAME)
+
+$(LIBFT):
+	@make -C libft
 
 header:
 	@printf "%b" "$(OK_COLOR)"
 	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
-	@echo ""
+	@echo "                                             "
+	@echo " +--^----------,--------,-----,--------^-,   "
+	@echo " | |||||||||   \`--------\'     |          O "
+	@echo " \`+---------------------------^----------|  "
+	@echo "   \`\\_,---------,---------,--------------\'"
+	@echo "     / XXXXXX /\'|       /\'                 "
+	@echo "    / XXXXXX /  \`\\    /\'                  "
+	@echo "   / XXXXXX /\`-------\'                     "
+	@echo "  / XXXXXX /							        "
+	@echo " / XXXXXX / 							        "
+	@echo "(________(                                   "
 	@echo ""
 ifneq ($(HASH),)
 	@printf "%b" "$(OBJ_COLOR)Name:	$(WARN_COLOR)$(NAME)@$(HASH)\n"
@@ -236,7 +240,7 @@ endif
 	@echo
 
  -include $(DEPS) $(DEPS_MAIN)
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBFT)
 	@$(call display_progress_bar)
 	@$(call run_and_test,$(CC) $(CFLAGS) $(DFLAGS) $(INCLUDES) $(OBJS) -lreadline -o $(NAME) $(LIBFT))
 	@echo "Program compiled successfully to Minishell."
@@ -253,6 +257,7 @@ valgrind: $(NAME)
 	$(VALGRIND) ./$(NAME)
 
 clean:
+	 @make -C libft clean
 	 @echo "                                          "
 	 @echo " ██████╗██╗     ███████╗ █████╗ ███╗   ██╗"
 	 @echo "██╔════╝██║     ██╔════╝██╔══██╗████╗  ██║"
@@ -266,6 +271,7 @@ clean:
 	@echo "Object files and dependancies cleaned."
 
 fclean: clean
+	@make -C libft fclean
 	rm -rf $(NAME)
 	@echo "Full clean complete."
 
