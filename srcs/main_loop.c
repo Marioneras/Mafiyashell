@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 17:36:22 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/06 15:37:02 by safamran         ###   ########.fr       */
+/*   Updated: 2025/10/09 17:04:36 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,42 @@ char	**safe_env(void)
 	return (tab);
 }
 
+void	loop(t_obj *obj)
+{
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO)
+		|| !isatty(STDERR_FILENO))
+		obj->input = get_next_line(STDIN_FILENO);
+	else
+		obj->input = readline("mafiyashell> ");
+	if (!obj->input)
+	{
+		if (isatty(STDIN_FILENO))
+		{
+			write(STDOUT_FILENO, "exit\n", 5);
+			ft_freetab(obj->env);
+			exit(EXIT_SUCCESS);
+		}
+		else
+		{
+			ft_freetab(obj->env);
+			exit (EXIT_FAILURE);
+		}
+	}
+	signal_in_loop(obj);
+}
+
+void	signal_in_loop(t_obj *obj)
+{
+	if (g_signal == SIGINT)
+		obj->exit_code = 130;
+	if (obj->input[0] && obj->input[0] != '\0')
+		add_history(obj->input);
+	if (parsing(obj))
+		execute(obj);
+	g_signal = 0;
+	normal_signal();
+}
+
 int	main(int argc, char *argv[], char **envp)
 {
 	t_obj	obj;
@@ -75,36 +111,7 @@ int	main(int argc, char *argv[], char **envp)
 	{
 		clear_history();
 		while (42)
-		{
-			if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO)
-				|| !isatty(STDERR_FILENO))
-				obj.input = get_next_line(STDIN_FILENO);
-			else
-				obj.input = readline("mafiyashell> ");
-			if (!obj.input)
-			{
-				if (isatty(STDIN_FILENO))
-				{
-					write(STDOUT_FILENO, "exit\n", 5);
-					ft_freetab(obj.env);
-					return (EXIT_SUCCESS);
-				}
-				else
-				{
-					ft_freetab(obj.env);
-					return (EXIT_FAILURE);
-				}
-			}
-			if (g_signal == SIGINT)
-				obj.exit_code = 130;
-			if (obj.input[0] && obj.input[0] != '\0')
-				add_history(obj.input);
-			if (parsing(&obj))
-				execute(&obj);
-			g_signal = 0;
-			normal_signal();
-		}
+			loop(&obj);
 	}
-	ft_freetab(obj.env);
-	return (obj.exit_code);
+	return (ft_freetab(obj.env), obj.exit_code);
 }

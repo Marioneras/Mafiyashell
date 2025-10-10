@@ -1,89 +1,110 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: safamran <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/08 17:24:46 by safamran          #+#    #+#             */
+/*   Updated: 2025/10/09 19:24:30 by safamran         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*process_segment(char *str, int *i, int start, char **envp, char *result, t_obj *obj)
+static char	*handle_escape_dollar(char *str, t_handle *handle, char *result)
+{
+	char	*prefsuf;
+	char	*dollar;
+	char	*tmp;
+
+	prefsuf = ft_substr(str, handle->start, handle->i - handle->start);
+	if (prefsuf)
+	{
+		tmp = join_and_free(result, prefsuf);
+		if (tmp)
+				result = tmp;
+		free(prefsuf);
+	}
+	dollar = ft_strdup("$");
+	if (dollar)
+	{
+		tmp = join_and_free(result, dollar);
+		if (tmp)
+			result = tmp;
+		free(dollar);
+	}
+	handle->i += 2;
+	handle->start = handle->i;
+	return (result);
+}
+
+char	*process_segment(char *str, t_handle *handle, char *result, t_obj *obj)
 {
 	char	*prefsuf;
 	char	*var;
 
-	prefsuf = ft_substr(str, start, *i - start);
+	prefsuf = ft_substr(str, handle->start, handle->i - handle->start);
 	if (prefsuf)
 	{
 		result = join_and_free(result, prefsuf);
 		free(prefsuf);
 	}
-	var = after_dollar(str, i, envp, obj);
+	var = after_dollar(str, &handle->i, obj->env, obj);
 	if (var)
 	{
 		result = join_and_free(result, var);
 		free(var);
 	}
+	handle->start = handle->i;
 	return (result);
 }
 
-char	*append_remaining(char *str, int start, int i, char *result)
+static char	*process_loop(char *str, t_handle *handle, char *result, t_obj *obj)
 {
-	char	*prefsuf;
-
-	prefsuf = ft_substr(str, start, i - start);
-	if (prefsuf)
+	while (str[handle->i] != '\0')
 	{
-		result = join_and_free(result, prefsuf);
-		free(prefsuf);
+		if (str[handle->i] == '\\' && str[handle->i + 1] == '$'
+			&& str[handle->i + 1] != '\0')
+			result = handle_escape_dollar(str, handle, result);
+		else if (str[handle->i] == '$')
+			result = process_segment(str, handle, result, obj);
+		else
+		(handle->i)++;
 	}
 	return (result);
 }
 
-char	*process_string(char *str, int *i, int *start, char **envp, char *result, t_obj *obj)
+char	*process_string(char *str, t_handle *handle, char *result, t_obj *obj)
 {
-	while (str[*i] != '\0')
+	char	*prefsuf;
+
+	result = process_loop(str, handle, result, obj);
+	if (handle->start < handle->i)
 	{
-		if (str[*i] == '\\' && str[*i + 1] == '$' && str[*i + 1] != '\0')
+		prefsuf = ft_substr(str, handle->start, handle->i - handle->start);
+		if (prefsuf)
 		{
-			char *prefsuf = ft_substr(str, *start, *i - *start);
-			if (prefsuf)
-			{
-				char *tmp = join_and_free(result, prefsuf);
-				if (tmp)
-					result = tmp;
-				free(prefsuf);
-			}
-			char *dollar = ft_strdup("$");
-			if (dollar)
-			{
-				char *tmp = join_and_free(result, dollar);
-				if (tmp)
-					result = tmp;
-				free(dollar);
-			}
-			*i += 2;
-			*start = *i;
+			result = join_and_free(result, prefsuf);
+			free(prefsuf);
 		}
-		else if (str[*i] == '$')
-		{
-			result = process_segment(str, i, *start, envp, result, obj);
-			*start = *i;
-		}
-		else
-			(*i)++;
 	}
 	return (result);
 }
 
 char	*expand_var(char *str, char **envp, t_obj *obj)
 {
-	char	*result;
-	int		i;
-	int		start;
+	char		*result;
+	t_handle	handle;
 
-	i = 0;
-	start = 0;
+	(void)envp;
+	handle.i = 0;
+	handle.start = 0;
 	if (!str)
 		return (NULL);
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
-	result = process_string(str, &i, &start, envp, result, obj);
-	if (start < i)
-		result = append_remaining(str, start, i, result);
+	result = process_string(str, &handle, result, obj);
 	return (result);
 }

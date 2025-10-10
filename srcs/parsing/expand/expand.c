@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: safamran <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:43:16 by safamran          #+#    #+#             */
-/*   Updated: 2025/10/08 15:43:05 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/09 19:24:44 by safamran         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,23 @@ char	*expand_it(char *str, char **envp, t_obj *obj)
 	if (is_expand(str))
 		new = expand_var(str, envp, obj);
 	if (new != NULL)
-		str = new;
+			str = new;
 	if (new)
 		return (new);
 	return (str);
+}
+
+char	*after_racc(int *i, int original_i, t_obj *obj, char *str)
+{
+	if (str[*i] == '\0')
+		return (*i = original_i + 1, ft_strdup("$"));
+	if (str[*i] == '?' || check_char(str[*i]) == 0)
+		return (*i = original_i + 2, ft_itoa(obj->exit_code));
+	if (str[*i] == '\0' || check_char(str[*i]) == 0)
+		return (*i = original_i + 1, ft_strdup("$"));
+	if (ft_isdigit(str[*i]))
+		return (*i = original_i + 2, ft_strdup(""));
+	return (NULL);
 }
 
 char	*after_dollar(char *str, int *i, char **envp, t_obj *obj)
@@ -36,26 +49,9 @@ char	*after_dollar(char *str, int *i, char **envp, t_obj *obj)
 
 	original_i = *i;
 	(*i)++;
-	if (str[*i] == '\0')
-	{
-		*i = original_i + 1;
-		return (ft_strdup("$"));
-	}
-	if (str[*i] == '?' || check_char(str[*i]) == 0)
-	{
-		*i = original_i + 2;
-		return (ft_itoa(obj->exit_code));
-	}
-	if (str[*i] == '\0' || check_char(str[*i]) == 0)
-	{
-		*i = original_i + 1;
-		return (ft_strdup("$"));
-	}
-	if (ft_isdigit(str[*i]))
-	{
-		*i = original_i + 2;
-		return (ft_strdup(""));
-	}
+	result = after_racc(i, original_i, obj, str);
+	if (result != NULL)
+		return (result);
 	start = *i;
 	while (str[*i] != '\0' && check_char(str[*i]) == 1)
 		(*i)++;
@@ -66,8 +62,7 @@ char	*after_dollar(char *str, int *i, char **envp, t_obj *obj)
 	if (replace == NULL)
 		return (ft_strdup(""));
 	result = ft_strdup(replace);
-	free(replace);
-	return (result);
+	return (free(replace), result);
 }
 
 char	*get_value(char *var_name, char **envp)
@@ -78,10 +73,7 @@ char	*get_value(char *var_name, char **envp)
 	int		envlen;
 
 	if (!envp || !var_name)
-	{
-		free(var_name);
-		return (NULL);
-	}
+		return (free(var_name), NULL);
 	varlen = ft_strlen(var_name);
 	i = 0;
 	while (envp[i] != NULL)
@@ -91,11 +83,9 @@ char	*get_value(char *var_name, char **envp)
 		{
 			envlen = ft_strlen(envp[i]);
 			result = ft_substr(envp[i], varlen + 1, envlen - varlen - 1);
-			free(var_name);
-			return (result);
+			return (free(var_name), result);
 		}
 		i++;
 	}
-	free(var_name);
-	return (NULL);
+	return (free(var_name), NULL);
 }
