@@ -18,9 +18,9 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -ggdb3
 DFLAGS = -MMD -MF $(@:.o=.d)
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all
+V_FLAG = --suppressions=./readline.supp
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
 	--track-origins=yes -s --trace-children=yes --track-fds=yes $(V_FLAG)
-V_FLAG = --suppressions="readline.supp"
 AUTHOR = mberthou
 DATE = 29/04/2025
 

@@ -50,6 +50,8 @@ void	free_cmd(t_cmd *cmd)
 	t_cmd	*tmp;
 	int		i;
 
+	while (cmd->previous)
+		cmd = cmd->previous;
 	while (cmd)
 	{
 		tmp = cmd;
@@ -57,8 +59,7 @@ void	free_cmd(t_cmd *cmd)
 		i = 0;
 		while (tmp->argv[i])
 		{
-			free(tmp->argv[i]);
-			tmp->argv[i] = NULL;
+			ft_clear(&tmp->argv[i]);
 			i++;
 		}
 		free(tmp->argv);
@@ -68,7 +69,8 @@ void	free_cmd(t_cmd *cmd)
 			ft_clear(&tmp->outfile);
 		if (tmp->limiter)
 			ft_clear(&tmp->limiter);
-		free_redirections(tmp->redirections);
+		if (tmp->redirections)
+			free_redirections(tmp->redirections);
 		free(tmp);
 	}
 }

@@ -41,26 +41,26 @@ static void	init_cmd(t_cmd *new_cmd, t_token *token)
 	int	count;
 
 	count = count_arguments(token);
-	ft_memset(new_cmd, 0, sizeof(t_cmd));
 	new_cmd->argv = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!new_cmd->argv)
 		return ;
 	while (token && token->type != PIPE)
 	{
 		if (token->type == INPUT)
-		{
 			set_value(&new_cmd->infile, ft_strdup(token->next->name));
-			set_value(&new_cmd->limiter, NULL);
-		}
 		else if (token->type == HEREDOC)
-		{
 			set_value(&new_cmd->infile, name_heredoc_file());
+		if (token->type == HEREDOC)
 			set_value(&new_cmd->limiter, ft_strdup(token->next->name));
-		}
+		else if (token->type == INPUT)
+			set_value(&new_cmd->limiter, NULL);
+		if (token->type == INPUT || token->type == HEREDOC)
+			new_cmd->heredoc = token->type == HEREDOC;
 		else if (token->type == TRUNC || token->type == APPEND)
+		{
 			set_value(&new_cmd->outfile, ft_strdup(token->next->name));
-		new_cmd->heredoc = token->type == HEREDOC;
-		new_cmd->append = token->type == APPEND;
+			new_cmd->append = token->type == APPEND;
+		}
 		token = token->next;
 	}
 }
@@ -70,7 +70,7 @@ static t_cmd	*get_cmd(t_token **current)
 	t_cmd	*new_cmd;
 	int		i;
 
-	new_cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	new_cmd = (t_cmd *)ft_calloc(sizeof(t_cmd), 1);
 	if (!new_cmd)
 		return (NULL);
 	init_cmd(new_cmd, (*current));
