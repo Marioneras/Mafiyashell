@@ -36,12 +36,15 @@ static void	racine_ex(t_token *head, char **envp, t_obj *obj)
 	current = head;
 	while (current)
 	{
-		result = expand_it(current->name, envp, obj);
-		if (result && result != current->name)
+		if (current->type != LIMITER)
 		{
-			free(current->name);
-			current->name = ft_strdup(result);
-			free(result);
+			result = expand_it(current->name, envp, obj);
+			if (result && result != current->name)
+			{
+				free(current->name);
+				current->name = ft_strdup(result);
+				free(result);
+			}
 		}
 		current = current->next;
 	}
