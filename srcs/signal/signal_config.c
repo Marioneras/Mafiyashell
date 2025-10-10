@@ -52,5 +52,5 @@ void	heredoc_signal(void)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	signal(SIGQUIT, SIG_IGN);
 }

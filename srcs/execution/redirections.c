@@ -27,7 +27,7 @@ static int	open_file(char *filename, int type)
 	return (fd);
 }
 
-bool	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)
+int	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)
 {
 	if (cmd->infile && cmd->heredoc)
 		*input_fd = here_doc(obj, cmd->infile, cmd->limiter);
@@ -38,15 +38,15 @@ bool	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)
 	else if (cmd->outfile && !cmd->append)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (*input_fd < 0)
-		return (display_error_message(errno, cmd->infile), false);
+		return (display_error_message(errno, cmd->infile), 1);
 	if (*input_fd == 130 || *input_fd == 131 || *input_fd == 150)
-		return (false);
+		return (*input_fd);
 	if (*output_fd < 0)
-		return (display_error_message(errno, cmd->outfile), false);
-	return (true);
+		return (display_error_message(errno, cmd->outfile), 1);
+	return (0);
 }
 
-bool	create_files(t_obj *obj)
+int	create_files(t_obj *obj)
 {
 	int				tmp_file;
 	t_cmd			*cur_cmd;
@@ -62,17 +62,17 @@ bool	create_files(t_obj *obj)
 			{
 				tmp_file = here_doc(obj, cur_red->name, cur_red->limiter);
 				if (tmp_file < 0 || tmp_file == 130 || tmp_file == 131)
-					return (false);
+					return (tmp_file);
 				close(tmp_file);
 				unlink(cur_red->name);
 			}
 			else if (open_file(cur_red->name, cur_red->type) < 0)
-				return (false);
+				return (1);
 			cur_red = cur_red->next;
 		}
 		cur_cmd = cur_cmd->next;
 	}
-	return (true);
+	return (0);
 }
 
 void	set_redirections(t_obj *obj, int *infile, int *outfile)

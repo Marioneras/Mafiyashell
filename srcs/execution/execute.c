@@ -45,10 +45,16 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 {
 	int	pipe_fd[2];
 	int	output_fd;
+	int	error_code;
 
 	output_fd = STDOUT_FILENO;
-	if (!open_fd(obj, obj->cmd, input_fd, &output_fd))
-		return (1);
+	error_code = open_fd(obj, obj->cmd, input_fd, &output_fd);
+	if (error_code != 0)
+	{
+		if (error_code == 150)
+			error_code = 0;
+		return (error_code);
+	}
 	if (!obj->cmd->argv[0])
 		return (execute_alone_redirections(obj, i, *input_fd));
 	if (obj->cmd->next)
@@ -101,7 +107,7 @@ static void	execution_routine(t_obj *obj)
 	input_fd = STDIN_FILENO;
 	current = obj->cmd;
 	number_of_commands = count_cmds(current);
-	obj->pid = (int *)malloc(sizeof(int) * number_of_commands);
+	obj->pid = (int *)ft_calloc(sizeof(int), number_of_commands);
 	if (!obj->pid)
 		exit(127);
 	i = -1;
@@ -112,16 +118,18 @@ static void	execution_routine(t_obj *obj)
 	}
 	if (input_fd != STDIN_FILENO)
 		close(input_fd);
-	if (obj->exit_code != 1)
+	if (obj->exit_code != 1 && obj->exit_code != 130 && obj->exit_code != 131)
 		wait_for_all(number_of_commands, obj);
 }
 
 void	execute(t_obj *obj)
 {
+	int		error_code;
 	t_cmd	*saved_cmd;
 
 	in_exec_signal();
-	if (create_files(obj))
+	error_code = create_files(obj);
+	if (error_code == 0)
 	{
 		saved_cmd = obj->cmd;
 		if (!obj->cmd->next && is_builtin(obj->cmd->argv[0]))
@@ -132,7 +140,7 @@ void	execute(t_obj *obj)
 	}
 	else
 	{
-		obj->exit_code = 1;
+		obj->exit_code = error_code;
 		free_cmd(obj->cmd);
 	}
 	ft_clear((char **)&obj->pid);

@@ -196,8 +196,8 @@ char							*get_env_variable(char **env, char *variable);
 int								is_directory(const char *path);
 void							set_redirections(t_obj *obj, int *infile,
 									int *outfile);
-bool							create_files(t_obj *obj);
-bool							open_fd(t_obj *obj, t_cmd *cmd, int *input_fd,
+int								create_files(t_obj *obj);
+int								open_fd(t_obj *obj, t_cmd *cmd, int *input_fd,
 									int *output_fd);
 int								count_cmds(t_cmd *current);
 void							dup_files(t_cmd *cmd, int input_fd,
