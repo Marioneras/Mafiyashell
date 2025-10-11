@@ -206,7 +206,7 @@ void							reset_offset(int *input_fd, char *infile);
 int								execute_alone_redirections(t_obj *obj, int i,
 									int input_fd);
 void							close_fd(t_cmd *cmd, int *input_fd,
-									int pipe_fd[2]);
+									int output_fd, int pipe_fd[2]);
 
 /* ********* heredoc ********** */
 char							*name_heredoc_file(void);

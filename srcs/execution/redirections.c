@@ -23,8 +23,9 @@ static int	open_file(char *filename, int type)
 	else
 		fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd < 0)
-		display_error_message(errno, filename);
-	return (fd);
+		return (display_error_message(errno, filename), -1);
+	close(fd);
+	return (0);
 }
 
 int	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)

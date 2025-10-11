@@ -65,7 +65,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 		child_process(obj, *input_fd, output_fd, pipe_fd);
 	else if (obj->pid[i] < 0)
 		return (127);
-	close_fd(obj->cmd, input_fd, pipe_fd);
+	close_fd(obj->cmd, input_fd, output_fd, pipe_fd);
 	return (0);
 }
 

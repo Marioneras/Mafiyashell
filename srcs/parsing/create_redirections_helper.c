@@ -37,7 +37,11 @@ bool	is_redirection_token(t_token *token)
 t_token	*find_first_redirection(t_token *token)
 {
 	while (token && !is_redirection_token(token))
+	{
+		if (token->type == PIPE)
+			return (NULL);
 		token = token->next;
+	}
 	return (token);
 }
 

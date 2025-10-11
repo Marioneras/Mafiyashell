@@ -73,12 +73,14 @@ int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
 	return (0);
 }
 
-void	close_fd(t_cmd *cmd, int *input_fd, int pipe_fd[2])
+void	close_fd(t_cmd *cmd, int *input_fd, int output_fd, int pipe_fd[2])
 {
 	int	old_fd;
 
 	if (cmd->infile)
 		close(*input_fd);
+	if (cmd->outfile)
+		close(output_fd);
 	if (cmd->next)
 	{
 		close(pipe_fd[1]);
