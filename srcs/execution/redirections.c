@@ -29,6 +29,8 @@ static int	open_file(char *filename, int type)
 
 int	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)
 {
+	if (g_signal == SIGINT)
+		return (130);
 	if (cmd->infile && cmd->heredoc)
 		*input_fd = here_doc(obj, cmd->infile, cmd->limiter);
 	if (cmd->infile && !cmd->heredoc)
