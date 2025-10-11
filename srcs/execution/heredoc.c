@@ -25,15 +25,14 @@ static char	*strip_quotes(char *limiter, bool *quoted)
 	return (limiter);
 }
 
-static int	ctrl_c(char *filename, char *limiter, int save_stdin,
-	int save_stdout)
+static int	ctrl_c(char *filename, char *limiter, t_fd save_fd, int fd)
 {
-	int	fd;
+	int	exit_code;
 
-	fd = handle_heredoc_error(filename, limiter, save_stdin, save_stdout);
-	reset_fd(save_stdin, save_stdout);
+	exit_code = handle_heredoc_error(filename, limiter, save_fd, fd);
+	reset_fd(save_fd.save_stdin, save_fd.save_stdout);
 	ft_clear(&limiter);
-	return (fd);
+	return (exit_code);
 }
 
 static void	write_heredoc_line(int fd, char **line, bool quoted, t_obj *obj)
@@ -66,7 +65,7 @@ int	here_doc(t_obj *obj, char *file, char *limit)
 		line = readline("> ");
 	}
 	if (!line)
-		return (close(fd), ctrl_c(file, limit, s.save_stdin, s.save_stdout));
+		return (ctrl_c(file, limit, s, fd));
 	ft_clear(&line);
 	child_signal();
 	return (reset_fd(s.save_stdin, s.save_stdout), ft_clear(&limit), fd);

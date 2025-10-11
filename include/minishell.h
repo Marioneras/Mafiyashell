@@ -256,8 +256,7 @@ void							display_error_message(int error_code,
 									char *error_message);
 int								redirection_error(char *str);
 int								handle_heredoc_error(char *filename,
-									char *limiter, int save_stdin,
-									int save_stdout);
+									char *limiter, t_fd save_fd, int fd);
 void							print_cmd(t_cmd *cmd);
 void							print_list(t_token *list);
 

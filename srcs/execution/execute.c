@@ -29,11 +29,11 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		{
 			ft_clear_tab(obj->env);
 			free_obj(obj);
-			exit(126);
+			exit(127);
 		}
 		execve(cmd_path, obj->cmd->argv, obj->env);
 		display_error_message(errno, obj->cmd->argv[0]);
-		exit(127);
+		exit(126);
 	}
 	obj->exit_code = builtin(obj);
 	ft_clear_tab(obj->env);
@@ -50,11 +50,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	output_fd = STDOUT_FILENO;
 	error_code = open_fd(obj, obj->cmd, input_fd, &output_fd);
 	if (error_code != 0)
-	{
-		if (error_code == 150)
-			error_code = 0;
 		return (error_code);
-	}
 	if (!obj->cmd->argv[0])
 		return (execute_alone_redirections(obj, i, *input_fd));
 	if (obj->cmd->next)
