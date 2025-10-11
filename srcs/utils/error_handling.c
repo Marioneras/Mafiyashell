@@ -23,7 +23,7 @@ void	display_error_message(int error_code, char *error_message)
 	{
 		ft_putstr_fd("mafiyashell: ", 2);
 		ft_putstr_fd(error_message, 2);
-		ft_putstr_fd(": command not found\n", 2);
+		ft_putstr_fd(": command not found", 2);
 	}
 	else if (error_code == INVALID_OPERATOR)
 	{

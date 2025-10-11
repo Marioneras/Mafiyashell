@@ -68,7 +68,10 @@ char	*get_absolute_path(t_cmd *cmd, char **env)
 		return (handle_direct_command(cmd->argv[0]));
 	paths = ft_split(get_env_variable(env, "PATH"), ':');
 	if (!paths)
+	{
+		display_error_message(NO_COMMAND, cmd->argv[0]);
 		return (NULL);
+	}
 	exec = find_executable_in_paths(cmd->argv[0], paths);
 	ft_clear_tab(paths);
 	if (!exec)

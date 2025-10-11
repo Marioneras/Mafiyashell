@@ -79,7 +79,7 @@ int	check_quotes(char *str)
 			return (0);
 		if (*str == 39)
 			result = in_single(&str);
-		if (*str != 39 || *str != 34)
+		if (*str && (*str != 39 || *str != 34))
 			str++;
 	}
 	if (result == 0)
