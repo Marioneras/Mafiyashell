@@ -65,32 +65,33 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	return (0);
 }
 
-static void	wait_for_all(int number_of_commands, t_obj *obj)
+static void    wait_for_all(int number_of_commands, t_obj *obj)
 {
-	int	i;
-	int	status;
+    int    i;
+    int    status;
 
-	i = 0;
-	status = 0;
-	while (i < number_of_commands)
-	{
-		if (obj->pid[i] == -1)
-			;
-		else if (i + 1 == number_of_commands)
-			waitpid(obj->pid[i], &status, 0);
-		else
-			waitpid(obj->pid[i], NULL, 0);
-		i++;
-	}
-	if (g_signal == SIGQUIT)
-	{
-		obj->exit_code = 128 + SIGQUIT;
-		g_signal = 0;
-	}
-	if (WIFEXITED(status))
-		obj->exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status))
-		obj->exit_code = 128 + WTERMSIG(status);
+    i = 0;
+    status = 0;
+    while (i < number_of_commands)
+    {
+        if (obj->pid[i] == -1)
+            ;
+        else if (i + 1 == number_of_commands) 
+            waitpid(obj->pid[i], &status, 0);
+        else
+            waitpid(obj->pid[i], NULL, 0);
+        i++;
+    }
+    if (WIFEXITED(status))
+        obj->exit_code = WEXITSTATUS(status);
+    else if (WIFSIGNALED(status))
+        obj->exit_code = 128 + WTERMSIG(status);
+    if (g_signal == SIGQUIT || g_signal == SIGINT || g_signal == SIGCHLD)
+    {
+        obj->exit_code = 128 + (g_signal == SIGQUIT) * SIGQUIT
+            + (g_signal != SIGQUIT) * SIGINT;
+        g_signal = 0;
+    }
 }
 
 static void	execution_routine(t_obj *obj)
