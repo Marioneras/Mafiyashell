@@ -76,7 +76,7 @@ static void    wait_for_all(int number_of_commands, t_obj *obj)
     {
         if (obj->pid[i] == -1)
             ;
-        else if (i + 1 == number_of_commands) 
+        else if (i + 1 == number_of_commands)
             waitpid(obj->pid[i], &status, 0);
         else
             waitpid(obj->pid[i], NULL, 0);
