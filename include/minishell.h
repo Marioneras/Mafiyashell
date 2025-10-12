@@ -178,6 +178,7 @@ bool							is_valid_redirection(t_token *token);
 int								nb_quote(char *str);
 char							*expand_var(char *str, char **envp, t_obj *obj);
 int								is_expand(char *str);
+void							tracking(char c, bool *s_quote, bool *d_quote);
 char							*after_dollar(char *str, int *i, char **envp,
 									t_obj *obj);
 char							*get_value(char *var_name, char **envp);
