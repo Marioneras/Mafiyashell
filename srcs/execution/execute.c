@@ -52,7 +52,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	if (error_code != 0)
 		return (error_code);
 	if (!obj->cmd->argv[0])
-		return (execute_alone_redirections(obj, i, *input_fd));
+		return (execute_alone_redirections(obj, i, input_fd));
 	if (obj->cmd->next)
 		if (pipe(pipe_fd) < 0)
 			return (127);

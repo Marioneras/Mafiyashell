@@ -63,12 +63,13 @@ void	reset_offset(int *input_fd, char *infile)
 		display_error_message(errno, infile);
 }
 
-int	execute_alone_redirections(t_obj *obj, int i, int input_fd)
+int	execute_alone_redirections(t_obj *obj, int i, int *input_fd)
 {
 	obj->pid[i] = -1;
 	if (obj->cmd->heredoc)
 	{
-		close(input_fd);
+		close(*input_fd);
+		*input_fd = 0;
 		if (unlink(obj->cmd->infile) < 0)
 			display_error_message(errno, obj->cmd->infile);
 	}
