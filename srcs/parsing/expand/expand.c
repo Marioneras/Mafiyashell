@@ -30,7 +30,7 @@ char	*after_racc(int *i, int original_i, t_obj *obj, char *str)
 {
 	if (str[*i] == '\0')
 		return (*i = original_i + 1, ft_strdup("$"));
-	if (str[*i] == '?' || check_char(str[*i]) == 0)
+	if (str[*i] == '?')
 		return (*i = original_i + 2, ft_itoa(obj->exit_code));
 	if (str[*i] == '\0' || check_char(str[*i]) == 0)
 		return (*i = original_i + 1, ft_strdup("$"));
