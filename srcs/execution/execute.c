@@ -67,8 +67,8 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 
 static void    wait_for_all(int number_of_commands, t_obj *obj)
 {
-    int    i;
-    int    status;
+    int i;
+    int status;
 
     i = 0;
     status = 0;
@@ -86,7 +86,7 @@ static void    wait_for_all(int number_of_commands, t_obj *obj)
         obj->exit_code = WEXITSTATUS(status);
     else if (WIFSIGNALED(status))
         obj->exit_code = 128 + WTERMSIG(status);
-    if (g_signal == SIGQUIT || g_signal == SIGINT || g_signal == SIGCHLD)
+    if (g_signal == SIGQUIT || g_signal == SIGINT)
     {
         obj->exit_code = 128 + (g_signal == SIGQUIT) * SIGQUIT
             + (g_signal != SIGQUIT) * SIGINT;
