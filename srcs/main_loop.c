@@ -85,7 +85,10 @@ void	loop(t_obj *obj)
 void	signal_in_loop(t_obj *obj)
 {
 	if (g_signal == SIGINT)
+	{
 		obj->exit_code = 130;
+		g_signal = 0;
+	}
 	if (obj->input[0] && obj->input[0] != '\0')
 		add_history(obj->input);
 	if (parsing(obj))
