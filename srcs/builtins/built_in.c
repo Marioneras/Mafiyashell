@@ -46,7 +46,6 @@ static int	run_exit(t_obj *obj)
 		value = ft_atoll(obj->cmd->argv[1]);
 		exit_code = (unsigned char)value;
 	}
-	ft_clear_tab(obj->env);
 	free_obj(obj);
 	clear_history();
 	exit(exit_code);

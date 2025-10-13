@@ -27,16 +27,16 @@ static int	child_process(t_obj *obj, int input_fd, int output_fd, int *pipe_fd)
 		cmd_path = get_absolute_path(obj->cmd, obj->env);
 		if (!cmd_path)
 		{
-			ft_clear_tab(obj->env);
 			free_obj(obj);
 			exit(127);
 		}
 		execve(cmd_path, obj->cmd->argv, obj->env);
 		display_error_message(errno, obj->cmd->argv[0]);
+		free(cmd_path);
+		free_obj(obj);
 		exit(126);
 	}
 	obj->exit_code = builtin(obj);
-	ft_clear_tab(obj->env);
 	free_obj(obj);
 	exit(0);
 }

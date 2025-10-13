@@ -80,4 +80,6 @@ void	free_obj(t_obj *obj)
 		free(obj->input);
 	if (obj->pid)
 		ft_clear((char **)&obj->pid);
+	if (obj->env)
+		ft_clear_tab(obj->env);
 }
