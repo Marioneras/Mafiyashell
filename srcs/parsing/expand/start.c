@@ -52,14 +52,17 @@ int	nb_quote(char *str)
 	return (0);
 }
 
+void	tracking(char c, bool *s_quote, bool *d_quote)
+{
+	if (c == '\'' && !*d_quote)
+		*s_quote = !*s_quote;
+	else if (c == '"' && !*s_quote)
+		*d_quote = !*d_quote;
+}
+
 int	is_expand(char *str)
 {
 	if (nb_dollar(str) == 0)
 		return (0);
-	if (nb_quote(str) != 0)
-	{
-		if (quote_check(str) == 0)
-			return (0);
-	}
 	return (1);
 }

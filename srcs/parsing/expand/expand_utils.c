@@ -23,7 +23,7 @@ static char	*handle_escape_dollar(char *str, t_handle *handle, char *result)
 	{
 		tmp = join_and_free(result, prefsuf);
 		if (tmp)
-				result = tmp;
+			result = tmp;
 		free(prefsuf);
 	}
 	dollar = ft_strdup("$");
@@ -62,15 +62,21 @@ char	*process_segment(char *str, t_handle *handle, char *result, t_obj *obj)
 
 static char	*process_loop(char *str, t_handle *handle, char *result, t_obj *obj)
 {
+	bool	in_single;
+	bool	in_double;
+
+	in_single = false;
+	in_double = false;
 	while (str[handle->i] != '\0')
 	{
+		tracking(str[handle->i], &in_single, &in_double);
 		if (str[handle->i] == '\\' && str[handle->i + 1] == '$'
 			&& str[handle->i + 1] != '\0')
 			result = handle_escape_dollar(str, handle, result);
-		else if (str[handle->i] == '$')
+		else if (str[handle->i] == '$' && !in_single)
 			result = process_segment(str, handle, result, obj);
 		else
-		(handle->i)++;
+			(handle->i)++;
 	}
 	return (result);
 }

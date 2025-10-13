@@ -20,7 +20,7 @@ char	*expand_it(char *str, char **envp, t_obj *obj)
 	if (is_expand(str))
 		new = expand_var(str, envp, obj);
 	if (new != NULL)
-			str = new;
+		str = new;
 	if (new)
 		return (new);
 	return (str);
