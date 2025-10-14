@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 17:12:59 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 19:42:26 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/14 13:02:22 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,36 +63,6 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 		return (127);
 	close_fd(obj->cmd, input_fd, output_fd, pipe_fd);
 	return (0);
-}
-
-static void    wait_for_all(int number_of_commands, t_obj *obj)
-{
-    int i;
-    int status;
-	int	exit_status;
-
-    i = 0;
-    status = 0;
-	exit_status = 0;
-    while (i < number_of_commands)
-    {
-        if (obj->pid[i] != -1)
-		{
-			waitpid(obj->pid[i], &status, 0);
-			if (WIFEXITED(status))
-				exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				exit_status = 128 + WTERMSIG(status);
-			if (g_signal == SIGQUIT || g_signal == SIGINT)
-			{
-				exit_status = 128 + (g_signal == SIGQUIT) * SIGQUIT
-					+ (g_signal != SIGQUIT) * SIGINT;
-				g_signal = 0;
-			}
-		}
-        i++;
-	}
-	obj->exit_code = exit_status;
 }
 
 static void	execution_routine(t_obj *obj)
