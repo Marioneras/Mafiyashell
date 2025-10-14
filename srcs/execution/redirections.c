@@ -6,7 +6,7 @@
 /*   By: mberthou <mberthou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 10:07:26 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/08 18:41:06 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:16:19 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@ int	open_fd(t_obj *obj, t_cmd *cmd, int *input_fd, int *output_fd)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	else if (cmd->outfile && !cmd->append)
 		*output_fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (*input_fd < 0)
-		return (display_error_message(errno, cmd->infile), 1);
+	if (*input_fd < 0 || *output_fd < 0)
+		return (fd_error(cmd, *input_fd, *output_fd));
 	if (*input_fd == 130 || *input_fd == 131 || *input_fd == 150)
 		return (*input_fd);
-	if (*output_fd < 0)
-		return (display_error_message(errno, cmd->outfile), 1);
 	return (0);
 }
 

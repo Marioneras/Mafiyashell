@@ -6,7 +6,7 @@
 /*   By: safamran <safamran@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 10:43:33 by mberthou          #+#    #+#             */
-/*   Updated: 2025/10/14 11:55:51 by mberthou         ###   ########.fr       */
+/*   Updated: 2025/10/14 16:15:11 by mberthou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,8 @@ void							set_redirections(t_obj *obj, int *infile,
 int								create_files(t_obj *obj);
 int								open_fd(t_obj *obj, t_cmd *cmd, int *input_fd,
 									int *output_fd);
+int								fd_error(t_cmd *cmd, int input_fd,
+									int output_fd);
 int								count_cmds(t_cmd *current);
 void							dup_files(t_cmd *cmd, int input_fd,
 									int output_fd, int *pipe_fd);
@@ -208,7 +210,8 @@ int								execute_alone_redirections(t_obj *obj, int i,
 									int *input_fd, int output_fd);
 void							close_fd(t_cmd *cmd, int *input_fd,
 									int output_fd, int pipe_fd[2]);
-void							wait_for_all(int number_of_commands, t_obj *obj);
+void							wait_for_all(int number_of_commands,
+									t_obj *obj);
 
 /* ********* heredoc ********** */
 char							*name_heredoc_file(void);

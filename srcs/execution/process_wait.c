@@ -41,20 +41,20 @@ static int	wait_for_child(pid_t pid)
 	return (status);
 }
 
-void    wait_for_all(int number_of_commands, t_obj *obj)
+void	wait_for_all(int number_of_commands, t_obj *obj)
 {
-    int i;
-    int status;
+	int	i;
+	int	status;
 	int	exit_status;
 	int	last_status;
 
-    i = -1;
-    status = 0;
+	i = -1;
+	status = 0;
 	exit_status = 0;
 	last_status = 0;
-    while (++i < number_of_commands)
-    {
-        if (obj->pid[i] != -1)
+	while (++i < number_of_commands)
+	{
+		if (obj->pid[i] != -1)
 		{
 			status = wait_for_child(obj->pid[i]);
 			if (obj->pid[i] == obj->pid[number_of_commands - 1])

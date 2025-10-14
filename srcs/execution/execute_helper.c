@@ -37,6 +37,9 @@ void	dup_files(t_cmd *cmd, int input_fd, int output_fd, int *pipe_fd)
 	{
 		if (dup2(pipe_fd[1], STDOUT_FILENO) < 0)
 			display_error_message(errno, "pipe");
+	}
+	if (cmd->next)
+	{
 		close(pipe_fd[1]);
 		close(pipe_fd[0]);
 	}
