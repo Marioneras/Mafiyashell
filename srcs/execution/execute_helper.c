@@ -61,16 +61,23 @@ void	reset_offset(int *input_fd, char *infile)
 		display_error_message(errno, infile);
 }
 
-int	execute_alone_redirections(t_obj *obj, int i, int *input_fd)
+int	execute_alone_redirections(t_obj *obj, int i, int *input_fd, int output_fd)
 {
 	obj->pid[i] = -1;
 	if (obj->cmd->heredoc)
 	{
 		close(*input_fd);
-		*input_fd = 0;
+		*input_fd = STDIN_FILENO;
 		if (unlink(obj->cmd->infile) < 0)
 			display_error_message(errno, obj->cmd->infile);
 	}
+	else if (obj->cmd->infile && *input_fd != STDIN_FILENO)
+	{
+		close(*input_fd);
+		*input_fd = STDIN_FILENO;
+	}
+	if (obj->cmd->outfile)
+		close(output_fd);
 	return (0);
 }
 

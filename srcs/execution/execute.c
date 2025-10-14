@@ -52,7 +52,7 @@ static int	execute_command(t_obj *obj, int i, int *input_fd)
 	if (error_code != 0)
 		return (error_code);
 	if (!obj->cmd->argv[0])
-		return (execute_alone_redirections(obj, i, input_fd));
+		return (execute_alone_redirections(obj, i, input_fd, output_fd));
 	if (obj->cmd->next)
 		if (pipe(pipe_fd) < 0)
 			return (127);
@@ -69,29 +69,30 @@ static void    wait_for_all(int number_of_commands, t_obj *obj)
 {
     int i;
     int status;
+	int	exit_status;
 
     i = 0;
     status = 0;
+	exit_status = 0;
     while (i < number_of_commands)
     {
-        if (obj->pid[i] == -1)
-            ;
-        else if (i + 1 == number_of_commands)
-            waitpid(obj->pid[i], &status, 0);
-        else
-            waitpid(obj->pid[i], NULL, 0);
+        if (obj->pid[i] != -1)
+		{
+			waitpid(obj->pid[i], &status, 0);
+			if (WIFEXITED(status))
+				exit_status = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				exit_status = 128 + WTERMSIG(status);
+			if (g_signal == SIGQUIT || g_signal == SIGINT)
+			{
+				exit_status = 128 + (g_signal == SIGQUIT) * SIGQUIT
+					+ (g_signal != SIGQUIT) * SIGINT;
+				g_signal = 0;
+			}
+		}
         i++;
-    }
-    if (WIFEXITED(status))
-        obj->exit_code = WEXITSTATUS(status);
-    else if (WIFSIGNALED(status))
-        obj->exit_code = 128 + WTERMSIG(status);
-    if (g_signal == SIGQUIT || g_signal == SIGINT)
-    {
-        obj->exit_code = 128 + (g_signal == SIGQUIT) * SIGQUIT
-            + (g_signal != SIGQUIT) * SIGINT;
-        g_signal = 0;
-    }
+	}
+	obj->exit_code = exit_status;
 }
 
 static void	execution_routine(t_obj *obj)

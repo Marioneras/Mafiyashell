@@ -19,7 +19,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -ggdb3
 DFLAGS = -MMD -MF $(@:.o=.d)
 V_FLAG = --suppressions=./readline.supp
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all \
+VALGRIND = valgrind --leak-check=full --show-leak-kinds=all -q \
 	--track-origins=yes -s --trace-children=yes --track-fds=yes $(V_FLAG)
 AUTHOR = mberthou
 DATE = 29/04/2025

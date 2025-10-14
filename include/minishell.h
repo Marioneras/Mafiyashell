@@ -205,7 +205,7 @@ void							dup_files(t_cmd *cmd, int input_fd,
 									int output_fd, int *pipe_fd);
 void							reset_offset(int *input_fd, char *infile);
 int								execute_alone_redirections(t_obj *obj, int i,
-									int *input_fd);
+									int *input_fd, int output_fd);
 void							close_fd(t_cmd *cmd, int *input_fd,
 									int output_fd, int pipe_fd[2]);
 
